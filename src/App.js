@@ -7,6 +7,7 @@ import Home from './pages/home/Home'
 import Login from './pages/login/Login'
 import Signup from './pages/signup/Signup'
 import Person from './pages/person/Person'
+import UpdatePerson from './pages/updatePerson/UpdatePerson'
 import Navbar from './components/Navbar'
 import Sidebar from './components/sidebar/Sidebar'
 
@@ -38,6 +39,10 @@ function App() {
              <Route 
                path="/person/:id" 
                element={user ? <Person /> : <Login />} 
+             />
+             <Route 
+               path="/updateperson/:id" 
+               element={user ? <UpdatePerson /> : <Login />} 
              />
              <Route 
                path="/addperson" 
