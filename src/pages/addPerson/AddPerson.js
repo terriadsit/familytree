@@ -5,9 +5,10 @@ import Select from 'react-select'
 
 // styles
 import './AddPerson.css'
+import { useFirestore } from '../../hooks/useFirestore'
 
 export default function AddPerson() {
-  const [people, setPeople] = []
+  // form fields
   const [name, setName] = useState('')
   const [otherName, setOtherName] = useState('')
   const [birthDate, setBirthDate] = useState('')
@@ -17,73 +18,55 @@ export default function AddPerson() {
   const [siblings, setSiblings] = useState([])
   const [parents, setParents] = useState([])
   const [children, setChildren] = useState([])
+
+  
+  const { addDocument } = useFirestore('people')
   const { user } = useAuthContext()
+
+  // 'people' to populate drop down selects
   const { documents, error } = useCollection('people', null, null)
+  const [people, setPeople] = useState([])
  
-  // later add createdAt, createdBy, diplay on home = true
+  // later add diplay on home = true
 
-  // later get all persons from db for select choice
+  console.log('documents', documents, 'error', error)
 
-  const peopleInDB = [
-    { value: "uid1", label: "Ray"},
-    { value: "uid2", label: "Jean"},
-    { value: "uid3", label: "Christy"},
-    { value: "uid4", lable: "Michael"}
-  ]
-
-  const checkForMatch =  (who, relationship) => {
-    let ids = []
-    let found = null
-    switch(relationship) {
-      case "sibling":
-        ids = siblings.map(s => s.value)
-        break
-      case "parent":
-        ids = parents.map(p => p.value)
-        break
-      case "children":
-        ids = children.map(c => c.value)
-        break
-      default:
-        console.log('wrong case')
-    }
-    found = ids.find(id => who.value === id)
-    return found
+  const formatRelatives = (relatives) => {
+    const rels = relatives.map(r =>  {
+      return { id: r.value, name: r.label }
+    })
+    return rels
   }
-
+ 
   const handleSiblingOption = (sib) => {
-    const found = checkForMatch(sib, "sibling")
-    if(!found){
-        setSiblings((prevSiblings) => [...prevSiblings, sib])
-    }
+      const sibs = formatRelatives(sib)
+      setSiblings(sibs)
   }
 
   const handleParentOption = (parent) => {
-    const found = checkForMatch(parent, "parent")
-    if(!found){
-      setParents((prevParents) => [...prevParents, parent])
-    }
+    const parents = formatRelatives(parent)
+    setParents(parents)
   }
 
   const handleChildrenOption = (child) => {
-    const found = checkForMatch(child, "children")
-    if(!found){
-      setChildren((prevChildren) => [...prevChildren, child])
-    }
+    const children = formatRelatives(child)
+    setChildren(children)
   }
 
   // populate people for select
-  useEffect((documents) => {
+  useEffect(() => {
+    console.log('in useEffect doc:', documents)
     if(documents) {
       const options = documents.map(person => {
-        return { value: person.uid, label: person.name }
+        console.log('in map',person.id, person.name)
+        return { value: person.id, label: person.name }
       })
       setPeople(options)
     }
 
-  },[documents])
-  
-  function handleSubmit(e) {
+   },[documents])
+
+ function handleSubmit(e) {
     e.preventDefault()
     const uid = user.uid
     const createdAt = new Date()
@@ -99,11 +82,14 @@ export default function AddPerson() {
       siblings,
       parents,
       children,
-      createdBy: uid
-      //createdAt: 
+      createdBy: uid,
+      createdAt
     }
+    addDocument(person)
+    
   }
   
+ 
   return (
     <div className="add-person">
         <h2 className="page-title">Add a Person. Except for name, fields may be left blank.</h2>
@@ -159,7 +145,7 @@ export default function AddPerson() {
               options={people}
           />
           </label>
-          <p>Current siblings: {siblings.map((s) => <em key={s.value}>{s.label}, </em>)}</p>
+          
           <label>
             <span>choose parents</span>
             <Select 
@@ -168,7 +154,7 @@ export default function AddPerson() {
               options={people}
           />
           </label>
-          <p>Current parents: {parents.map((p) => <em key={p.value}>{p.label}, </em>)}</p>
+         
           <label>
             <span>choose children</span>
             <Select 
@@ -177,7 +163,7 @@ export default function AddPerson() {
               options={people}
           />
           </label>
-          <p>Current children: {children.map((c) => <em key={c.value}>{c.label}, </em>)}</p>
+          
           <label>
             <span>comments, memories, stories, etc.</span>
             <textarea 
