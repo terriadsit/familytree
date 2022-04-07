@@ -9,6 +9,7 @@ import Select from 'react-select'
 
 // styles
 import './AddPerson.css'
+import updateMyPersons from '../../manageFileStorage/updateMyPersons'
 
 
 
@@ -123,7 +124,7 @@ export default function AddPerson() {
     // may not be necessary
 
     // add personid to users home page personList
-    
+    updateMyPersons(uid, personId, 'add')
 
   }
   
