@@ -1,11 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useCollection } from '../../hooks/useCollection'
+import { useFirestore } from '../../hooks/useFirestore'
 import { useAuthContext } from '../../hooks/useAuthContext'
+import checkImage from '../../manageFileStorage/checkImage'
+import { uploadImage } from '../../manageFileStorage/uploadImage'
+
 import Select from 'react-select'
 
 // styles
 import './AddPerson.css'
-import { useFirestore } from '../../hooks/useFirestore'
+
+
 
 export default function AddPerson() {
   // form fields
@@ -76,31 +81,28 @@ export default function AddPerson() {
    let selected = e.target.files[0]
    console.log(selected)
 
-   if (selected) {
-     if (!selected.type.includes('image')) {
-       setImageError('selected file must be an image')
-       return
-     }
-     if (selected.size > 100000) {
-       setImageError('selected file must be smaller than 100kb')
-       return
-     }
-     setImage(selected)
-     console.log('image updated')
+    const error = checkImage(selected)
+    if (!error) {
+      setImage(selected)
+      console.log('image updated')
+    } else {
+      setImageError(error)
     }
   }
   
- function handleSubmit(e) {
+ const handleSubmit = async (e) => {
     e.preventDefault()
+    const memories = [] // for memory doc ids 
     const uid = user.uid
     const createdAt = new Date()
+    const tempImage = ''
     const person = {
       name,
       otherName,
       birthDate,
       deathDate,
       birthCity, 
-      image,
+      tempImage,
       comments,
       spouses,
       marriageComments,
@@ -108,9 +110,21 @@ export default function AddPerson() {
       parents,
       children,
       createdBy: uid,
-      createdAt
+      createdAt,
+      memories
     }
-    addDocument(person)
+    // now get personid
+    let personId = await addDocument(person)
+        
+    // now add image to storage 
+    const imgUrl = await uploadImage(image, personId, personId)
+    setImage(imgUrl)
+    // now update person file to include image
+    // may not be necessary
+
+    // add personid to users home page personList
+    
+
   }
   
   return (
