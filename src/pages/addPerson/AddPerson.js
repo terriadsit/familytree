@@ -14,22 +14,23 @@ export default function AddPerson() {
   const [birthDate, setBirthDate] = useState('')
   const [deathDate, setDeathDate] = useState('')
   const [birthCity, setBirthCity] = useState('')
+  const [image, setImage] = useState(null)
+  const [imageError, setImageError] = useState(null)
   const [comments, setComments] = useState('')
+  const [spouses, setSpouses] = useState([])
+  const [marriageComments, setMarriageComments] = useState('')
   const [siblings, setSiblings] = useState([])
   const [parents, setParents] = useState([])
   const [children, setChildren] = useState([])
 
-  
   const { addDocument } = useFirestore('people')
   const { user } = useAuthContext()
 
   // 'people' to populate drop down selects
-  const { documents, error } = useCollection('people', null, null)
+  const { documents } = useCollection('people', null, null)
   const [people, setPeople] = useState([])
  
   // later add diplay on home = true
-
-  console.log('documents', documents, 'error', error)
 
   const formatRelatives = (relatives) => {
     const rels = relatives.map(r =>  {
@@ -52,13 +53,16 @@ export default function AddPerson() {
     const children = formatRelatives(child)
     setChildren(children)
   }
+  
+  const handleSpousesOption = (spouse) => {
+    const s = formatRelatives(spouse)
+    setSpouses(s)
+  }
 
   // populate people for select
   useEffect(() => {
-    console.log('in useEffect doc:', documents)
     if(documents) {
       const options = documents.map(person => {
-        console.log('in map',person.id, person.name)
         return { value: person.id, label: person.name }
       })
       setPeople(options)
@@ -66,19 +70,40 @@ export default function AddPerson() {
 
    },[documents])
 
+ const handleImageChange = (e) => {
+   setImage(null)
+   setImageError(null)
+   let selected = e.target.files[0]
+   console.log(selected)
+
+   if (selected) {
+     if (!selected.type.includes('image')) {
+       setImageError('selected file must be an image')
+       return
+     }
+     if (selected.size > 100000) {
+       setImageError('selected file must be smaller than 100kb')
+       return
+     }
+     setImage(selected)
+     console.log('image updated')
+    }
+  }
+  
  function handleSubmit(e) {
     e.preventDefault()
     const uid = user.uid
     const createdAt = new Date()
-    console.log(name, otherName, birthDate, deathDate, birthCity, comments, uid)
-    console.log('people', people)
     const person = {
       name,
       otherName,
       birthDate,
       deathDate,
       birthCity, 
+      image,
       comments,
+      spouses,
+      marriageComments,
       siblings,
       parents,
       children,
@@ -86,10 +111,8 @@ export default function AddPerson() {
       createdAt
     }
     addDocument(person)
-    
   }
   
- 
   return (
     <div className="add-person">
         <h2 className="page-title">Add a Person. Except for name, fields may be left blank.</h2>
@@ -135,6 +158,14 @@ export default function AddPerson() {
               value={birthCity}
             />
           </label>
+          <label>
+            <span>upload an image</span>
+            <input 
+              type="file"
+              onChange={handleImageChange}
+            />
+          </label>
+          {imageError && <p className='error'>{imageError}</p>}
           <span>later you will be able to update this person to link to their siblings, parents and children if those people are presently not added </span>
             <br></br>
           <label>
@@ -145,7 +176,6 @@ export default function AddPerson() {
               options={people}
           />
           </label>
-          
           <label>
             <span>choose parents</span>
             <Select 
@@ -154,7 +184,22 @@ export default function AddPerson() {
               options={people}
           />
           </label>
-         
+         <label>
+            <span>choose spouses</span>
+            <Select 
+              isMulti
+              onChange={(option) => {handleSpousesOption(option)}}
+              options={people}
+          />
+          </label>
+          <label>
+            <span>marriage comments (dates, locations, etc.) </span>
+            <input 
+              type="text"
+              onChange={e => setMarriageComments(e.target.value)}
+              value={marriageComments}
+            />
+          </label>
           <label>
             <span>choose children</span>
             <Select 
@@ -163,7 +208,6 @@ export default function AddPerson() {
               options={people}
           />
           </label>
-          
           <label>
             <span>comments, memories, stories, etc.</span>
             <textarea 
@@ -172,7 +216,6 @@ export default function AddPerson() {
               value={comments}
             ></textarea>
           </label>
-          
           <button className="btn">Add Person</button>
         </form>
     </div>
