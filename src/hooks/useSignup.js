@@ -31,10 +31,12 @@ export const useSignup = () => {
 
       // create a user document
       const uid =  res.user.uid
+      const myPersons = []
       const userData = {
         displayName,
         email,
-        shareEmail: checked
+        shareEmail: checked,
+        myPersons
       }
       await setDoc(doc(dbFirestore, 'users', uid), userData)
       

@@ -21,8 +21,7 @@ async function updateMyPersons(uid, person, whChange) {
        }
    }
    
-   
-  
+
     return 
     
 }

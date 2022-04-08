@@ -80,15 +80,14 @@ export default function AddPerson() {
    setImage(null)
    setImageError(null)
    let selected = e.target.files[0]
-   console.log(selected)
-
+   if (image) {
     const error = checkImage(selected)
-    if (!error) {
-      setImage(selected)
-      console.log('image updated')
-    } else {
-      setImageError(error)
-    }
+      if (!error) {
+       setImage(selected)
+      } else {
+        setImageError(error)
+      }
+   }
   }
   
  const handleSubmit = async (e) => {
@@ -126,6 +125,7 @@ export default function AddPerson() {
     // add personid to users home page personList
     updateMyPersons(uid, personId, 'add')
 
+    
   }
   
   return (
