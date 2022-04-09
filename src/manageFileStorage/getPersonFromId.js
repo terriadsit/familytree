@@ -1,6 +1,6 @@
 import { dbFirestore } from "../firebase/config"
 import { doc, onSnapshot } from "firebase/firestore"
-
+// Make async, use getDoc https://firebase.google.com/docs/firestore/query-data/get-data
 export default function getPersonFromId(id) {
     let person = {}
     const ref = doc(dbFirestore, 'people', 'lbtJ6HZwwIUBAdafPCrS')
