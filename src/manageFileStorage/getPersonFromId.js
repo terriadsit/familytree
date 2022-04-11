@@ -3,29 +3,39 @@ import { doc, getDoc } from "firebase/firestore"
 
 // get a persons detail imformation from their id
 async function getPersonFromId(id) {
-    let person = {}
-    const personList = document.querySelector('.persons')
-    const node = document.createElement("li")
+  const personList = document.querySelector('.persons')
+  let person = {}
+  let tempBirthday = 'unknown'
+  let tempBirthCity = 'unknown'
 
     try {
      const ref = doc(dbFirestore, 'people', id)
 
      const docSnap = await getDoc(ref)
-
+        
       if (docSnap.exists()) {
-         console.log('document data', docSnap.data().name)
           person = { ...docSnap.data() }
-          console.log('in try block', person)
-          const textnode = document.createTextNode(`${person.name}`)
-          node.appendChild(textnode)
-          personList.appendChild(node)
+          if (person.birthdate) {
+            tempBirthday = person.birthdate
+          }
+          if (person.birthCity) {
+            tempBirthCity = person.birthCity
+          }
+          const newHtml = `
+            <li>
+              <div className="person-list">
+                <h4>${person.name}</h4>
+                <p>born at: ${tempBirthCity} birth date: ${tempBirthday}</p>
+              </div>
+            </li>
+          `
+          personList.innerHTML += newHtml
       } else {
-          console.log('no such document')
+          console.log('no such person')
       }
     } catch(err)  
         {console.log('could not get person ', err)}
          
    } 
-   
-
+  
 export { getPersonFromId as default }

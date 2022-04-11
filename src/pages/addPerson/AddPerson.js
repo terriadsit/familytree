@@ -124,8 +124,7 @@ export default function AddPerson() {
 
     // add personid to users home page personList
     updateMyPersons(uid, personId, 'add')
-
-    
+  
   }
   
   return (
