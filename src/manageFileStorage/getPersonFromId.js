@@ -1,20 +1,31 @@
 import { dbFirestore } from "../firebase/config"
-import { doc, onSnapshot } from "firebase/firestore"
+import { doc, getDoc } from "firebase/firestore"
 
-export default function getPersonFromId(id) {
+// get a persons detail imformation from their id
+async function getPersonFromId(id) {
     let person = {}
-    const ref = doc(dbFirestore, 'people', 'lbtJ6HZwwIUBAdafPCrS')
+    const personList = document.querySelector('.persons')
+    const node = document.createElement("li")
 
-    onSnapshot(ref, snapshot => {
-      // need to make sure the doc exists & has data
-      if(snapshot.data()) {
-        person = {...snapshot.data(), id: snapshot.id}
-        console.log('snapshot data', person)
+    try {
+     const ref = doc(dbFirestore, 'people', id)
+
+     const docSnap = await getDoc(ref)
+
+      if (docSnap.exists()) {
+         console.log('document data', docSnap.data().name)
+          person = { ...docSnap.data() }
+          console.log('in try block', person)
+          const textnode = document.createTextNode(`${person.name}`)
+          node.appendChild(textnode)
+          personList.appendChild(node)
       } else {
-        console.log('no such person id', id)      
+          console.log('no such document')
       }
-    })
+    } catch(err)  
+        {console.log('could not get person ', err)}
          
-   return { person }
-} 
+   } 
+   
 
+export { getPersonFromId as default }
