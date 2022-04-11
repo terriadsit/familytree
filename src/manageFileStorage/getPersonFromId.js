@@ -21,12 +21,16 @@ async function getPersonFromId(id) {
           if (person.birthCity) {
             tempBirthCity = person.birthCity
           }
+          const newUrl = `/updateperson/${id}`
           const newHtml = `
-            <li>
-              <div className="person-list">
-                <h4>${person.name}</h4>
-                <p>born at: ${tempBirthCity} birth date: ${tempBirthday}</p>
-              </div>
+          
+           <li style="margin-right: 10px;" key=${id}>
+              <a href=${newUrl}>
+                <div className="person-list">
+                  <h4 style="font-size: 0.9em;">${person.name}</h4>
+                  <p>born at: ${tempBirthCity} birth date: ${tempBirthday}</p>
+                </div>
+              </a>
             </li>
           `
           personList.innerHTML += newHtml

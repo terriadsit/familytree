@@ -1,0 +1,42 @@
+.home {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-gap: 20px;
+  }
+  .home li {
+    background-color: #fff;
+    min-width: 100px;
+    padding: 16px;
+    border-radius: 6px;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.05);
+    text-decoration: none;
+    color: inherit;
+  }
+  .home h4 {
+    font-size: 0.9em;
+    color: var(--heading-color);
+  }
+  .home p {
+    color: var(--text-color);
+    font-size: 0.9em;
+  }
+  .home .assigned-to {
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+  }
+  .home ul {
+    margin: 10px 0;
+    display: flex;
+  }
+  .home a {
+      text-decoration: none;
+  }
+  /* .home li {
+    margin-right: 10px;
+  } */
+  .home .avatar {
+    width: 30px;
+    height: 30px;
+  }
