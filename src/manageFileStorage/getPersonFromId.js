@@ -7,7 +7,7 @@ async function getPersonFromId(id) {
   let person = {}
   let tempBirthday = 'unknown'
   let tempBirthCity = 'unknown'
-  let tempImage = null
+  let tempImageUrl = null
 
     try {
      const ref = doc(dbFirestore, 'people', id)
@@ -16,26 +16,34 @@ async function getPersonFromId(id) {
         
       if (docSnap.exists()) {
           person = { ...docSnap.data() }
+          console.log('get person person', person)
           if (person.birthDate) {
             tempBirthday = person.birthDate
           }
           if (person.birthCity) {
             tempBirthCity = person.birthCity
           }
-          if (person.image) {
-            tempImage = person.image
-            console.log(person.image)
+          if (person.imageUrl) {
+            tempImageUrl = person.imageUrl
+            console.log('get person from id',person.imageUrl)
           }
           const newUrl = `/updateperson/${id}`
-          const newHtml = `
+          let newHtml = `
             <a href=${newUrl}>
                <h4 >${person.name}</h4>
                <p>born in: ${tempBirthCity} </p>
                <p>birth date: ${tempBirthday}</p>
-               <img src=${tempImage} alt="person image" />
-            </a>
-          `
+              `
+          newHtml += (!tempImageUrl ? "</a>" : 
+                      `<img 
+                        src=${tempImageUrl} 
+                        alt="person image" 
+                        class-name="image"
+                        />
+                    </a>`
+          )
           personList.innerHTML += newHtml
+          
       } else {
           console.log('no such person')
       }

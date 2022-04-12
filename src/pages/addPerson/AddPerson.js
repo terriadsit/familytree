@@ -11,8 +11,6 @@ import Select from 'react-select'
 import './AddPerson.css'
 import updateMyPersons from '../../manageFileStorage/updateMyPersons'
 
-
-
 export default function AddPerson() {
   // form fields
   const [name, setName] = useState('')
@@ -21,6 +19,7 @@ export default function AddPerson() {
   const [deathDate, setDeathDate] = useState('')
   const [birthCity, setBirthCity] = useState('')
   const [image, setImage] = useState(null)
+  const [imageUrl, setImageUrl] = useState(null)
   const [imageError, setImageError] = useState(null)
   const [comments, setComments] = useState('')
   const [spouses, setSpouses] = useState([])
@@ -36,10 +35,8 @@ export default function AddPerson() {
   const { documents } = useCollection('people', null, null)
   const [people, setPeople] = useState([])
  
-  // later add diplay on home = true
-
   const formatRelatives = (relatives) => {
-    const rels = relatives.map(r =>  {
+     const rels = relatives.map(r =>  {
       return { id: r.value, name: r.label }
     })
     return rels
@@ -80,7 +77,7 @@ export default function AddPerson() {
    setImage(null)
    setImageError(null)
    let selected = e.target.files[0]
-   if (image) {
+   if (selected) {
     const error = checkImage(selected)
       if (!error) {
        setImage(selected)
@@ -101,7 +98,7 @@ export default function AddPerson() {
       birthDate,
       deathDate,
       birthCity, 
-      image,
+      imageUrl,
       comments,
       spouses,
       marriageComments,
@@ -115,17 +112,16 @@ export default function AddPerson() {
     // now get personid
     let personId = await addDocument(person)
         
-    // now add image to storage 
-    const imgUrl = await uploadImage(image, personId, personId)
-      .then(setImage(imgUrl))
-      .then(console.log('imgUrl', imgUrl))
-    //
-    // now update person file to include image
-    // may not be necessary
-
+    // now add image to storage, uploadImage will update person imageUrl 
+    console.log('add person;', image, personId, personId)
+    await uploadImage(image, personId, personId)
+     
     // add personid to users home page personList
     updateMyPersons(uid, personId, 'add')
-  
+    
+    // clear form
+    document.querySelector('.add-person-form').reset()
+
   }
   
   return (

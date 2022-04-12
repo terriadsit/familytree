@@ -1,8 +1,11 @@
 import { storage } from "../firebase/config"
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import { dbFirestore } from "../firebase/config"
+import { updateDoc, doc } from "firebase/firestore"
 
 export async function uploadImage(image, personId, commentId) {
     let imgUrl = ''
+    console.log('image',image)
     if (image) {
       try {
         // create path, commentId and personId are equal on main person entry
@@ -10,6 +13,12 @@ export async function uploadImage(image, personId, commentId) {
         const storageRef = ref(storage, uploadPath)
         await uploadBytes(storageRef, image)
         imgUrl = await getDownloadURL(storageRef)
+        console.log('imgUrl in upload image',imgUrl)
+
+        // update person or comment doc to include imageUrl
+        const personRef = doc(dbFirestore, 'people', personId)
+        updateDoc(personRef, { imageUrl: imgUrl })
+
          } catch(err) { 
             console.log('could not upload image', err)
       }

@@ -21,23 +21,22 @@ function Home() {
     if(document){
        document.myPersons.map((p) => {
         return people.push(p)
-     })
-   }
-   
-   // get each person's detail imformation
-   for(let i = 0; i < people.length; i++) {
-     getPersonFromId(people[i])
-   }
+       })
+      
+       // get each person's detail imformation
+       for(let i = 0; i < people.length; i++) {
+         getPersonFromId(people[i])
+       } 
+    }
   })
-  
+
   if (error) {
     return <p className="error">${error}</p>
   }
 
   return (
     <div className='person-list'>
-      
-      
+            
       {error && <p className="error">${error}</p>}
         
     </div>
