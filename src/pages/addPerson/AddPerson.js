@@ -95,14 +95,13 @@ export default function AddPerson() {
     const memories = [] // for memory doc ids 
     const uid = user.uid
     const createdAt = new Date()
-    const tempImage = ''
     const person = {
       name,
       otherName,
       birthDate,
       deathDate,
       birthCity, 
-      tempImage,
+      image,
       comments,
       spouses,
       marriageComments,
@@ -118,7 +117,9 @@ export default function AddPerson() {
         
     // now add image to storage 
     const imgUrl = await uploadImage(image, personId, personId)
-    setImage(imgUrl)
+      .then(setImage(imgUrl))
+      .then(console.log('imgUrl', imgUrl))
+    //
     // now update person file to include image
     // may not be necessary
 

@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { Link } from 'react-router-dom'
 
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { useDocument } from '../../hooks/useDocument'
@@ -36,13 +35,10 @@ function Home() {
   }
 
   return (
-    <div className="home">
-        <h2 className="page-title">Home</h2>
-        <br></br>
-        <ul className="persons home">
-
-        </ul>
-        {error && <p className="error">${error}</p>}
+    <div className='person-list'>
+      
+      
+      {error && <p className="error">${error}</p>}
         
     </div>
   )

@@ -3,10 +3,11 @@ import { doc, getDoc } from "firebase/firestore"
 
 // get a persons detail imformation from their id
 async function getPersonFromId(id) {
-  const personList = document.querySelector('.persons')
+  const personList = document.querySelector('.person-list')
   let person = {}
   let tempBirthday = 'unknown'
   let tempBirthCity = 'unknown'
+  let tempImage = null
 
     try {
      const ref = doc(dbFirestore, 'people', id)
@@ -15,23 +16,24 @@ async function getPersonFromId(id) {
         
       if (docSnap.exists()) {
           person = { ...docSnap.data() }
-          if (person.birthdate) {
-            tempBirthday = person.birthdate
+          if (person.birthDate) {
+            tempBirthday = person.birthDate
           }
           if (person.birthCity) {
             tempBirthCity = person.birthCity
           }
+          if (person.image) {
+            tempImage = person.image
+            console.log(person.image)
+          }
           const newUrl = `/updateperson/${id}`
           const newHtml = `
-          
-           <li style="margin-right: 10px;" key=${id}>
-              <a href=${newUrl}>
-                <div className="person-list">
-                  <h4 style="font-size: 0.9em;">${person.name}</h4>
-                  <p>born at: ${tempBirthCity} birth date: ${tempBirthday}</p>
-                </div>
-              </a>
-            </li>
+            <a href=${newUrl}>
+               <h4 >${person.name}</h4>
+               <p>born in: ${tempBirthCity} </p>
+               <p>birth date: ${tempBirthday}</p>
+               <img src=${tempImage} alt="person image" />
+            </a>
           `
           personList.innerHTML += newHtml
       } else {
