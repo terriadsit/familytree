@@ -6,6 +6,7 @@ import checkImage from '../../manageFileStorage/checkImage'
 import { uploadImage } from '../../manageFileStorage/uploadImage'
 
 import Select from 'react-select'
+import { useNavigate } from "react-router-dom"
 
 // styles
 import './AddPerson.css'
@@ -30,6 +31,7 @@ export default function AddPerson() {
 
   const { addDocument } = useFirestore('people')
   const { user } = useAuthContext()
+  let navigate = useNavigate()
 
   // 'people' to populate drop down selects
   const { documents } = useCollection('people', null, null)
@@ -81,6 +83,7 @@ export default function AddPerson() {
     const error = checkImage(selected)
       if (!error) {
        setImage(selected)
+       setImageUrl('')
       } else {
         setImageError(error)
       }
@@ -113,21 +116,20 @@ export default function AddPerson() {
     let personId = await addDocument(person)
         
     // now add image to storage, uploadImage will update person imageUrl 
-    console.log('add person;', image, personId, personId)
     await uploadImage(image, personId, personId)
      
     // add personid to users home page personList
     updateMyPersons(uid, personId, 'add')
     
-    // clear form
-    document.querySelector('.add-person-form').reset()
+    // redirect to home page
+    navigate('/')
 
   }
   
   return (
     <div className="add-person">
         <h2 className="page-title">Add a Person. Except for name, fields may be left blank.</h2>
-        <form className="add-person-form"onSubmit={handleSubmit}>
+        <form className="add-person-form" id="add-form" onSubmit={handleSubmit}>
           <label>
             <span>person's full birth name</span>
             <input 

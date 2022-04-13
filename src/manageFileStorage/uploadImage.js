@@ -5,7 +5,6 @@ import { updateDoc, doc } from "firebase/firestore"
 
 export async function uploadImage(image, personId, commentId) {
     let imgUrl = ''
-    console.log('image',image)
     if (image) {
       try {
         // create path, commentId and personId are equal on main person entry

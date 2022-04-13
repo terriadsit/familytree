@@ -4,7 +4,7 @@ import { doc, getDoc } from "firebase/firestore"
 // get a persons detail imformation from their id
 async function getPersonFromId(id) {
   const personList = document.querySelector('.person-list')
-  let person = {}
+  let person = null
   let tempBirthday = 'unknown'
   let tempBirthCity = 'unknown'
   let tempImageUrl = null
@@ -15,8 +15,8 @@ async function getPersonFromId(id) {
      const docSnap = await getDoc(ref)
         
       if (docSnap.exists()) {
-          person = { ...docSnap.data() }
-          console.log('get person person', person)
+        person = { ...docSnap.data() }
+        if (person.name) {
           if (person.birthDate) {
             tempBirthday = person.birthDate
           }
@@ -25,7 +25,6 @@ async function getPersonFromId(id) {
           }
           if (person.imageUrl) {
             tempImageUrl = person.imageUrl
-            console.log('get person from id',person.imageUrl)
           }
           const newUrl = `/updateperson/${id}`
           let newHtml = `
@@ -43,13 +42,13 @@ async function getPersonFromId(id) {
                     </a>`
           )
           personList.innerHTML += newHtml
-          
-      } else {
-          console.log('no such person')
-      }
-    } catch(err)  
-        {console.log('could not get person ', err)}
-         
+        }  
+      } 
+    } catch(err) {
+      
+        //console.log('could not get person ', err)
+      
+    }     
    } 
   
 export { getPersonFromId as default }
