@@ -2,12 +2,13 @@ import { dbFirestore } from "../firebase/config"
 import { doc, getDoc } from "firebase/firestore"
 
 // get a persons detail imformation from their id
-async function getPersonFromId(id) {
+async function getPersonFromId(personInfo) {
   const personList = document.querySelector('.person-list')
   let person = null
   let tempBirthday = 'unknown'
   let tempBirthCity = 'unknown'
   let tempImageUrl = null
+  let id = personInfo.personId
 
     try {
      const ref = doc(dbFirestore, 'people', id)
@@ -29,7 +30,7 @@ async function getPersonFromId(id) {
           const newUrl = `/updateperson/${id}`
           let newHtml = `
             <a href=${newUrl}>
-               <h4 >${person.name}</h4>
+               <h4>${person.name}</h4>
                <p>born in: ${tempBirthCity} </p>
                <p>birth date: ${tempBirthday}</p>
               `

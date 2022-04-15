@@ -12,7 +12,6 @@ export async function uploadImage(image, personId, commentId) {
         const storageRef = ref(storage, uploadPath)
         await uploadBytes(storageRef, image)
         imgUrl = await getDownloadURL(storageRef)
-        console.log('imgUrl in upload image',imgUrl)
 
         // update person or comment doc to include imageUrl
         const personRef = doc(dbFirestore, 'people', personId)

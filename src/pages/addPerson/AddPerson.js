@@ -2,15 +2,18 @@ import { useEffect, useState } from 'react'
 import { useCollection } from '../../hooks/useCollection'
 import { useFirestore } from '../../hooks/useFirestore'
 import { useAuthContext } from '../../hooks/useAuthContext'
+
 import checkImage from '../../manageFileStorage/checkImage'
+import updateMyPersons from '../../manageFileStorage/updateMyPersons'
 import { uploadImage } from '../../manageFileStorage/uploadImage'
 
 import Select from 'react-select'
 import { useNavigate } from "react-router-dom"
 
+import { serverTimestamp } from 'firebase/firestore'
+
 // styles
 import './AddPerson.css'
-import updateMyPersons from '../../manageFileStorage/updateMyPersons'
 
 export default function AddPerson() {
   // form fields
@@ -32,7 +35,7 @@ export default function AddPerson() {
   const { addDocument } = useFirestore('people')
   const { user } = useAuthContext()
   let navigate = useNavigate()
-
+  
   // 'people' to populate drop down selects
   const { documents } = useCollection('people', null, null)
   const [people, setPeople] = useState([])
@@ -94,7 +97,7 @@ export default function AddPerson() {
     e.preventDefault()
     const memories = [] // for memory doc ids 
     const uid = user.uid
-    const createdAt = new Date()
+    const createdAt = serverTimestamp()
     const person = {
       name,
       otherName,
@@ -118,8 +121,8 @@ export default function AddPerson() {
     // now add image to storage, uploadImage will update person imageUrl 
     await uploadImage(image, personId, personId)
      
-    // add personid to users home page personList
-    updateMyPersons(uid, personId, 'add')
+    // add personid and Birthday to users home page personList
+    updateMyPersons(uid, personId, birthDate, 'add')
     
     // redirect to home page
     navigate('/')

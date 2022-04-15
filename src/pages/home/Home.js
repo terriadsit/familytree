@@ -22,7 +22,22 @@ function Home() {
        document.myPersons.map((p) => {
         return people.push(p)
        })
+
+       // sort by BirthDates
+       people.sort(function(a, b) {
+        const dateA = a.birthDate.toUpperCase(); // ignore upper and lowercase
+        const dateB = b.birthDate.toUpperCase(); // ignore upper and lowercase
+        if (dateA < dateB) {
+          return -1;
+        }
+        if (dateA > dateB) {
+          return 1;
+        }
       
+        // names must be equal
+        return 0;
+      });       
+       
        // get each person's detail imformation
        for(let i = 0; i < people.length; i++) {
          getPersonFromId(people[i])

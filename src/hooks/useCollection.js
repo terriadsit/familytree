@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react"
 
 // firebase imports 
 import { dbFirestore } from "../firebase/config"
-import { collection, query, where, onSnapshot } from 'firebase/firestore'
+import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore'
 
 export const useCollection = (whCollection, _query, _orderBy) => {
   const [documents, setDocuments] = useState(null)
@@ -10,16 +10,20 @@ export const useCollection = (whCollection, _query, _orderBy) => {
 
   // if we don't use a ref --> infinite loop in useEffect
   // _query is an array and is "different" on every function call
+  // _query contains: field name, comparison, value to be == or !=
   let queryArray = useRef(_query).current
-  const orderBy = useRef(_orderBy).current
+  let order = useRef(_orderBy).current
 
+  // default order
+  order = order ? order : ['name'] 
+  
   useEffect(() => {
     let ref = collection(dbFirestore, whCollection)
-    if (orderBy) {
-      ref = ref.orderBy(...orderBy)
-    }
-
-    const unsubscribe = onSnapshot(ref, snapshot => {
+    let q = (_query) ? 
+      query(ref, where(...queryArray), orderBy(...order)) : 
+      query(ref, orderBy(...order) )
+    
+    const unsubscribe = onSnapshot(q, snapshot => {
       let results = []
       
       snapshot.docs.forEach(doc => {
@@ -38,7 +42,7 @@ export const useCollection = (whCollection, _query, _orderBy) => {
     // unsubscribe on unmount
     return () => unsubscribe()
 
-  }, [whCollection, query, orderBy])
+  }, [whCollection, _query, order, queryArray])
 
   return { documents, error }
 }

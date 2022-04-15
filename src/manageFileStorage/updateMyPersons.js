@@ -1,18 +1,23 @@
 import { dbFirestore } from "../firebase/config"
 import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'
 
-async function updateMyPersons(uid, person, whChange) {
+async function updateMyPersons(uid, person, birthDate, whChange) {
     const userRef = doc(dbFirestore, 'users', uid)
+    const personInfo = { 
+        personId: person,
+        birthDate
+    }
+    
     switch(whChange) {
        case "add": {
            await updateDoc(userRef, {
-                myPersons: arrayUnion(person)
+                myPersons: arrayUnion(personInfo)
            })
         break
        }
        case "remove": {
            await updateDoc(userRef, {
-               myPersons: arrayRemove(person)
+               myPersons: arrayRemove(personInfo)
            })
         break
        }

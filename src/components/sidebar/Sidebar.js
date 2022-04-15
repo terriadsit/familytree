@@ -1,5 +1,6 @@
 
 import { NavLink } from 'react-router-dom'
+import { useAuthContext } from '../../hooks/useAuthContext'
 import Search from './Search'
 import ListAll from './ListAll'
 
@@ -9,14 +10,15 @@ import './Sidebar.css'
 import AddIcon from '../../assets/add_icon.svg'
 
 export default function Sidebar() {
-  
- 
+  const { user } = useAuthContext()
+  const displayName = user.displayName
+
   return (
     <div className="sidebar">
         <div className="sidebar-content">
             <div className="user">
                 {/* user here later */}
-                <p>Welcome !</p>
+                <p>Welcome {displayName}!</p>
             </div>
             <nav className="links">
               <ul>
