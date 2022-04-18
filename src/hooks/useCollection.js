@@ -18,8 +18,9 @@ export const useCollection = (whCollection, _query, _orderBy) => {
   order = order ? order : ['name'] 
   
   useEffect(() => {
+    console.log('in useEffect useCollection')
     let ref = collection(dbFirestore, whCollection)
-    let q = (_query) ? 
+    let q = (queryArray) ? 
       query(ref, where(...queryArray), orderBy(...order)) : 
       query(ref, orderBy(...order) )
     
@@ -42,7 +43,7 @@ export const useCollection = (whCollection, _query, _orderBy) => {
     // unsubscribe on unmount
     return () => unsubscribe()
 
-  }, [whCollection, _query, order, queryArray])
+  }, [whCollection])
 
   return { documents, error }
 }
