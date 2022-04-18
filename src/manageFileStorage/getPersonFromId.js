@@ -27,7 +27,7 @@ async function getPersonFromId(personInfo) {
           if (person.imageUrl) {
             tempImageUrl = person.imageUrl
           }
-          const newUrl = `/updateperson/${id}`
+          const newUrl = `/person/${id}`
           let newHtml = `
             <a href=${newUrl}>
                <h4>${person.name}</h4>

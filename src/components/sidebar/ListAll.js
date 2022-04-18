@@ -15,7 +15,7 @@ export default function ListAll() {
       <ul>
       {documents && documents.map(person => (
         <li key={person.id} className="person-list-item">
-          <Link to={'/updateperson/' + person.id}>
+          <Link to={'/person/' + person.id}>
               <p>{person.name} 
                 {person.birthDate ? `, ${person.birthDate.substring(0, 4)}` : ''} 
               </p>

@@ -1,5 +1,4 @@
 import { useDocument } from '../../hooks/useDocument'
-import { useRef } from 'react'
 import { useParams } from 'react-router-dom'
 
 // styles 
@@ -10,11 +9,21 @@ export default function UpdatePerson() {
   const personId = params.id
   console.log(personId)
   const { document, error } = useDocument('people', personId)
-  console.log(document)
-    
+  
+  if (error) {
+    return <div className="error">{error}</div>
+  }
+  
+  if (!document) {
+    return <div className="loading">Loading...</div>
+  }
+
+
+
   return (
-    <div>
-        UpdatePerson
+    <div className="person-details">
+      <h1>{document.name}</h1>
+        
     </div>
   )
 }
