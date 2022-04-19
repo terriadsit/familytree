@@ -11,7 +11,8 @@ import AddIcon from '../../assets/add_icon.svg'
 
 export default function Sidebar() {
   const { user } = useAuthContext()
-  const displayName = user.displayName
+  
+  const displayName = user ? user.displayName : ''
 
   return (
     <div className="sidebar">

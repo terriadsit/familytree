@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useCollection } from '../../hooks/useCollection'
 import { useFirestore } from '../../hooks/useFirestore'
 import { useAuthContext } from '../../hooks/useAuthContext'
+import { serverTimestamp } from 'firebase/firestore'
 
 import checkImage from '../../manageFileStorage/checkImage'
 import updateMyPersons from '../../manageFileStorage/updateMyPersons'
@@ -10,7 +11,6 @@ import { uploadImage } from '../../manageFileStorage/uploadImage'
 import Select from 'react-select'
 import { useNavigate } from "react-router-dom"
 
-import { serverTimestamp } from 'firebase/firestore'
 
 // styles
 import './AddPerson.css'
@@ -111,7 +111,7 @@ export default function AddPerson() {
       siblings,
       parents,
       children,
-      createdBy: uid,
+      createdBy: {uid: user.uid, createdByName: user.displayName},
       createdAt,
       memories
     }

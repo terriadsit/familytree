@@ -12,11 +12,14 @@ export async function uploadImage(image, personId, commentId) {
         const storageRef = ref(storage, uploadPath)
         await uploadBytes(storageRef, image)
         imgUrl = await getDownloadURL(storageRef)
-
         // update person or comment doc to include imageUrl
-        const personRef = doc(dbFirestore, 'people', personId)
-        updateDoc(personRef, { imageUrl: imgUrl })
-
+        if (personId === commentId) {
+          const personRef = doc(dbFirestore, 'people', personId)
+          updateDoc(personRef, { imageUrl: imgUrl })
+        }  else {
+          const commentRef = doc(dbFirestore, 'comments', commentId)
+          updateDoc(commentRef, { imageUrl: imgUrl })
+        }   
          } catch(err) { 
             console.log('could not upload image', err)
       }

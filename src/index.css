@@ -3,7 +3,7 @@
 /* variables */
 :root {
   --heading-color: #444;
-  --text-color: #999;
+  --text-color: rgb(102, 98, 98);
   --primary-color: #8d69f1;
   --highlight-color: #d13267;
   --bg-color: #f4f4f4;

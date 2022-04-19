@@ -4,11 +4,11 @@ import PersonSummary from './PersonSummary'
 
 // styles
 import './Person.css'
+import PersonComments from './PersonComments'
 
 export default function Person() {
   let params = useParams()
   const personId = params.id
-  console.log(personId)
   const { document, error } = useDocument('people', personId)
   
   if (error) {
@@ -24,6 +24,7 @@ export default function Person() {
   return (
     <div className="person-details">
       <PersonSummary person={document} />
+      <PersonComments personId={personId}/>
     </div>
   )
 }

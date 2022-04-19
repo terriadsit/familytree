@@ -1,0 +1,26 @@
+.person-details {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    align-items: start;
+    grid-gap: 60px
+}
+.person-summary {
+   background-color: #fff; 
+   padding: 30px;
+   border-radius: 4px;
+}
+.person-summary {
+    margin: 30px 0;
+    color: var(--text-color);
+    line-height: 1.8em;
+    font-size: 0.9em;
+}
+.project-summary h4 {
+    color: var(--text-color);
+    font-size: 0.9em;
+}
+.person-summary .image {
+    border-radius: 6px;
+    max-width: 150px;
+    max-height: 150px;
+}
