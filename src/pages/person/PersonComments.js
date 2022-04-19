@@ -1,13 +1,14 @@
-import { useState  } from "react"
+import { useEffect, useState, useRef  } from "react"
 import { serverTimestamp } from 'firebase/firestore'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { useFirestore } from "../../hooks/useFirestore"
 import { uploadImage } from "../../manageFileStorage/uploadImage"
+import { useParams } from "react-router-dom"
 import  checkImage from "../../manageFileStorage/checkImage"
+import CommentList from "./CommentList"
 
-export default function PersonComments(personId) {
-  let tempPersonId = personId.personId
-  console.log('person comments pid', tempPersonId)
+export default function PersonComments({personId}) {
+  
   const { addDocument, response } = useFirestore('comments')
   const [newComment, setNewComment] = useState('')
   const { user } = useAuthContext()
@@ -15,7 +16,10 @@ export default function PersonComments(personId) {
   const [image, setImage] = useState(null)
   const [imageUrl, setImageUrl] = useState(null)
   const [imageError, setImageError] = useState(null)
-
+  
+  // let params = useParams()
+  // const personId = params.id
+  
   const handleImageChange = (e) => {
     setImage(null)
     setImageError(null)
@@ -45,13 +49,13 @@ export default function PersonComments(personId) {
       let commentId = await addDocument(commentToAdd)
 
       // now add image to storage, uploadImage will update  imageUrl 
-      await uploadImage(image, tempPersonId, commentId)
-      
+      await uploadImage(image, personId, commentId)
   }  
   
   return (
     <div className="comments"> 
         <h4>Comments, stories, photos, etc.</h4>
+        <CommentList personId={personId} />
         <form className="add-comment" onSubmit={handleSubmit}>
             <label>
                 <span>Add new comment:</span>

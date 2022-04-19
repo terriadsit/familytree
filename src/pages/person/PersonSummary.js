@@ -19,17 +19,18 @@ export default function PersonSummary({ person }) {
   return (
     <div>
         <div className="person-summary">
-        {person.imageUrl && 
+          <h4>{person.name} 
+              {person.otherName && <span> ({person.otherName})</span>}
+          </h4>
+          <br></br>
+          {person.imageUrl && 
                 <img 
                     className="image"
                     src={person.imageUrl} 
                     alt="person" 
                  />}
-            <br></br>
-            <h2 className="page-title">{person.name} 
-              {person.otherName && <span> ({person.otherName})</span>}
-            </h2>
-          
+            
+                     
             <p>born: {person.birthDate ? person.birthDate : 'unknown'} to {person.deathDate ? person.deathDate : 'unknown'}</p>
             <p>at: {person.birthCity ? person.birthCity : 'unknown'}</p>
             <p>parents: {parents}</p>

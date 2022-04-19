@@ -18,7 +18,7 @@ export const useCollection = (whCollection, _query, _orderBy) => {
   order = order ? order : ['name'] 
   
   useEffect(() => {
-    console.log('in useEffect useCollection')
+    console.log('in useEffect useCollection', _query, _orderBy)
     let ref = collection(dbFirestore, whCollection)
     let q = (queryArray) ? 
       query(ref, where(...queryArray), orderBy(...order)) : 

@@ -10,17 +10,32 @@
    border-radius: 4px;
 }
 .person-summary {
-    margin: 30px 0;
     color: var(--text-color);
     line-height: 1.8em;
     font-size: 0.9em;
 }
-.project-summary h4 {
+.person-summary h4 {
     color: var(--text-color);
-    font-size: 0.9em;
+    font-size: 1.2em;
+    font-weight: bold;
 }
 .person-summary .image {
     border-radius: 6px;
     max-width: 150px;
     max-height: 150px;
+}
+.person-summary .btn {
+    margin-top:20px
+}
+/* person comments */
+.comments {
+    color: var(--text-color);
+    
+}
+.comments label {
+    margin-bottom: 0px;
+}
+.comments textarea {
+    min-height: 40px;
+    font-size: 1.5em;
 }
