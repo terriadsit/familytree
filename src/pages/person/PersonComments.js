@@ -49,6 +49,7 @@ export default function PersonComments({personId}) {
 
       // clear form
       setNewComment('')
+      
   }  
   
   return (
