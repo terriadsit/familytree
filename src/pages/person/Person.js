@@ -1,5 +1,4 @@
 import { useDocument } from '../../hooks/useDocument'
-import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import PersonSummary from './PersonSummary'
 import PersonComments from './PersonComments'
@@ -21,8 +20,6 @@ export default function Person() {
     return <div className="loading">Loading...</div>
   }
   
-
-  console.log('person', personId)
   return (
     <div className="person-details">
       <PersonSummary person={document} />

@@ -1,15 +1,14 @@
-import { useEffect, useState, useRef  } from "react"
+import { useState } from "react"
 import { serverTimestamp } from 'firebase/firestore'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { useFirestore } from "../../hooks/useFirestore"
 import { uploadImage } from "../../manageFileStorage/uploadImage"
-import { useParams } from "react-router-dom"
 import  checkImage from "../../manageFileStorage/checkImage"
 import CommentList from "./CommentList"
 
 export default function PersonComments({personId}) {
   
-  const { addDocument, response } = useFirestore('comments')
+  const { addDocument } = useFirestore('comments')
   const [newComment, setNewComment] = useState('')
   const { user } = useAuthContext()
   const createdAt = serverTimestamp()
@@ -17,9 +16,6 @@ export default function PersonComments({personId}) {
   const [imageUrl, setImageUrl] = useState(null)
   const [imageError, setImageError] = useState(null)
   
-  // let params = useParams()
-  // const personId = params.id
-  console.log('personComments', personId)
   const handleImageChange = (e) => {
     setImage(null)
     setImageError(null)
