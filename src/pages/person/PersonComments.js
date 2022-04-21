@@ -19,7 +19,7 @@ export default function PersonComments({personId}) {
   
   // let params = useParams()
   // const personId = params.id
-  
+  console.log('personComments', personId)
   const handleImageChange = (e) => {
     setImage(null)
     setImageError(null)
@@ -50,6 +50,9 @@ export default function PersonComments({personId}) {
 
       // now add image to storage, uploadImage will update  imageUrl 
       await uploadImage(image, personId, commentId)
+
+      // clear form
+      setNewComment('')
   }  
   
   return (
