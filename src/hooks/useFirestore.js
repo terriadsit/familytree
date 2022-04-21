@@ -1,6 +1,6 @@
 import { useReducer, useEffect, useState } from "react"
 import { dbFirestore } from "../firebase/config"
-import { collection, addDoc } from 'firebase/firestore'
+import { collection, addDoc, deleteDoc, doc } from 'firebase/firestore'
 
 
 let initialState = {
@@ -61,7 +61,7 @@ export const useFirestore = (whCollection) => {
     dispatch({ type: 'IS_PENDING' })
 
     try {
-      await ref.doc(id).delete()
+      await deleteDoc(doc(ref, id ))
       dispatchIfNotCancelled({ type: 'DELETED_DOCUMENT' })
     }
     catch (err) {

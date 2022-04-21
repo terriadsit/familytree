@@ -65,7 +65,14 @@
     color: var(--text-color);
     font-size: 0.9em;
 }
+.comment-list-item {
+    display: block;
+}
 .fa-regular {
-    position: absolute;
-    right: 0;
+    justify-content: flex-end;
+    margin-top: 3px;
+    display: block;
   }
+.deleteBtn {
+    border: none;
+}
