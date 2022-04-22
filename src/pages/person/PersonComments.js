@@ -6,7 +6,7 @@ import { uploadImage } from "../../manageFileStorage/uploadImage"
 import  checkImage from "../../manageFileStorage/checkImage"
 import CommentList from "./CommentList"
 
-export default function PersonComments({personId}) {
+export default function PersonComments({ person }) {
   
   const { addDocument } = useFirestore('comments')
   const [newComment, setNewComment] = useState('')
@@ -35,7 +35,7 @@ export default function PersonComments({personId}) {
       e.preventDefault()
       
       const commentToAdd = {
-        personId,
+        personId: person.id,
         createdBy: {createdBy: user.uid, name: user.displayName },
         comment: newComment,
         createdAt,
@@ -43,19 +43,21 @@ export default function PersonComments({personId}) {
       }
 
       let commentId = await addDocument(commentToAdd)
-
+      console.log('person comments', person.id)
       // now add image to storage, uploadImage will update  imageUrl 
-      await uploadImage(image, personId, commentId)
+      await uploadImage(image, commentToAdd.personId, commentId)
 
       // clear form
       setNewComment('')
+      setImageUrl(null)
+      setImage(null)
       
   }  
   
   return (
     <div className="comments"> 
         <h4>Comments, stories, photos, etc.</h4>
-        <CommentList personId={personId} />
+        <CommentList person={person} />
         <form className="add-comment" onSubmit={handleSubmit}>
             <label>
                 <span>Add new comment:</span>

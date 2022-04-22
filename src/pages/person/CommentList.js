@@ -1,36 +1,22 @@
 import { useCollection } from "../../hooks/useCollection"
 import { useAuthContext } from "../../hooks/useAuthContext"
 import { useState } from "react"
-import { useFirestore } from "../../hooks/useFirestore"
-import deleteStoredImage from "../../manageFileStorage/deleteStoredImage"
+import deleteComment from "./deleteComment"
 
-export default function CommentList({personId}) {
+export default function CommentList({ person }) {
   const [deleteError, setDeleteError] = useState('')
   const { user } = useAuthContext()
-  const query = ['personId', '==', personId]
+  const query = ['personId', '==', person.id]
   const { documents, error } = useCollection('comments', query, ['createdAt'])
-  const { deleteDocument } = useFirestore('comments')
-  
-  
+    
   if (error) {
+      setDeleteError(error)
       return <div className="error">{error}</div>
   }
 
   const handleClick = (comment) => {
-    console.log('comment.createdBy', comment.createdBy, 'id', comment.id)
-    const id = comment.createdBy.createdBy
-    if (user.uid === id || id === personId.createdBy) {
-      if (comment.imageUrl) {
-        const anError = deleteStoredImage(comment.imageUrl)
-        setDeleteError(anError)
-        console.log('error', anError)
-      }
-      if (!deleteError) {
-        deleteDocument(comment.id)
-      }
-    } else {
-      setDeleteError('only the creator of this person or this comment may delete it')
-    }
+    const error = deleteComment(comment, user, person)
+    console.log(error)
   }
 
   return (
@@ -43,7 +29,7 @@ export default function CommentList({personId}) {
                     {comment.imageUrl && <img className="image" src={comment.imageUrl} alt="user added" />}
                     <p className="comment-author">added by: {comment.createdBy.name}</p>
                     <button className="deleteBtn" 
-                      onClick={() => handleClick(comment)}
+                      onClick={() => handleClick({commentId: comment.id, commentData: comment})}
                     >
                       <i className="fa-regular fa-trash-can"></i>
                     </button>

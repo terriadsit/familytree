@@ -23,7 +23,7 @@ export default function Person() {
   return (
     <div className="person-details">
       <PersonSummary person={document} />
-      <PersonComments personId={personId}/>
+      <PersonComments person={document}/>
     </div>
   )
 }
