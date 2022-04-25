@@ -113,7 +113,7 @@ export default function AddPerson() {
       children,
       createdBy: {uid: user.uid, createdByName: user.displayName},
       createdAt,
-      memories
+      onUsers: [user.uid]
     }
     // now get personid
     let personId = await addDocument(person)

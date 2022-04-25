@@ -7,6 +7,7 @@ import deleteComment from "./deleteComment"
 import { useFirestore } from "../../hooks/useFirestore"
 import deleteStoredImage from "../../manageFileStorage/deleteStoredImage"
 import { query, collection, where, getDocs } from 'firebase/firestore'
+import updateMyPersons from "../../manageFileStorage/updateMyPersons"
 
 export default function PersonSummary({ person }) {
     const [deleteError, setDeleteError] = useState('')
@@ -53,13 +54,17 @@ export default function PersonSummary({ person }) {
           for (let i = 0; i < commentsToDelete.length; i++) {
              deleteComment(commentsToDelete[i], user, person)
            }
-                  
-          // delete person from any users home page
-          //updateMyPersons(user.id, person.id, person.birthDate, 'remove')
-          
+           
+           // find those users who have this person on their home page, myPersons
+           const displayedBy = person.onUsers
+           console.log('person.onUsers', displayedBy)
+           displayedBy.map((uid) => {
+             updateMyPersons(uid, person.id, null, 'remove')
+           })
+                    
           // last, delete person
           if (!deleteError) {
-             deleteDocument(person.id)
+            deleteDocument(person.id)
           }
         } else {
           setDeleteError('only the creator of this person or this comment may delete it')
