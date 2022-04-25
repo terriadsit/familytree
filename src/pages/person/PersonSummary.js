@@ -8,6 +8,7 @@ import { useFirestore } from "../../hooks/useFirestore"
 import deleteStoredImage from "../../manageFileStorage/deleteStoredImage"
 import { query, collection, where, getDocs } from 'firebase/firestore'
 import updateMyPersons from "../../manageFileStorage/updateMyPersons"
+import updateARelative from "../../manageFileStorage/updateARelative"
 
 export default function PersonSummary({ person }) {
     const [deleteError, setDeleteError] = useState('')
@@ -57,7 +58,25 @@ export default function PersonSummary({ person }) {
            displayedBy.map((uid) => (
              updateMyPersons(uid, person.id, person.birthDate, 'remove')
            ))
-                    
+          
+          // remove this person from any relatives
+          // update any siblings
+          for (let i = 0; i < person.siblings.length; i++) {
+            updateARelative(person.siblings[i].id, person.id, person.name, 'siblings', 'remove')
+          }
+          // update any spouses
+          for (let i = 0; i < person.spouses.length; i++) {
+            updateARelative(person.spouses[i].id, person.id, person.name, 'spouses', 'remove')
+          } 
+          // update any parents by removing this person from children list
+          for (let i = 0; i < person.parents.length; i++) {
+            updateARelative(person.parents[i].id, person.id, person.name, 'children', 'remove')
+          } 
+          // update any children by removing this person from the parents list
+          for (let i = 0; i < person.children.length; i++) {
+            updateARelative(person.children[i].id, person.id, person.name, 'parents', 'remove')
+          }
+
           // last, delete person
           if (!deleteError) {
             deleteDocument(person.id)
