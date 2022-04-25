@@ -94,8 +94,7 @@ export default function AddPerson() {
   }
   
  const handleSubmit = async (e) => {
-    e.preventDefault()
-    const memories = [] // for memory doc ids 
+    e.preventDefault() 
     const uid = user.uid
     const createdAt = serverTimestamp()
     const person = {

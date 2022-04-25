@@ -3,10 +3,11 @@ import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'
 
 async function updateMyPersons(uid, personId, birthDate, whChange) {
     const userRef = doc(dbFirestore, 'users', uid)
+    birthDate = birthDate ? birthDate : 'unknown' 
     const personInfo = { 
-        personId
+        personId,
+        birthDate
     }
-    
     switch(whChange) {
        case "add": {
            await updateDoc(userRef, {

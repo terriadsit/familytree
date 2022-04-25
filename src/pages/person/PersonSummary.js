@@ -32,10 +32,8 @@ export default function PersonSummary({ person }) {
 
     // delete person
     async function handleClick(person) {
-        console.log('person.createdBy', person.createdBy, 'id', person.id)
         const id = person.createdBy.uid
         if (user.uid === id ) {
-            console.log('in first if', user.uid, id)
           if (person.imageUrl) {
             const anError = deleteStoredImage(person.imageUrl)
             setDeleteError(anError)
@@ -46,7 +44,6 @@ export default function PersonSummary({ person }) {
           let ref = collection(dbFirestore, 'comments')
           let q = query(ref, where('personId', '==', person.id))  
           const querySnapshot = await getDocs(q)
-          console.log('in catch ids', querySnapshot)
           querySnapshot.forEach(doc => { 
              commentsToDelete.push({ commentId: doc.id, commentData: doc.data()})
           })
@@ -57,10 +54,9 @@ export default function PersonSummary({ person }) {
            
            // find those users who have this person on their home page, myPersons
            const displayedBy = person.onUsers
-           console.log('person.onUsers', displayedBy)
-           displayedBy.map((uid) => {
-             updateMyPersons(uid, person.id, null, 'remove')
-           })
+           displayedBy.map((uid) => (
+             updateMyPersons(uid, person.id, person.birthDate, 'remove')
+           ))
                     
           // last, delete person
           if (!deleteError) {
