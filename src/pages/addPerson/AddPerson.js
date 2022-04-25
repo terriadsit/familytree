@@ -7,6 +7,7 @@ import { serverTimestamp } from 'firebase/firestore'
 import checkImage from '../../manageFileStorage/checkImage'
 import updateMyPersons from '../../manageFileStorage/updateMyPersons'
 import { uploadImage } from '../../manageFileStorage/uploadImage'
+import updateARelative from '../../manageFileStorage/updateARelative'
 
 import Select from 'react-select'
 import { useNavigate } from "react-router-dom"
@@ -122,7 +123,27 @@ export default function AddPerson() {
      
     // add personid and Birthday to users home page personList
     updateMyPersons(uid, personId, birthDate, 'add')
-    
+
+    // update any siblings
+    for (let i = 0; i < siblings.length; i++) {
+      updateARelative(siblings[i].id, personId, name, 'siblings', 'add')
+    }
+
+    // update any spouse(s)
+    for (let i = 0; i < spouses.length; i++) {
+      updateARelative(spouses[i].id, personId, name, 'spouses', 'add')
+    }
+
+    // update any parents by adding this person as children
+    for (let i = 0; i < parents.length; i++) {
+      updateARelative(parents[i].id, personId, name, 'children', 'add')
+    }
+
+    // update any children by adding this person as parent
+    for (let i = 0; i < children.length; i++) {
+      updateARelative(children[i].id, personId, name, 'parents', 'add')
+    }
+
     // redirect to home page
     navigate('/')
 
