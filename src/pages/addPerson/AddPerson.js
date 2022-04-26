@@ -9,6 +9,7 @@ import checkImage from '../../manageFileStorage/checkImage'
 import updateMyPersons from '../../manageFileStorage/updateMyPersons'
 import { uploadImage } from '../../manageFileStorage/uploadImage'
 import updateARelative from '../../manageFileStorage/updateARelative'
+import Relatives from './Relatives'
 
 import Select from 'react-select'
 import { useNavigate, useLocation, useParams } from "react-router-dom"
@@ -71,7 +72,7 @@ export default function AddPerson() {
       setImageUrl(null)
       setImageError(null)
       setComments(person.comments)
-      setSpouses([])
+      setSpouses(person.spouses)
       setMarriageComments(person.marriageComments)
       setSiblings([])
       setParents([])
@@ -105,48 +106,7 @@ export default function AddPerson() {
     }
   },[action, personId])
 
-  // 'people' to populate drop down selects
-  const { documents } = useCollection('people', null, null)
-  const [people, setPeople] = useState([])
- 
-  const formatRelatives = (relatives) => {
-     const rels = relatives.map(r =>  {
-      return { id: r.value, name: r.label }
-    })
-    return rels
-  }
- 
-  const handleSiblingOption = (sib) => {
-      const sibs = formatRelatives(sib)
-      setSiblings(sibs)
-  }
-
-  const handleParentOption = (parent) => {
-    const parents = formatRelatives(parent)
-    setParents(parents)
-  }
-
-  const handleChildrenOption = (child) => {
-    const children = formatRelatives(child)
-    setChildren(children)
-  }
   
-  const handleSpousesOption = (spouse) => {
-    const s = formatRelatives(spouse)
-    setSpouses(s)
-  }
-
-  // populate people for select
-  useEffect(() => {
-    if(documents) {
-      const options = documents.map(person => {
-        return { value: person.id, label: person.name }
-      })
-      setPeople(options)
-    }
-
-   },[documents])
-
  const handleImageChange = (e) => {
    setImage(null)
    setImageError(null)
@@ -272,30 +232,8 @@ export default function AddPerson() {
           {imageError && <p className='error'>{imageError}</p>}
           <span>later you will be able to update this person to link to their siblings, parents and children if those people are presently not added </span>
             <br></br>
-          <label>
-            <span>choose siblings</span>
-            <Select 
-              isMulti
-              onChange={(option) => {handleSiblingOption(option)}}
-              options={people}
-          />
-          </label>
-          <label>
-            <span>choose parents</span>
-            <Select 
-              isMulti
-              onChange={(option) => {handleParentOption(option)}}
-              options={people}
-          />
-          </label>
-         <label>
-            <span>choose spouses</span>
-            <Select 
-              isMulti
-              onChange={(option) => {handleSpousesOption(option)}}
-              options={people}
-          />
-          </label>
+          <Relatives person={person} />
+          
           <label>
             <span>marriage comments (dates, locations, etc.) </span>
             <input 
@@ -304,14 +242,7 @@ export default function AddPerson() {
               value={marriageComments}
             />
           </label>
-          <label>
-            <span>choose children</span>
-            <Select 
-              isMulti
-              onChange={(option) => {handleChildrenOption(option)}}
-              options={people}
-          />
-          </label>
+          
           <label>
             <span>comments, memories, stories, etc.</span>
             <textarea 
