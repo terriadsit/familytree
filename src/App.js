@@ -42,7 +42,7 @@ function App() {
              />
              <Route 
                path="/updateperson/:id" 
-               element={user ? <UpdatePerson /> : <Login />} 
+               element={user ? <AddPerson /> : <Login />} 
              />
              <Route 
                path="/addperson" 

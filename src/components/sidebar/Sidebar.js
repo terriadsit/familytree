@@ -24,7 +24,7 @@ export default function Sidebar() {
             <nav className="links">
               <ul>
                 <li>
-                  <NavLink to="/addperson">
+                  <NavLink to="/addperson?action=create">
                     <img src={AddIcon} alt="add icon" />
                     <span>Add a Person</span>
                   </NavLink> 

@@ -11,7 +11,7 @@ import updateMyPersons from "../../manageFileStorage/updateMyPersons"
 import updateARelative from "../../manageFileStorage/updateARelative"
 
 export default function PersonSummary({ person }) {
-    const [deleteError, setDeleteError] = useState('')
+    const [error, setError] = useState('')
     let commentsToDelete = []
     const { user } = useAuthContext()
     const { deleteDocument } = useFirestore('people')
@@ -31,13 +31,22 @@ export default function PersonSummary({ person }) {
     const spouses = formatNameList(person.spouses)
     const children = formatNameList(person.children)
 
+    // edit person
+    const handleEdit = () => {
+      if (person.createdBy.uid === user.uid) {
+         navigate('/updateperson/' + person.id)
+      } else {
+         setError('only the creator of this document may edit it')
+      }
+    }
+
     // delete person
-    async function handleClick(person) {
+    async function handleDelete(person) {
         const id = person.createdBy.uid
         if (user.uid === id ) {
           if (person.imageUrl) {
             const anError = deleteStoredImage(person.imageUrl)
-            setDeleteError(anError)
+            setError(anError)
             console.log('error', anError)
           }
           
@@ -78,11 +87,11 @@ export default function PersonSummary({ person }) {
           }
 
           // last, delete person
-          if (!deleteError) {
+          if (!error) {
             deleteDocument(person.id)
           }
         } else {
-          setDeleteError('only the creator of this person or this comment may delete it')
+          setError('only the creator of this person or this comment may delete it')
         }
         // redirect to home page
         navigate('/')
@@ -110,12 +119,19 @@ export default function PersonSummary({ person }) {
             <p>children: {children}</p>
             <div>{person.comments}</div>
             <p className="created-by">Entry created by: {person.createdBy.createdByName} </p>
-            <button className="deleteBtn" 
-              onClick={() => handleClick(person)}
-            >
-              <i className="fa-regular fa-trash-can"></i>
+            <div className="edit-btns">
+             <button className="deleteBtn" 
+               onClick={() => handleDelete(person)}
+             >
+               <i className="fa-regular fa-trash-can"></i>
+             </button>
+             <button className="deleteBtn" 
+               onClick={() => handleEdit(person)}
+             >
+               <i className="fa-solid fa-pen"></i>
             </button>
-            {deleteError && <p className="error">Error deleting document: {deleteError}</p> }
+            </div>
+            {error && <p className="error">Error: {error}</p> }
         </div>
     </div>
   )

@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { useCollection } from '../../hooks/useCollection'
 import { useFirestore } from '../../hooks/useFirestore'
 import { useAuthContext } from '../../hooks/useAuthContext'
-import { serverTimestamp } from 'firebase/firestore'
+import { serverTimestamp, doc, getDoc } from 'firebase/firestore'
+import { dbFirestore } from '../../firebase/config'
 
 import checkImage from '../../manageFileStorage/checkImage'
 import updateMyPersons from '../../manageFileStorage/updateMyPersons'
@@ -10,13 +11,25 @@ import { uploadImage } from '../../manageFileStorage/uploadImage'
 import updateARelative from '../../manageFileStorage/updateARelative'
 
 import Select from 'react-select'
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation, useParams } from "react-router-dom"
 
 
 // styles
 import './AddPerson.css'
 
 export default function AddPerson() {
+  //Query Parameters
+  const history = useNavigate();
+  const queryString = useLocation().search;
+  const queryParams = new URLSearchParams(queryString);
+  const action = queryParams.get('action');
+  console.log('actioon', action, 'querystring',queryString)
+
+  //Route parameteres
+  const params = useParams();
+  const personId = params.id;
+  console.log('id', personId)
+
   // form fields
   const [name, setName] = useState('')
   const [otherName, setOtherName] = useState('')
@@ -32,11 +45,66 @@ export default function AddPerson() {
   const [siblings, setSiblings] = useState([])
   const [parents, setParents] = useState([])
   const [children, setChildren] = useState([])
+  const [error, setError] = useState('')
 
   const { addDocument } = useFirestore('people')
   const { user } = useAuthContext()
   let navigate = useNavigate()
-  
+  let person = {}
+
+  async function getPersonDetails() {
+    let person = {}
+    try {
+      const ref = doc(dbFirestore, 'people', personId)
+ 
+      const docSnap = await getDoc(ref)
+         
+       if (docSnap.exists()) {
+         person = { ...docSnap.data() }
+      } 
+      setName(person.name)
+      setOtherName(person.otherName)
+      setBirthDate(person.birthDate)
+      setDeathDate(person.deathDate)
+      setBirthCity(person.birthCity)
+      setImage(null)
+      setImageUrl(null)
+      setImageError(null)
+      setComments(person.comments)
+      setSpouses([])
+      setMarriageComments(person.marriageComments)
+      setSiblings([])
+      setParents([])
+      setChildren([])
+
+    } catch(err) {
+      setError(err)
+      console.log('error', err)
+    }
+  }
+
+  useEffect(() => {
+    if(!action){
+      getPersonDetails()
+    
+    } else {
+      setName('')
+      setOtherName('')
+      setBirthDate('')
+      setDeathDate('')
+      setBirthCity('')
+      setImage(null)
+      setImageUrl(null)
+      setImageError(null)
+      setComments('')
+      setSpouses([])
+      setMarriageComments('')
+      setSiblings([])
+      setParents([])
+      setChildren([])
+    }
+  },[action, personId])
+
   // 'people' to populate drop down selects
   const { documents } = useCollection('people', null, null)
   const [people, setPeople] = useState([])
