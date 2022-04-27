@@ -22,6 +22,24 @@ export default function Relatives(person) {
   const { documents } = useCollection('people', null, null)
   const [people, setPeople] = useState([])
    
+  const updateSiblings = (action) => {
+    console.log('action', action, 'tempsib', tempSibling)
+    if (action === 'add') { 
+      
+        const found = tempSiblings.find(element => element.id === tempSibling.id )
+        if (!found && tempSibling) {
+          tempSiblings.push(tempSibling) 
+        }
+    } else {
+        const filtered = tempSiblings.filter(sib => sib.id !== tempSibling.id)
+        tempSiblings = filtered
+        console.log('must add or remove sibling')
+    }
+    console.log('tempsibs',tempSiblings)
+    const formattedSibs = formatNameList(tempSiblings)
+    sibsList.innerText = 'current siblings: ' + formattedSibs
+  }
+
   const addSibling = () => {
     const found = tempSiblings.find(element => element.id === tempSibling.id )
     if (!found && tempSibling) {
@@ -79,8 +97,8 @@ export default function Relatives(person) {
               options={people}
             />
           </label>
-          <button type="button" className="btn" onClick={addSibling}>Add Sibling</button>
-          <button type="button" className="btn" onClick={removeSibling}>Remove Sibling</button>
+          <button type="button" className="btn" onClick={() => updateSiblings('add')}>Add Sibling</button>
+          <button type="button" className="btn" onClick={() => updateSiblings('remove')}>Remove Sibling</button>
           <p id='sibs-list'></p>
           <label>
             <span>choose parents</span>
