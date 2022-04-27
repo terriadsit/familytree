@@ -9,6 +9,7 @@ import deleteStoredImage from "../../manageFileStorage/deleteStoredImage"
 import { query, collection, where, getDocs } from 'firebase/firestore'
 import updateMyPersons from "../../manageFileStorage/updateMyPersons"
 import updateARelative from "../../manageFileStorage/updateARelative"
+import formatNameList from "../../sharedFunctions/formatNameList"
 
 export default function PersonSummary({ person }) {
     const [error, setError] = useState('')
@@ -18,14 +19,7 @@ export default function PersonSummary({ person }) {
     let navigate = useNavigate()
 
    
-    const formatNameList = (list) => {
-        let tempList = ''
-        for (let i=0; i < list.length; i++) {
-            tempList += list[i].name + ', '
-        }
-        tempList = tempList.replace(/,\s*$/,"")
-        return tempList
-    }
+  
     const parents = formatNameList(person.parents)
     const siblings = formatNameList(person.siblings)
     const spouses = formatNameList(person.spouses)

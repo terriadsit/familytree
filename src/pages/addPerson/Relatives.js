@@ -1,6 +1,7 @@
 import { useCollection } from "../../hooks/useCollection"
 import { useState, useEffect } from "react"
 import Select from 'react-select'
+import formatNameList from "../../sharedFunctions/formatNameList"
 
 export default function Relatives(person) {
   // form fields
@@ -9,36 +10,53 @@ export default function Relatives(person) {
   const [siblings, setSiblings] = useState([])
   const [parents, setParents] = useState([])
   const [children, setChildren] = useState([])
+
+  const sibsList = document.getElementById('sibs-list')
+
+  let tempSibling = ''
+  let tempSiblings = []
+  const seen = new Set()
+  let siblingSet = new Set()
   
   // 'people' to populate drop down selects
   const { documents } = useCollection('people', null, null)
   const [people, setPeople] = useState([])
- 
-  const formatRelatives = (relatives) => {
-     const rels = relatives.map(r =>  {
-      return { id: r.value, name: r.label }
-    })
-    return rels
+   
+  const addSibling = () => {
+    const found = tempSiblings.find(element => element.id === tempSibling.id )
+    if (!found && tempSibling) {
+      tempSiblings.push(tempSibling)
+      const formattedSibs = formatNameList(tempSiblings)
+      sibsList.innerText = 'current siblings: ' + formattedSibs
+    }
+  }
+
+  const removeSibling = () => {
+    console.log('remove', tempSibling)
+    const filtered = tempSiblings.filter(sib => sib.id !== tempSibling.id)
+    console.log('filtered', filtered)
+    tempSiblings = filtered
+    const formattedSibs = formatNameList(tempSiblings)
+    sibsList.innerText = 'current siblings: ' + formattedSibs
   }
  
   const handleSiblingOption = (sib) => {
-      const sibs = formatRelatives(sib)
-      setSiblings(sibs)
+    tempSibling = { id: sib.value, name: sib.label }
   }
 
   const handleParentOption = (parent) => {
-    const parents = formatRelatives(parent)
+    //const parents = formatRelatives(parent)
     setParents(parents)
   }
 
   const handleChildrenOption = (child) => {
-    const children = formatRelatives(child)
+    //const children = formatRelatives(child)
     setChildren(children)
   }
   
   const handleSpousesOption = (spouse) => {
-    const s = formatRelatives(spouse)
-    setSpouses(s)
+    //const s = formatRelatives(spouse)
+    setSpouses(spouse)
   }
 
   // populate people for select
@@ -56,12 +74,14 @@ export default function Relatives(person) {
     <div>
         <label>
             <span>choose siblings</span>
-            <Select 
-              isMulti
+            <Select className="sibling"
               onChange={(option) => {handleSiblingOption(option)}}
               options={people}
-          />
+            />
           </label>
+          <button type="button" className="btn" onClick={addSibling}>Add Sibling</button>
+          <button type="button" className="btn" onClick={removeSibling}>Remove Sibling</button>
+          <p id='sibs-list'></p>
           <label>
             <span>choose parents</span>
             <Select 
