@@ -14,7 +14,6 @@ import Relatives from './Relatives'
 import Select from 'react-select'
 import { useNavigate, useLocation, useParams } from "react-router-dom"
 
-
 // styles
 import './AddPerson.css'
 
@@ -106,7 +105,10 @@ export default function AddPerson() {
     }
   },[action, personId])
 
-  
+ const handleCallback = (childData) => {
+   console.log('childData', childData)
+ }
+
  const handleImageChange = (e) => {
    setImage(null)
    setImageError(null)
@@ -152,28 +154,9 @@ export default function AddPerson() {
     // add personid and Birthday to users home page personList
     updateMyPersons(uid, personId, birthDate, 'add')
 
-    // update any siblings
-    for (let i = 0; i < siblings.length; i++) {
-      updateARelative(siblings[i].id, personId, name, 'siblings', 'add')
-    }
-
-    // update any spouse(s)
-    for (let i = 0; i < spouses.length; i++) {
-      updateARelative(spouses[i].id, personId, name, 'spouses', 'add')
-    }
-
-    // update any parents by adding this person as children
-    for (let i = 0; i < parents.length; i++) {
-      updateARelative(parents[i].id, personId, name, 'children', 'add')
-    }
-
-    // update any children by adding this person as parent
-    for (let i = 0; i < children.length; i++) {
-      updateARelative(children[i].id, personId, name, 'parents', 'add')
-    }
-
-    // redirect to home page
-    navigate('/')
+    
+    // redirect to add relatives
+    navigate(`/addrelatives/${personId}`)
 
   }
   
@@ -230,10 +213,6 @@ export default function AddPerson() {
             />
           </label>
           {imageError && <p className='error'>{imageError}</p>}
-          <span>later you will be able to update this person to link to their siblings, parents and children if those people are presently not added </span>
-            <br></br>
-          <Relatives person={person} />
-          
           <label>
             <span>marriage comments (dates, locations, etc.) </span>
             <input 
@@ -253,6 +232,11 @@ export default function AddPerson() {
           </label>
           <button className="btn">Add Person</button>
         </form>
+        <br></br>
+        <span>later you will be able to update this person to link to their siblings, parents and children if those people are presently not added </span>
+           
+        {!action && <Relatives person={person} />}
+          
     </div>
   )
 }

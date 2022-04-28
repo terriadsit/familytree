@@ -10,6 +10,7 @@ import Person from './pages/person/Person'
 import UpdatePerson from './pages/updatePerson/UpdatePerson'
 import Navbar from './components/Navbar'
 import Sidebar from './components/sidebar/Sidebar'
+import AddRelatives from './pages/addRelatives/AddRelatives'
 
 // styles
 import './App.css'
@@ -48,6 +49,10 @@ function App() {
                path="/addperson" 
                element={user ? <AddPerson /> : <Login />} 
              />
+             <Route 
+               path="/addrelatives/:id"
+               element={user ? <AddRelatives /> : <Login />}
+             /> 
            </Routes>
           </div>
         </BrowserRouter>

@@ -8,7 +8,6 @@ import './Person.css'
 
 export default function Person() {
   let params = useParams()
-  //const [personId, setPersonId] = useState(params.id)
   const personId = params.id
   const { document, error } = useDocument('people', personId)
   
