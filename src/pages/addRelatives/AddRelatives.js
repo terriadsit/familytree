@@ -1,71 +1,90 @@
 import { useCollection } from "../../hooks/useCollection"
 import { useState, useEffect } from "react"
-import Select from 'react-select'
 import formatNameList from "../../sharedFunctions/formatNameList"
 import updateARelative from "../../manageFileStorage/updateARelative"
 import { useDocument } from "../../hooks/useDocument"
 import PersonSummary from "../person/PersonSummary"
 import { useParams } from 'react-router-dom'
+import ChooseRelatives from './ChooseRelatives'
+import Select from 'react-select'
 
 // styles
 import './AddRelatives.css'
 
 function AddRelatives() {
 
-    // 'people' to populate drop down selects
-    const { documents } = useCollection('people', null, null)
-    const [people, setPeople] = useState([])
+  // 'people' to populate drop down selects
+  const { documents } = useCollection('people', null, null)
+  const [people, setPeople] = useState([])
     
-    // person who is getting relatives added
-    let params = useParams()
-    const personId = params.id
-    const { document: tempdoc } = useDocument('people', personId )
-    const person = { ...tempdoc }
-    //let error = !person.name ? 'this person does not exist' : ''
+  // person who is getting relatives added
+  let params = useParams()
+  const personId = params.id
+  const { document: tempdoc } = useDocument('people', personId )
+  const person = { ...tempdoc }
+  const name = person.name   
+
+  let error = !person.name ? 'this person does not exist' : ''
     
-    // populate people for select
-    useEffect(() => {
-        if(documents) {
-          const options = documents.map(person => {
-            return { value: person.id, label: person.name }
-          })
-          setPeople(options)
-        }
-    
-       },[documents])
+  // populate people for select
+  useEffect(() => {
+    if(documents) {
+      const options = documents.map(person => {
+        return { value: person.id, label: person.name }
+    })
+    setPeople(options)
+    }
+  },[documents])
 
   // form fields
   const [spouses, setSpouses] = useState([])
-  //const [siblings, setSiblings] = useState([])
+  const [siblings, setSiblings] = useState([])
   const [parents, setParents] = useState([])
   const [children, setChildren] = useState([])
-    
+
   let tempSibling = ''
-  let siblings = []
-  const name = person.name   
-      
-     // ui Sibling list
-     const updateSiblings = (action) => {
-       const sibsList = document.getElementById('sibs-list')
-       if (action === 'add') { 
-          const found = siblings.find(element => element.id === tempSibling.id )
-          if (!found && tempSibling) {
-            siblings.push(tempSibling) 
-          }
-       } else {
-          const filtered = siblings.filter(sib => sib.id !== tempSibling.id)
-          siblings = filtered
-          console.log('must add or remove sibling')
+  let tempSiblings = []   
+  
+  const relationships = {
+    sib: 'sibling',
+    spo: 'spouse',
+    par: 'parent',
+    chi: 'child'
+  };
+
+  let relationship = 'sibling'
+  
+  let props = {
+    relationship,
+    people: [...people],
+    updateRelatives: (action) => updateRelatives(action),
+    handleSiblingOption: (sib) => handleSiblingOption(sib)
+  }
+
+  // ui Sibling list
+  const updateRelatives = (action) => {
+    const sibsList = document.getElementById('sibs-list')
+    if (action === 'add') { 
+      const found = tempSiblings.find(element => element.id === tempSibling.id )
+      if (!found && tempSibling) {
+      tempSiblings.push(tempSibling) 
       }
-      const formattedSibs = formatNameList(siblings)
-      sibsList.innerText = 'current siblings: ' + formattedSibs
+    } else {
+      const filtered = tempSiblings.filter(sib => sib.id !== tempSibling.id)
+      tempSiblings = filtered
     }
-  
-     const handleSiblingOption = (sib) => {
-       tempSibling = { id: sib.value, name: sib.label }
-     }
-  
-     const handleParentOption = (parent) => {
+    const formattedSibs = formatNameList(tempSiblings)
+    console.log(formattedSibs)
+    console.log('tempSiblings', tempSiblings, 'siblings', siblings)
+    sibsList.innerText = 'current siblings: ' + formattedSibs
+    //setSiblings(tempSiblings)
+  }
+
+  const handleSiblingOption = (sib) => {
+    tempSibling = { id: sib.value, name: sib.label }
+  }
+
+  const handleParentOption = (parent) => {
     //   //const parents = formatRelatives(parent)
     //  // setParents(parents)
      }
@@ -120,16 +139,9 @@ function AddRelatives() {
       <div>
          <PersonSummary person={person} />
         <form onSubmit={handleSubmit}>
-          <label>
-            <span>choose siblings</span>
-            <Select className="sibling"
-              onChange={(option) => {handleSiblingOption(option)}}
-              options={people}
-            />
-          </label>
-          <button type="button" className="btn" onClick={() => updateSiblings('add')}>Add Sibling</button>
-          <button type="button" className="btn" onClick={() => updateSiblings('remove')}>Remove Sibling</button>
+          <ChooseRelatives {...props} />
           <p id='sibs-list'></p>
+         
        
           <label>
             <span>choose parents</span>
