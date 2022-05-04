@@ -14,7 +14,7 @@ import { useNavigate, useLocation, useParams } from "react-router-dom"
 import './AddPerson.css'
 
 export default function AddPerson() {
-  //Query Parameters
+  //Query Parameters, action is 'create' for new add, no action for update
   const queryString = useLocation().search;
   const queryParams = new URLSearchParams(queryString);
   const action = queryParams.get('action');
@@ -41,7 +41,7 @@ export default function AddPerson() {
   const [children, setChildren] = useState([])
   const [error, setError] = useState('')
 
-  const { addDocument } = useFirestore('people')
+  const { addDocument, updateDocument, response } = useFirestore('people')
   const { user } = useAuthContext()
   let navigate = useNavigate()
   
@@ -61,14 +61,14 @@ export default function AddPerson() {
       setDeathDate(person.deathDate)
       setBirthCity(person.birthCity)
       setImage(null)
-      setImageUrl(null)
+      setImageUrl(person.imageUrl)
       setImageError(null)
       setComments(person.comments)
       setSpouses(person.spouses)
       setMarriageComments(person.marriageComments)
-      setSiblings([])
-      setParents([])
-      setChildren([])
+      setSiblings(person.siblings)
+      setParents(person.parents)
+      setChildren(person.children)
 
     } catch(err) {
       setError(err)
@@ -115,34 +115,50 @@ export default function AddPerson() {
   
  const handleSubmit = async (e) => {
     e.preventDefault() 
-    const uid = user.uid
-    const createdAt = serverTimestamp()
-    const person = {
-      name,
-      otherName,
-      birthDate,
-      deathDate,
-      birthCity, 
-      imageUrl,
-      comments,
-      spouses,
-      marriageComments,
-      siblings,
-      parents,
-      children,
-      createdBy: {uid: user.uid, createdByName: user.displayName},
-      createdAt,
-      onUsers: [user.uid]
-    }
-    // now get personid
-    let personId = await addDocument(person)
+    if (action) {
+      // add a new person to db
+      const uid = user.uid
+      const createdAt = serverTimestamp()
+      const person = {
+        name,
+        otherName,
+        birthDate,
+        deathDate,
+        birthCity, 
+        imageUrl,
+        comments,
+        spouses,
+        marriageComments,
+        siblings,
+        parents,
+        children,
+        createdBy: {uid: user.uid, createdByName: user.displayName},
+        createdAt,
+        onUsers: [user.uid]
+      }
+      // now get personid
+      let personId = await addDocument(person)
         
-    // now add image to storage, uploadImage will update person imageUrl 
-    await uploadImage(image, personId, personId)
+      // now add image to storage, uploadImage will update person imageUrl 
+      await uploadImage(image, personId, personId)
      
-    // add personid and Birthday to users home page personList
-    updateMyPersons(uid, personId, birthDate, 'add')
-
+      // add personid and Birthday to users home page personList
+      updateMyPersons(uid, personId, birthDate, 'add')
+    } else {
+      // update this person instead of add
+      const updatedPerson =  {
+        name,
+        otherName,
+        birthDate,
+        deathDate,
+        birthCity, 
+        imageUrl,
+        comments,
+        spouses,
+        marriageComments
+      }
+      await updateDocument(personId, updatedPerson)
+    }
     
     // redirect to add relatives
     navigate(`/addrelatives/${personId}`)

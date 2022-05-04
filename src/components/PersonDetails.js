@@ -33,8 +33,8 @@ export default function PersonDetails({...person}) {
         <p>sibling(s): {siblings}</p>
         <p>married to: {spouses} {person.marriageComments}</p>
         <p>children: {children}</p>
-        {/* <div>{person.comments}</div>
-        {person.createdBy.createdByName && <p className="created-by">Entry created by: {person.createdBy.createdByName} </p>} */}
+        
+        <p className="created-by">Entry created by: {person.createdBy.createdByName} </p> 
     </div>
   )
 }
