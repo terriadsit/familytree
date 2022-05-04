@@ -13,13 +13,13 @@ function Home() {
   const uid = user.uid
   const error = ''
     
-  const { document } = useDocument('users', uid)
+  const { data } = useDocument('users', uid)
   let people = []  // people's ids
 
   useEffect (() => {
     // get people ids which user would like displayed
-    if(document){
-       document.myPersons.map((p) => {
+    if(data){
+       data.myPersons.map((p) => {
         return people.push(p)
        })
 

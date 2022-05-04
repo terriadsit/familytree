@@ -9,20 +9,37 @@ import './Person.css'
 export default function Person() {
   let params = useParams()
   const personId = params.id
-  const { document, error } = useDocument('people', personId)
+  const { data, error } = useDocument('people', personId )
+  //const person = { ...tempdoc }
   
+  // // prepare props
+  // let personDetailsProps = {
+  //   name: person.name,
+  //   otherName: person.otherName,
+  //   birthDate: person.birthDate,
+  //   deathDate: person.deathDate,
+  //   birthCity: person.birthCity, 
+  //   imageUrl: person.imageUrl,
+  //   comments: person.comments,
+  //   spouses: person.spouses,
+  //   marriageComments: person.marriageComments,
+  //   siblings: person.siblings,
+  //   parents: person.parents,
+  //   children: person.children
+  // }
+
   if (error) {
     return <div className="error">{error}</div>
   }
   
-  if (!document) {
+  if (!data) {
     return <div className="loading">Loading...</div>
   }
   
   return (
-    <div className="person-details">
-      <PersonSummary person={document} />
-      <PersonComments person={document}/>
+    <div className="person-page">
+      <PersonSummary  person={data}/>
+      <PersonComments person={data}/>
     </div>
   )
 }

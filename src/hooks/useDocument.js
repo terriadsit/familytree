@@ -3,7 +3,7 @@ import { dbFirestore } from "../firebase/config"
 import { doc, onSnapshot } from "firebase/firestore"
 
 export const useDocument = (collection, id) => {
-  const [document, setDocument] = useState(null)
+  const [data, setData] = useState(null)
   const [error, setError] = useState(null)
 
   // realtime document data
@@ -13,7 +13,7 @@ export const useDocument = (collection, id) => {
     const unsubscribe = onSnapshot(ref, snapshot => {
       // need to make sure the doc exists & has data
       if(snapshot.data()) {
-        setDocument({...snapshot.data(), id: snapshot.id})
+        setData({...snapshot.data(), id: snapshot.id})
         setError(null)
       }
       else {
@@ -29,5 +29,5 @@ export const useDocument = (collection, id) => {
 
   }, [collection, id])
 
-  return { document, error }
+  return { data, error }
 }

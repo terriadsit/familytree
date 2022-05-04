@@ -28,7 +28,7 @@ export default function AddPerson() {
   //Route parameteres
   const params = useParams();
   const personId = params.id;
-  console.log('id', personId)
+  console.log('id', personId, 'params.id', params.id)
 
   // form fields
   const [name, setName] = useState('')

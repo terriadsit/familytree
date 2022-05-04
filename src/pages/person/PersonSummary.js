@@ -2,29 +2,24 @@ import { useState } from "react"
 import { dbFirestore } from "../../firebase/config"
 import { useNavigate } from "react-router-dom"
 import { useAuthContext } from "../../hooks/useAuthContext"
-//import { useCollection } from "../../hooks/useCollection"
 import deleteComment from "./deleteComment"
 import { useFirestore } from "../../hooks/useFirestore"
 import deleteStoredImage from "../../manageFileStorage/deleteStoredImage"
 import { query, collection, where, getDocs } from 'firebase/firestore'
 import updateMyPersons from "../../manageFileStorage/updateMyPersons"
 import updateARelative from "../../manageFileStorage/updateARelative"
-import formatNameList from "../../sharedFunctions/formatNameList"
+import PersonDetails from "../../components/PersonDetails"
 
-export default function PersonSummary({ person }) {
+export default function PersonSummary({...tempPerson }) {
+    const person = {...tempPerson.person}
     const [error, setError] = useState('')
     let commentsToDelete = []
     const { user } = useAuthContext()
     const { deleteDocument } = useFirestore('people')
     let navigate = useNavigate()
 
+    let personDetailsProps = {...person}
    
-  
-    const parents = formatNameList(person.parents)
-    const siblings = formatNameList(person.siblings)
-    const spouses = formatNameList(person.spouses)
-    const children = formatNameList(person.children)
-
     // edit person
     const handleEdit = () => {
       if (person.createdBy.uid === user.uid) {
@@ -94,25 +89,9 @@ export default function PersonSummary({ person }) {
   return (
     <div>
         <div className="person-summary">
-          <h4>{person.name} 
-              {person.otherName && <span> ({person.otherName})</span>}
-          </h4>
-          <br></br>
-          {person.imageUrl && 
-                <img 
-                    className="image"
-                    src={person.imageUrl} 
-                    alt="person" 
-                 />}
-                             
-            <p>born: {person.birthDate ? person.birthDate : 'unknown'} to {person.deathDate ? person.deathDate : 'unknown'}</p>
-            <p>at: {person.birthCity ? person.birthCity : 'unknown'}</p>
-            <p>parents: {parents}</p>
-            <p>sibling(s): {siblings}</p>
-            <p>married to: {spouses} {person.marriageComments}</p>
-            <p>children: {children}</p>
-            <div>{person.comments}</div>
-            <p className="created-by">Entry created by: {person.createdBy.createdByName} </p>
+          
+          <PersonDetails {...personDetailsProps} />
+           
             <div className="edit-btns">
              <button className="deleteBtn" 
                onClick={() => handleDelete(person)}
