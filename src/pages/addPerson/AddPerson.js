@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useCollection } from '../../hooks/useCollection'
 import { useFirestore } from '../../hooks/useFirestore'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { serverTimestamp, doc, getDoc } from 'firebase/firestore'
@@ -8,10 +7,7 @@ import { dbFirestore } from '../../firebase/config'
 import checkImage from '../../manageFileStorage/checkImage'
 import updateMyPersons from '../../manageFileStorage/updateMyPersons'
 import { uploadImage } from '../../manageFileStorage/uploadImage'
-import updateARelative from '../../manageFileStorage/updateARelative'
-import Relatives from './Relatives'
 
-import Select from 'react-select'
 import { useNavigate, useLocation, useParams } from "react-router-dom"
 
 // styles
@@ -19,12 +15,10 @@ import './AddPerson.css'
 
 export default function AddPerson() {
   //Query Parameters
-  const history = useNavigate();
   const queryString = useLocation().search;
   const queryParams = new URLSearchParams(queryString);
   const action = queryParams.get('action');
-  console.log('actioon', action, 'querystring',queryString)
-
+  
   //Route parameteres
   const params = useParams();
   const personId = params.id;
@@ -50,8 +44,7 @@ export default function AddPerson() {
   const { addDocument } = useFirestore('people')
   const { user } = useAuthContext()
   let navigate = useNavigate()
-  let person = {}
-
+  
   async function getPersonDetails() {
     let person = {}
     try {
@@ -104,10 +97,6 @@ export default function AddPerson() {
       setChildren([])
     }
   },[action, personId])
-
- const handleCallback = (childData) => {
-   console.log('childData', childData)
- }
 
  const handleImageChange = (e) => {
    setImage(null)
@@ -235,7 +224,6 @@ export default function AddPerson() {
         <br></br>
         <span>later you will be able to update this person to link to their siblings, parents and children if those people are presently not added </span>
            
-        {!action && <Relatives person={person} />}
           
     </div>
   )

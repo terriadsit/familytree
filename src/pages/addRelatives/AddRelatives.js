@@ -1,17 +1,17 @@
-import { useCollection } from "../../hooks/useCollection"
+import { useParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from "react"
-import formatNameList from "../../sharedFunctions/formatNameList"
-import updateARelative from "../../manageFileStorage/updateARelative"
+import { useCollection } from "../../hooks/useCollection"
 import { useDocument } from "../../hooks/useDocument"
+import updateARelative from "../../manageFileStorage/updateARelative"
 import PersonDetails from "../../components/PersonDetails"
-import { useParams } from 'react-router-dom'
 import ChooseRelatives from './ChooseRelatives'
-import Select from 'react-select'
 
 // styles
 import './AddRelatives.css'
 
 function AddRelatives() {
+
+  const navigate = useNavigate()
 
   // 'people' to populate drop down selects
   const { documents } = useCollection('people', null, null)
@@ -42,79 +42,49 @@ function AddRelatives() {
   const [parents, setParents] = useState([])
   const [children, setChildren] = useState([])
 
-  let tempRelative = ''
   let tempRelatives = []   
   
-  const relationships = {
-    sib: 'sibling',
-    spo: 'spouse',
-    par: 'parent',
-    chi: 'child'
-  };
-
   // set up props for components
   let chooseSiblingProps = {
     relationship: 'sibling',
     people: [...people],
-    updateRelatives: (action) => updateRelatives(action),
     handleRelativeOption: (rel) => handleSiblingOption(rel)
   }
   let chooseParentsProps = {
     relationship: 'parents',
     people: [...people],
-    updateRelatives: (action) => updateRelatives(action),
     handleRelativeOption: (rel) => handleParentsOption(rel)
   }
   let chooseChildrenProps = {
     relationship: 'children',
     people: [...people],
-    updateRelatives: (action) => updateRelatives(action),
     handleRelativeOption: (rel) => handleChildrenOption(rel)
   }
   let chooseSpousesProps = {
     relationship: 'spouses',
     people: [...people],
-    updateRelatives: (action) => updateRelatives(action),
     handleRelativeOption: (rel) => handleSpousesOption(rel)
   }
   let personDetailsProps = {...person, siblings, parents, children, spouses}
   
-    // ui Sibling list
-  const updateRelatives = (action) => {
-    //setSiblings(tempSiblings)
-     const sibsList = document.getElementById('sibs-list')
-    // if (action === 'add') { 
-    //   const found = tempSiblings.find(element => element.id === tempSibling.id )
-    //   if (!found && tempSibling) {
-    //   tempSiblings.push(tempSibling) 
-    //   }
-    // } else {
-    //   const filtered = tempSiblings.filter(sib => sib.id !== tempSibling.id)
-    //   tempSiblings = filtered
-    // }
-    const formattedSibs = formatNameList(siblings)
-    
-  }
-
+  // formfield onChange functions, passed to <ChooseRelative>
   const handleSiblingOption = (rel) => {
     rel.map((r) => tempRelatives.push({id: r.value, name: r.label}))
     setSiblings(tempRelatives)
   }
-
   const handleParentsOption = (rel) => {
     rel.map((r) => tempRelatives.push({id: r.value, name: r.label}))
     setParents(tempRelatives)
   }
-  
   const handleChildrenOption = (rel) => {
     rel.map((r) => tempRelatives.push({id: r.value, name: r.label}))
     setChildren(tempRelatives)
   }
-    
   const handleSpousesOption = (rel) => {
     rel.map((r) => tempRelatives.push({id: r.value, name: r.label}))
     setSpouses(tempRelatives)
   }
+
   
     // // update any spouse(s)
     // for (let i = 0; i < spouses.length; i++) {
@@ -134,15 +104,35 @@ function AddRelatives() {
    
     const handleSubmit = (e) => {
       e.preventDefault()
+      // note: updateARelative parameters are:
+      // (personToUpdateId, relativeId, relativeName, whRelative, whChange)
       
-     // add sibs to person in db
+      // add sibs to this person in db, then add this person to sibs as a sib
       for (let i = 0; i < siblings.length; i++) {
         updateARelative(personId, siblings[i].id, siblings[i].name, 'siblings', 'add')
+        updateARelative(siblings[i].id, personId, name, 'siblings', 'add')
       }
-      // update any of their siblings
-      for (let i = 0; i < siblings.length; i++) {
-        updateARelative(siblings[i].name, personId, name, 'siblings', 'add')
+      
+      // update parents of this person, then add this person as a child to them
+      for (let i = 0; i < parents.length; i++) {
+        updateARelative(personId, parents[i].id, parents[i].name, 'parents', 'add')
+        updateARelative(parents[i].id, personId, name, 'children', 'add')
       }
+
+      // update children of this person, then add this person as parent to them
+      for (let i = 0; i < children.length; i++) {
+        updateARelative(personId, children[i].id, children[i].name, 'children', 'add')
+        updateARelative(children[i].id, personId, name, 'parents', 'add')
+      }
+
+      // update any spouse(s)
+     for (let i = 0; i < spouses.length; i++) {
+       updateARelative(personId, spouses[i].id, spouses[i].name, 'spouses', 'add')
+       updateARelative(spouses[i].id, personId, name, 'spouses', 'add')
+     }
+
+      // navigate home
+      navigate('/')
     }
   
     if (error) {

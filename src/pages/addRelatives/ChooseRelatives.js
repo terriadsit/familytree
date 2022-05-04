@@ -1,8 +1,4 @@
-import { useCollection } from "../../hooks/useCollection"
-import formatNameList from "../../sharedFunctions/formatNameList"
 import Select from 'react-select'
-
-import { useState } from "react"
 
 export default function ChooseRelatives({...props}) {
     const relationship = props.relationship
