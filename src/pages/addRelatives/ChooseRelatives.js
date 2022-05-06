@@ -7,7 +7,7 @@ export default function ChooseRelatives({...props}) {
   return (
     <div>
       <label>
-        <span>choose {relationship}</span>
+        <span>choose {relationship} to add:</span>
           <Select className="relative"
             isMulti
             onChange={(option) => {props.handleRelativeOption(option)}}

@@ -48,8 +48,6 @@ function AddRelatives() {
   const [children, setChildren] = useState([])
   const [prevSiblings, setPrevSiblings] = useState([])
 
-
-
   // on updates, add previous relatives to state
   // passed as props to RemoveRelative component
   const addPrevRelatives =  (rel) => {
@@ -59,9 +57,6 @@ function AddRelatives() {
     console.log('temprelatives', tempRelatives )
     setSiblings(tempRelatives)
   }
-  
-  
-   
   
   // set up props for components
   let removeSiblingProps = {
@@ -95,6 +90,9 @@ function AddRelatives() {
   // formfield onClick functions passed to <RemoveRelatives>
   const removeSibling = (e) => {
     let tempRelatives = [...siblings]
+    // remove sibling to this person in db, then remove this person from sibs as a sib
+    updateARelative(personId, e.target.value, e.target.name, 'siblings', 'remove')
+    updateARelative(e.target.value, personId, name, 'siblings', 'remove')
     console.log('sibling to remove', e.target.value, e.target.name)
     const keepRelatives = tempRelatives.filter((r) => r.id !== e.target.value)
     setSiblings(keepRelatives)
