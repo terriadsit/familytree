@@ -1,3 +1,7 @@
+// manage adding and updating relatives, 
+// called by AddPerson
+// holds state for relatives wh/ is updated through props functions managed here
+
 import { useParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from "react"
 import { useCollection } from "../../hooks/useCollection"
@@ -8,9 +12,10 @@ import ChooseRelatives from './ChooseRelatives'
 
 // styles
 import './AddRelatives.css'
+import RemoveRelatives from './RemoveRelatives'
 
 function AddRelatives() {
-
+  
   const navigate = useNavigate()
 
   // 'people' to populate drop down selects
@@ -41,10 +46,40 @@ function AddRelatives() {
   const [siblings, setSiblings] = useState([])
   const [parents, setParents] = useState([])
   const [children, setChildren] = useState([])
+  const [prevSiblings, setPrevSiblings] = useState([])
 
-  let tempRelatives = []   
+  // get any previous relatives into state
+  //let tempRelatives = []
+  // useEffect(() => {
+  //   if(name) {
+  //     console.log('useeffect', person)
+  //     //person.siblings.map(s => console.log('tempsibs', s))
+  //     //person.siblings.map(s => tempRelatives.push(s))
+  //     //console.log('tempsibs', tempRelatives)
+  //   }
+  //   //setSiblings(tempRelatives)
+  // }, [name]) 
+
+  // on updates, add previous relatives to state
+  // passed as props to RemoveRelative component
+  const addPrevRelatives =  (rel) => {
+    let tempRelatives = []
+    console.log('rel', rel)
+    rel.map((r) => tempRelatives.push({id: r.id, name: r.name}))
+    console.log('temprelatives', tempRelatives )
+    setSiblings(tempRelatives)
+  }
+  
+  
+   
   
   // set up props for components
+  let removeSiblingProps = {
+    relationship: 'siblings',
+    prevRelatives: person,
+    addPrevRelatives: (rel) => addPrevRelatives(rel),
+    removePrevRelative: (e) => removeSibling(e)
+  }
   let chooseSiblingProps = {
     relationship: 'sibling',
     people: [...people],
@@ -67,20 +102,42 @@ function AddRelatives() {
   }
   let personDetailsProps = {...person, siblings, parents, children, spouses}
   
+  // formfield onClick functions passed to <RemoveRelatives>
+  const removeSibling = (e) => {
+    console.log('sibling to remove', e.target.value, e.target.name)
+  }
+
   // formfield onChange functions, passed to <ChooseRelative>
   const handleSiblingOption = (rel) => {
-    rel.map((r) => tempRelatives.push({id: r.value, name: r.label}))
+    let tempRelatives = [...siblings]
+    let found = null
+    console.log('rel', rel)
+    rel.map(r => {
+      found = tempRelatives.find(el => el.id === r.value) 
+      console.log('ids', r.id )
+      if (!found) {
+        tempRelatives.push({id: r.value, name: r.label})
+      }
+    })
+
+  
+    //rel.map((r) => tempRelatives.push({id: r.value, name: r.label}))
     setSiblings(tempRelatives)
+    console.log('handle sib tempRelatives',tempRelatives)
   }
+  
   const handleParentsOption = (rel) => {
+    let tempRelatives = []
     rel.map((r) => tempRelatives.push({id: r.value, name: r.label}))
     setParents(tempRelatives)
   }
   const handleChildrenOption = (rel) => {
+    let tempRelatives = []
     rel.map((r) => tempRelatives.push({id: r.value, name: r.label}))
     setChildren(tempRelatives)
   }
   const handleSpousesOption = (rel) => {
+    let tempRelatives = []
     rel.map((r) => tempRelatives.push({id: r.value, name: r.label}))
     setSpouses(tempRelatives)
   }
@@ -91,17 +148,7 @@ function AddRelatives() {
     //   updateARelative(spouses[i].id, personId, name, 'spouses', 'add')
     // }
   
-    // // update any parents by adding this person as children
-    // for (let i = 0; i < parents.length; i++) {
-    //   updateARelative(parents[i].id, personId, name, 'children', 'add')
-    // }
-  
-    // // update any children by adding this person as parent
-    // for (let i = 0; i < children.length; i++) {
-    //   updateARelative(children[i].id, personId, name, 'parents', 'add')
-    // }
-  
-   
+    
     const handleSubmit = (e) => {
       e.preventDefault()
       // note: updateARelative parameters are:
@@ -148,6 +195,7 @@ function AddRelatives() {
          <PersonDetails {...personDetailsProps} />
          
         <form onSubmit={handleSubmit}>
+          {person && <RemoveRelatives {...removeSiblingProps} />}
           <ChooseRelatives {...chooseSiblingProps} />
           <ChooseRelatives {...chooseParentsProps} />    
           <ChooseRelatives {...chooseChildrenProps} /> 

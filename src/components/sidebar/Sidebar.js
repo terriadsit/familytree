@@ -18,7 +18,6 @@ export default function Sidebar() {
     <div className="sidebar">
         <div className="sidebar-content">
             <div className="user">
-                {/* user here later */}
                 <p>Welcome {displayName}!</p>
             </div>
             <nav className="links">

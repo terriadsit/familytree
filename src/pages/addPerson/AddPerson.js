@@ -21,7 +21,7 @@ export default function AddPerson() {
   
   //Route parameteres
   const params = useParams();
-  const personId = params.id;
+  let personId = params.id;
   console.log('id', personId, 'params.id', params.id)
 
   // form fields
@@ -114,6 +114,7 @@ export default function AddPerson() {
   }
   
  const handleSubmit = async (e) => {
+    
     e.preventDefault() 
     if (action) {
       // add a new person to db
@@ -138,12 +139,14 @@ export default function AddPerson() {
       }
       // now get personid
       let personId = await addDocument(person)
-        
+      console.log('getting id',personId )  
       // now add image to storage, uploadImage will update person imageUrl 
       await uploadImage(image, personId, personId)
      
       // add personid and Birthday to users home page personList
       updateMyPersons(uid, personId, birthDate, 'add')
+      console.log('afterupdate my persons', personId)
+      navigate(`/addrelatives/${personId}`)
     } else {
       // update this person instead of add
       const updatedPerson =  {
@@ -158,10 +161,11 @@ export default function AddPerson() {
         marriageComments
       }
       await updateDocument(personId, updatedPerson)
+      navigate(`/addrelatives/${personId}`)
     }
     
-    // redirect to add relatives
-    navigate(`/addrelatives/${personId}`)
+ 
+    
 
   }
   
