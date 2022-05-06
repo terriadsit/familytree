@@ -1,5 +1,5 @@
-// manage adding and updating relatives, 
-// called by AddPerson
+// manage adding and updating (remove or add) relatives, 
+// called by <AddPerson>
 // holds state for relatives wh/ is updated through props functions managed here
 
 import { useParams, useNavigate } from 'react-router-dom'
@@ -48,17 +48,7 @@ function AddRelatives() {
   const [children, setChildren] = useState([])
   const [prevSiblings, setPrevSiblings] = useState([])
 
-  // get any previous relatives into state
-  //let tempRelatives = []
-  // useEffect(() => {
-  //   if(name) {
-  //     console.log('useeffect', person)
-  //     //person.siblings.map(s => console.log('tempsibs', s))
-  //     //person.siblings.map(s => tempRelatives.push(s))
-  //     //console.log('tempsibs', tempRelatives)
-  //   }
-  //   //setSiblings(tempRelatives)
-  // }, [name]) 
+
 
   // on updates, add previous relatives to state
   // passed as props to RemoveRelative component
@@ -104,7 +94,10 @@ function AddRelatives() {
   
   // formfield onClick functions passed to <RemoveRelatives>
   const removeSibling = (e) => {
+    let tempRelatives = [...siblings]
     console.log('sibling to remove', e.target.value, e.target.name)
+    const keepRelatives = tempRelatives.filter((r) => r.id !== e.target.value)
+    setSiblings(keepRelatives)
   }
 
   // formfield onChange functions, passed to <ChooseRelative>
@@ -118,6 +111,7 @@ function AddRelatives() {
       if (!found) {
         tempRelatives.push({id: r.value, name: r.label})
       }
+      return null
     })
 
   
@@ -142,11 +136,6 @@ function AddRelatives() {
     setSpouses(tempRelatives)
   }
 
-  
-    // // update any spouse(s)
-    // for (let i = 0; i < spouses.length; i++) {
-    //   updateARelative(spouses[i].id, personId, name, 'spouses', 'add')
-    // }
   
     
     const handleSubmit = (e) => {

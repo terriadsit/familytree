@@ -31,9 +31,12 @@ export default function PersonDetails({...person}) {
         <p>at: {person.birthCity ? person.birthCity : 'unknown'}</p>
         <p>parents: {parents}</p>
         <p>sibling(s): {siblings}</p>
-        <p>married to: {spouses} {person.marriageComments}</p>
+        <p>married to: {spouses} {person.marriageComments && spouses ? 
+          `, ${person.marriageComments}` :
+          person.marriageComments }
+        </p>
         <p>children: {children}</p>
-        
+        {person.comments && <p>comments: {person.comments}</p>}
         <p className="created-by">Entry created by: {person.createdBy.createdByName} </p> 
     </div>
   )

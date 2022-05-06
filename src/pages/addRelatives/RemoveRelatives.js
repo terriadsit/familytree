@@ -1,28 +1,35 @@
 // readme: remove from ui prev relatives as user clicks x
-// manage state in calling function to update current relatives
+// callback function manages state to update current relatives UI
 
 import { useEffect } from "react"
 
 export default function RemoveRelatives({...props}) {
-    let html = 'temp'
-    console.log('remove', props.prevRelatives[props.relationship])
-    const relatives = props.prevRelatives[props.relationship]
-    console.log('relatives', relatives)
-    //const relativeListRef = document.getElementById('relative-list')
-    //console.log('ref', relativeListRef)
-    useEffect(() => {
-      props.addPrevRelatives(relatives)
-    },[])
+  const addPrevRelatives = props.addPrevRelatives
+  console.log('remove', props.prevRelatives[props.relationship])
+  const relatives = props.prevRelatives[props.relationship]
+  console.log('relatives', relatives)
+  //const removeRef = querySelector()
+
+  const handleClick = (e) => {
+    props.removePrevRelative(e)
+    const removeRef = document.getElementById(e.target.value)
+    removeRef.innerHTML = ''
+  }
+
+    
+  useEffect(() => {
+    addPrevRelatives(relatives)
+  },[relatives])
     
   return (
     <ul className="relative-list">
         {
           relatives.map(r => (
-             <li key={r.id}>
+             <li key={r.id} id={r.id}>
                 {r.name}
                 <button 
                   className="btn delete-btn"
-                  onClick={(e, r) => props.removePrevRelative(e, r)} 
+                  onClick={handleClick} 
                   value={r.id} 
                   name={r.name}
                   type='button'>

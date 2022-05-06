@@ -1,3 +1,6 @@
+// add or update a new person to the db depending on "action"
+// then navigate to <AddRelatives> to add or update relatives
+
 import { useEffect, useState } from 'react'
 import { useFirestore } from '../../hooks/useFirestore'
 import { useAuthContext } from '../../hooks/useAuthContext'
@@ -22,8 +25,7 @@ export default function AddPerson() {
   //Route parameteres
   const params = useParams();
   let personId = params.id;
-  console.log('id', personId, 'params.id', params.id)
-
+  
   // form fields
   const [name, setName] = useState('')
   const [otherName, setOtherName] = useState('')
@@ -39,9 +41,8 @@ export default function AddPerson() {
   const [siblings, setSiblings] = useState([])
   const [parents, setParents] = useState([])
   const [children, setChildren] = useState([])
-  const [error, setError] = useState('')
-
-  const { addDocument, updateDocument, response } = useFirestore('people')
+  
+  const { addDocument, updateDocument } = useFirestore('people')
   const { user } = useAuthContext()
   let navigate = useNavigate()
   
@@ -71,7 +72,7 @@ export default function AddPerson() {
       setChildren(person.children)
 
     } catch(err) {
-      setError(err)
+      
       console.log('error', err)
     }
   }
@@ -139,13 +140,14 @@ export default function AddPerson() {
       }
       // now get personid
       let personId = await addDocument(person)
-      console.log('getting id',personId )  
+       
       // now add image to storage, uploadImage will update person imageUrl 
       await uploadImage(image, personId, personId)
      
       // add personid and Birthday to users home page personList
       updateMyPersons(uid, personId, birthDate, 'add')
-      console.log('afterupdate my persons', personId)
+      
+      // navigate to add relatives
       navigate(`/addrelatives/${personId}`)
     } else {
       // update this person instead of add
@@ -161,6 +163,8 @@ export default function AddPerson() {
         marriageComments
       }
       await updateDocument(personId, updatedPerson)
+
+      // navigate to add or update relatives
       navigate(`/addrelatives/${personId}`)
     }
     
