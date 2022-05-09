@@ -1,18 +1,18 @@
-import formatNameList from "../sharedFunctions/formatNameList"
+// displays details of a person
+// called by <PersonSummary > and <AddRelatives >
+// receives a person with all their details
 
+import formatNameList from "../sharedFunctions/formatNameList"
 
 // styles
 import './PersonDetails.css'
 
 export default function PersonDetails({...person}) {
-
-  
   
   const parents = formatNameList(person.parents)
   const siblings = formatNameList(person.siblings)
   const spouses = formatNameList(person.spouses)
   const children = formatNameList(person.children)
-
 
   return (
     <div className="person-details">

@@ -15,6 +15,7 @@ import { useNavigate, useLocation, useParams } from "react-router-dom"
 
 // styles
 import './AddPerson.css'
+import deleteStoredImage from '../../manageFileStorage/deleteStoredImage'
 
 export default function AddPerson() {
   //Query Parameters, action is 'create' for new add, no action for update
@@ -46,6 +47,7 @@ export default function AddPerson() {
   const { user } = useAuthContext()
   let navigate = useNavigate()
   
+  // if updating, need persons details
   async function getPersonDetails() {
     let person = {}
     try {
@@ -100,7 +102,6 @@ export default function AddPerson() {
   },[action, personId])
 
  const handleImageChange = (e) => {
-   setImage(null)
    setImageError(null)
    let selected = e.target.files[0]
    if (selected) {
@@ -112,6 +113,12 @@ export default function AddPerson() {
         setImageError(error)
       }
    }
+  }
+
+  const deleteImage = () => {
+    deleteStoredImage(imageUrl)
+    setImageUrl(null)
+    
   }
   
  const handleSubmit = async (e) => {
@@ -151,6 +158,8 @@ export default function AddPerson() {
       navigate(`/addrelatives/${personId}`)
     } else {
       // update this person instead of add
+
+     
       const updatedPerson =  {
         name,
         otherName,
@@ -162,7 +171,12 @@ export default function AddPerson() {
         spouses,
         marriageComments
       }
+      
       await updateDocument(personId, updatedPerson)
+
+       // // now add image to storage, uploadImage will update person imageUrl 
+       await uploadImage(image, personId, personId)
+     
 
       // navigate to add or update relatives
       navigate(`/addrelatives/${personId}`)
@@ -211,20 +225,36 @@ export default function AddPerson() {
             />
           </label>
           <label>
-            <span>city of birth</span>
+            <span>city and state of birth</span>
             <input 
               type="text"
               onChange={e => setBirthCity(e.target.value)}
               value={birthCity}
             />
           </label>
-          <label>
-            <span>upload an image</span>
-            <input 
-              type="file"
-              onChange={handleImageChange}
+          {!imageUrl &&
+             <label>
+              <span>upload an image</span>
+              <input 
+                type="file"
+                onChange={handleImageChange}
+              />
+            </label>
+          }
+          {imageUrl && 
+          <div>
+            <img 
+              className="image"
+              src={imageUrl} 
+              alt="person" 
             />
-          </label>
+            <button 
+              type="button"
+              onClick={deleteImage}
+            >
+              <i className="fa-regular fa-trash-can"></i>
+            </button>
+          </div>}
           {imageError && <p className='error'>{imageError}</p>}
           <label>
             <span>marriage comments (dates, locations, etc.) </span>

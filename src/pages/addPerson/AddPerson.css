@@ -1,3 +1,9 @@
 .add-person-form {
     max-width: 600px;
 }
+.add-person-form .image {
+    border-radius: 6px;
+    max-width: 200px;
+    max-height: 200px;
+    display: flex;
+}

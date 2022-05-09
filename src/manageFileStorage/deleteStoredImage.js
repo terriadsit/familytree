@@ -1,3 +1,5 @@
+// delete a file from firebase storage when passed an url to that file
+
 import { getStorage, ref, deleteObject } from "firebase/storage";
 
 export default function deleteStoredImage(url) {

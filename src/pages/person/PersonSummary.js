@@ -1,3 +1,6 @@
+// displays person details along with the ability to delete or edit 
+// when called from <AddPerson>
+
 import { useState } from "react"
 import { dbFirestore } from "../../firebase/config"
 import { useNavigate } from "react-router-dom"

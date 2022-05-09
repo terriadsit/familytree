@@ -23,7 +23,7 @@ export default function RemoveRelatives({...props}) {
     
   return (
     <div className="relatives">
-      <p>{relationship} to remove:</p>
+      {relatives.length > 1 && <p>{relationship} to remove:</p>}
       <ul className="relative-list">
         {
           relatives.map(r => (

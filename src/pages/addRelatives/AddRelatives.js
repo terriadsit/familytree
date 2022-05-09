@@ -9,6 +9,7 @@ import { useDocument } from "../../hooks/useDocument"
 import updateARelative from "../../manageFileStorage/updateARelative"
 import PersonDetails from "../../components/PersonDetails"
 import ChooseRelatives from './ChooseRelatives'
+import checkImage from '../../manageFileStorage/checkImage'
 
 // styles
 import './AddRelatives.css'
