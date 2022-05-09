@@ -6,7 +6,8 @@ import { useEffect } from "react"
 
 export default function RemoveRelatives({...props}) {
   const addPrevRelatives = props.addPrevRelatives
-  const relatives = props.prevRelatives[props.relationship]
+  const relatives = props.person[props.relationship]
+  const relationship = props.relationship
   
   // remove this relative from the state in parent component
   // then remove from ui in stateless list
@@ -17,12 +18,12 @@ export default function RemoveRelatives({...props}) {
   }
 
   useEffect(() => {
-    addPrevRelatives(relatives)
-  },[relatives])
+    addPrevRelatives(relatives, relationship)
+  },[relatives, relationship])
     
   return (
     <div className="relatives">
-      <p>{props.relationship} to remove:</p>
+      <p>{relationship} to remove:</p>
       <ul className="relative-list">
         {
           relatives.map(r => (

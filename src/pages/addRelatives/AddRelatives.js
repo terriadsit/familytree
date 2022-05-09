@@ -46,24 +46,67 @@ function AddRelatives() {
   const [siblings, setSiblings] = useState([])
   const [parents, setParents] = useState([])
   const [children, setChildren] = useState([])
-  const [prevSiblings, setPrevSiblings] = useState([])
 
-  // on updates, add previous relatives to state
-  // passed as props to RemoveRelative component
-  const addPrevRelatives =  (rel) => {
-    let tempRelatives = []
-    console.log('rel', rel)
-    rel.map((r) => tempRelatives.push({id: r.id, name: r.name}))
-    console.log('temprelatives', tempRelatives )
-    setSiblings(tempRelatives)
+  // check for select field relatives matching existing relatives
+  const checkForMatch = (prevRel, proposedRel) => {
+   let found = null
+    proposedRel.map(r => {
+      found = prevRel.find(el => el.id === r.value) 
+      if (!found) {
+        prevRel.push({id: r.value, name: r.label})
+      }
+      return null
+    })
+    return prevRel
   }
   
-  // set up props for components
+  // on update of person, add previous relatives to state
+  // passed as props to RemoveRelative component
+  const addPrevRelatives =  (rel, relationship) => {
+    let tempRelatives = []
+    rel.map((r) => tempRelatives.push({id: r.id, name: r.name}))
+    switch (relationship) {
+      case 'siblings':
+        setSiblings(tempRelatives)
+        break;
+      case 'parents':
+        setParents(tempRelatives)
+        break;
+      case 'spouses':
+        setSpouses(tempRelatives)
+        break;
+      case 'children':
+        setChildren(tempRelatives)
+        break;
+      default:
+        console.log('no such relative')
+    }
+  }
+  
+  // set up props for components, first removing then adding
   let removeSiblingProps = {
     relationship: 'siblings',
-    prevRelatives: person,
-    addPrevRelatives: (rel) => addPrevRelatives(rel),
+    person,
+    addPrevRelatives: (rel, relationship) => addPrevRelatives(rel, relationship),
     removePrevRelative: (e) => removeSibling(e)
+  }
+  let removeParentProps = {
+    relationship: 'parents',
+    person,
+    addPrevRelatives: (rel, relationship) => addPrevRelatives(rel, relationship),
+    removePrevRelative: (e) => removeParents(e)
+  }
+  let removeSpouseProps = {
+    relationship: 'spouses',
+    person,
+    addPrevRelatives: (rel, relationship) => addPrevRelatives(rel, relationship),
+    removePrevRelative: (e) => removeSpouses(e)
+  }
+  let removeChildrenProps = {
+    relationship: 'children',
+    person,
+    addPrevRelatives: (rel, relationship) => addPrevRelatives(rel, relationship),
+    removePrevRelative: (e) => removeChildren(e)
   }
   let chooseSiblingProps = {
     relationship: 'sibling',
@@ -87,56 +130,67 @@ function AddRelatives() {
   }
   let personDetailsProps = {...person, siblings, parents, children, spouses}
   
-  // formfield onClick functions passed to <RemoveRelatives>
+  // formfield onClick delete functions passed to <RemoveRelatives>
+  // remove relative from db
+  // remove relative from state to keep ui in sync
   const removeSibling = (e) => {
     let tempRelatives = [...siblings]
     // remove sibling to this person in db, then remove this person from sibs as a sib
     updateARelative(personId, e.target.value, e.target.name, 'siblings', 'remove')
     updateARelative(e.target.value, personId, name, 'siblings', 'remove')
-    console.log('sibling to remove', e.target.value, e.target.name)
     const keepRelatives = tempRelatives.filter((r) => r.id !== e.target.value)
     setSiblings(keepRelatives)
   }
+  const removeParents = (e) => {
+    let tempRelatives = [...parents]
+    // remove parent to this person in db, then remove this person from parent as a child
+    updateARelative(personId, e.target.value, e.target.name, 'parents', 'remove')
+    updateARelative(e.target.value, personId, name, 'children', 'remove')
+    const keepRelatives = tempRelatives.filter((r) => r.id !== e.target.value)
+    setParents(keepRelatives)
+  }
+  const removeChildren = (e) => {
+    let tempRelatives = [...children]
+    // remove child of this person in db, then remove this person as a parent to the child
+    updateARelative(personId, e.target.value, e.target.name, 'children', 'remove')
+    updateARelative(e.target.value, personId, name, 'parents', 'remove')
+    const keepRelatives = tempRelatives.filter((r) => r.id !== e.target.value)
+    setChildren(keepRelatives)
+  }
+  const removeSpouses = (e) => {
+    let tempRelatives = [...spouses]
+    // remove spouse to this person in db, then remove this person from the spouse as a spouse
+    updateARelative(personId, e.target.value, e.target.name, 'spouses', 'remove')
+    updateARelative(e.target.value, personId, name, 'spouses', 'remove')
+    const keepRelatives = tempRelatives.filter((r) => r.id !== e.target.value)
+    setSpouses(keepRelatives)
+  }
 
   // formfield onChange functions, passed to <ChooseRelative>
+  // add unique chosen relatives from select field to state
   const handleSiblingOption = (rel) => {
     let tempRelatives = [...siblings]
-    let found = null
-    console.log('rel', rel)
-    rel.map(r => {
-      found = tempRelatives.find(el => el.id === r.value) 
-      console.log('ids', r.id )
-      if (!found) {
-        tempRelatives.push({id: r.value, name: r.label})
-      }
-      return null
-    })
-
-  
-    //rel.map((r) => tempRelatives.push({id: r.value, name: r.label}))
+    tempRelatives = checkForMatch(tempRelatives, rel)
     setSiblings(tempRelatives)
-    console.log('handle sib tempRelatives',tempRelatives)
   }
   
   const handleParentsOption = (rel) => {
-    let tempRelatives = []
-    rel.map((r) => tempRelatives.push({id: r.value, name: r.label}))
+    let tempRelatives = [...parents]
+    tempRelatives = checkForMatch(tempRelatives, rel)
     setParents(tempRelatives)
   }
   const handleChildrenOption = (rel) => {
-    let tempRelatives = []
-    rel.map((r) => tempRelatives.push({id: r.value, name: r.label}))
+    let tempRelatives = [...children]
+    tempRelatives = checkForMatch(tempRelatives, rel)
     setChildren(tempRelatives)
   }
   const handleSpousesOption = (rel) => {
-    let tempRelatives = []
-    rel.map((r) => tempRelatives.push({id: r.value, name: r.label}))
+    let tempRelatives = [...spouses]
+    tempRelatives = checkForMatch(tempRelatives, rel)
     setSpouses(tempRelatives)
   }
-
-  
     
-    const handleSubmit = (e) => {
+  const handleSubmit = (e) => {
       e.preventDefault()
       // note: updateARelative parameters are:
       // (personToUpdateId, relativeId, relativeName, whRelative, whChange)
@@ -184,8 +238,11 @@ function AddRelatives() {
         <form onSubmit={handleSubmit}>
           {person && <RemoveRelatives {...removeSiblingProps} />}
           <ChooseRelatives {...chooseSiblingProps} />
-          <ChooseRelatives {...chooseParentsProps} />    
+          {person && <RemoveRelatives {...removeParentProps} />}
+          <ChooseRelatives {...chooseParentsProps} /> 
+          {person && <RemoveRelatives {...removeChildrenProps} />}   
           <ChooseRelatives {...chooseChildrenProps} /> 
+          {person && <RemoveRelatives {...removeSpouseProps} />}
           <ChooseRelatives {...chooseSpousesProps} /> 
           <button className="btn">Add Relatives</button>
       </form>
