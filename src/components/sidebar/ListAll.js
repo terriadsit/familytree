@@ -13,9 +13,9 @@ export default function ListAll() {
       <h4>All People (Birth Names):</h4>
       <ul>
       {documents && documents.map(person => (
-        <li key={person.id} className="person-list-item">
-          <a href={'/person/' + person.id}>
-              <p>{person.name} 
+        <li key={person.id} >
+          <a className="person-list-item" href={'/person/' + person.id}>
+              <p className='person-in-list'>{person.name} 
                 {person.birthDate ? `, ${person.birthDate.substring(0, 4)}` : ''} 
               </p>
           </a>

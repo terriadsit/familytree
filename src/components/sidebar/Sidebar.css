@@ -6,10 +6,14 @@
     box-sizing: border-box;
     position: relative;
     color: #fff;
+    
+    
   }
   .sidebar-content {
     position: fixed;
     width: inherit;
+    max-height: 100vh;
+    overflow-y: auto;
   }
   .sidebar .user {
     font-weight: bold;
@@ -33,6 +37,14 @@
     color: #fff;
     box-sizing: border-box;
   }
+  /* .sidebar a {
+    display: flex;
+    padding: 0;
+    text-decoration: none;
+    width: 100%;
+    color: #fff;
+    box-sizing: border-box;
+  } */
   .sidebar .links img {
     margin-right: 10px;
     filter: invert(100%);
