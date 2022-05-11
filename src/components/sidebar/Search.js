@@ -1,10 +1,12 @@
 // styles
-import './ListAll.css'
+import './Search.css'
 
 export default function Search() {
   return (
-    <div>
-        Search
+    <div className="search">
+       Search Linked in
+        
+      
     </div>
   )
 }

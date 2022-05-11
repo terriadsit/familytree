@@ -10,6 +10,7 @@ import Person from './pages/person/Person'
 import Navbar from './components/Navbar'
 import Sidebar from './components/sidebar/Sidebar'
 import AddRelatives from './pages/addRelatives/AddRelatives'
+import Search from './components/sidebar/Search'
 
 // styles
 import './App.css'
@@ -52,6 +53,10 @@ function App() {
                path="/addrelatives/:id"
                element={user ? <AddRelatives /> : <Login />}
              /> 
+             <Route 
+               path="/search"
+               element={user ? <Search /> : <Login />}
+             />
            </Routes>
           </div>
         </BrowserRouter>

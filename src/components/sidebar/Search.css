@@ -1,0 +1,12 @@
+.search hover {
+    display: flex;
+    color: #555;
+    background: var(--bg-color);
+    border-radius: 20px 0 0 20px;
+    padding: 10px;
+}
+.search i {
+    margin: 0 10px;
+    position: relative;
+    top: 5px;
+}

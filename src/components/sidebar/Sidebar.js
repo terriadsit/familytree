@@ -28,7 +28,12 @@ export default function Sidebar() {
                     <span>Add a Person</span>
                   </NavLink> 
                 </li>
-                <li><Search /></li>
+                <li>
+                  <NavLink to="/search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <span>Search</span>
+                  </NavLink>
+                </li>
                 <li><ListAll /></li>
               </ul>
             </nav>
