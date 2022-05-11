@@ -9,12 +9,10 @@ import { useDocument } from "../../hooks/useDocument"
 import updateARelative from "../../manageFileStorage/updateARelative"
 import PersonDetails from "../../components/PersonDetails"
 import ChooseRelatives from './ChooseRelatives'
-import checkImage from '../../manageFileStorage/checkImage'
+import RemoveRelatives from './RemoveRelatives'
 
 // styles
 import './AddRelatives.css'
-import RemoveRelatives from './RemoveRelatives'
-
 function AddRelatives() {
   
   const navigate = useNavigate()
@@ -22,16 +20,7 @@ function AddRelatives() {
   // 'people' to populate drop down selects
   const { documents } = useCollection('people', null, null)
   const [people, setPeople] = useState([])
-    
-  // person who is getting relatives added
-  let params = useParams()
-  const personId = params.id
-  const { data: tempdoc } = useDocument('people', personId )
-  const person = { ...tempdoc }
-  const name = person.name   
-
-  let error = !person.name ? 'this person does not exist' : ''
-    
+  
   // populate people for select
   useEffect(() => {
     if(documents) {
@@ -41,7 +30,17 @@ function AddRelatives() {
     setPeople(options)
     }
   },[documents])
+ 
 
+  // person who is getting relatives added
+  let params = useParams()
+  const personId = params.id
+  const { data: tempdoc } = useDocument('people', personId )
+  const person = { ...tempdoc }
+  const name = person.name   
+
+  let error = !person.name ? 'this person does not exist' : ''
+    
   // form fields
   const [spouses, setSpouses] = useState([])
   const [siblings, setSiblings] = useState([])
@@ -174,7 +173,6 @@ function AddRelatives() {
     tempRelatives = checkForMatch(tempRelatives, rel)
     setSiblings(tempRelatives)
   }
-  
   const handleParentsOption = (rel) => {
     let tempRelatives = [...parents]
     tempRelatives = checkForMatch(tempRelatives, rel)

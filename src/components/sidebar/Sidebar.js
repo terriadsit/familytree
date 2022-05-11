@@ -30,7 +30,7 @@ export default function Sidebar() {
                 </li>
                 <li>
                   <NavLink to="/search">
-                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <i className="fa-solid fa-magnifying-glass"></i>
                     <span>Search</span>
                   </NavLink>
                 </li>
