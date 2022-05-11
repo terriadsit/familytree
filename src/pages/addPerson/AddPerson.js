@@ -122,8 +122,8 @@ export default function AddPerson() {
   }
   
  const handleSubmit = async (e) => {
-    
     e.preventDefault() 
+    console.log('submit',e.target.value)
     if (action) {
       // add a new person to db
       const uid = user.uid
@@ -154,12 +154,14 @@ export default function AddPerson() {
       // add personid and Birthday to users home page personList
       updateMyPersons(uid, personId, birthDate, 'add')
       
-      // navigate to add relatives
-      navigate(`/addrelatives/${personId}`)
+      // navigate to add relatives or home
+      if (e.target.value === 'home') {
+        navigate('/')
+      } else {
+        navigate(`/addrelatives/${personId}`)
+      }
     } else {
       // update this person instead of add
-
-     
       const updatedPerson =  {
         name,
         otherName,
@@ -174,17 +176,16 @@ export default function AddPerson() {
       
       await updateDocument(personId, updatedPerson)
 
-       // // now add image to storage, uploadFile will update person imageUrl 
-       await uploadFile('image',image, personId, personId)
+      // now add image to storage, uploadFile will update person imageUrl 
+      await uploadFile('image',image, personId, personId)
      
-
-      // navigate to add or update relatives
-      navigate(`/addrelatives/${personId}`)
+      // navigate to add relatives or home
+      if (e.target.value === 'home') {
+        navigate('/')
+      } else {
+        navigate(`/addrelatives/${personId}`)
+      }
     }
-    
- 
-    
-
   }
   
   return (
@@ -273,11 +274,28 @@ export default function AddPerson() {
               value={comments}
             ></textarea>
           </label>
-          <button className="btn">Add Person</button>
+          <button 
+            className="btn"
+            type="button"
+            value="add-relatives"
+            onClick={handleSubmit}
+          >
+            Save and Add Relatives
+          </button>
+          <span> or </span>
+          <button 
+            className="btn"
+            type="button"
+            value="home"
+            onClick={handleSubmit}
+          >
+            Save
+          </button>
+          <br></br>
+          <span>later you will be able to update this person to link to their siblings, parents and children if those people are presently not added </span>
         </form>
-        <br></br>
-        <span>later you will be able to update this person to link to their siblings, parents and children if those people are presently not added </span>
-           
+        
+        <br></br>  
           
     </div>
   )
