@@ -7,9 +7,9 @@ import { useAuthContext } from '../../hooks/useAuthContext'
 import { serverTimestamp, doc, getDoc } from 'firebase/firestore'
 import { dbFirestore } from '../../firebase/config'
 
-import checkImage from '../../manageFileStorage/checkImage'
+import checkFile from '../../manageFileStorage/checkFile'
 import updateMyPersons from '../../manageFileStorage/updateMyPersons'
-import { uploadImage } from '../../manageFileStorage/uploadImage'
+import { uploadFile } from '../../manageFileStorage/uploadFile'
 
 import { useNavigate, useLocation, useParams } from "react-router-dom"
 
@@ -35,7 +35,7 @@ export default function AddPerson() {
   const [birthCity, setBirthCity] = useState('')
   const [image, setImage] = useState(null)
   const [imageUrl, setImageUrl] = useState(null)
-  const [imageError, setImageError] = useState(null)
+  const [fileError, setFileError] = useState(null)
   const [comments, setComments] = useState('')
   const [spouses, setSpouses] = useState([])
   const [marriageComments, setMarriageComments] = useState('')
@@ -65,7 +65,7 @@ export default function AddPerson() {
       setBirthCity(person.birthCity)
       setImage(null)
       setImageUrl(person.imageUrl)
-      setImageError(null)
+      setFileError(null)
       setComments(person.comments)
       setSpouses(person.spouses)
       setMarriageComments(person.marriageComments)
@@ -91,7 +91,7 @@ export default function AddPerson() {
       setBirthCity('')
       setImage(null)
       setImageUrl(null)
-      setImageError(null)
+      setFileError(null)
       setComments('')
       setSpouses([])
       setMarriageComments('')
@@ -102,15 +102,15 @@ export default function AddPerson() {
   },[action, personId])
 
  const handleImageChange = (e) => {
-   setImageError(null)
+   setFileError(null)
    let selected = e.target.files[0]
    if (selected) {
-    const error = checkImage(selected)
+    const error = checkFile('image',selected)
       if (!error) {
        setImage(selected)
        setImageUrl('')
       } else {
-        setImageError(error)
+        setFileError(error)
       }
    }
   }
@@ -148,8 +148,8 @@ export default function AddPerson() {
       // now get personid
       let personId = await addDocument(person)
        
-      // now add image to storage, uploadImage will update person imageUrl 
-      await uploadImage(image, personId, personId)
+      // now add image to storage, uploadFile will update person imageUrl 
+      await uploadFile('image', image, personId, personId)
      
       // add personid and Birthday to users home page personList
       updateMyPersons(uid, personId, birthDate, 'add')
@@ -174,8 +174,8 @@ export default function AddPerson() {
       
       await updateDocument(personId, updatedPerson)
 
-       // // now add image to storage, uploadImage will update person imageUrl 
-       await uploadImage(image, personId, personId)
+       // // now add image to storage, uploadFile will update person imageUrl 
+       await uploadFile('image',image, personId, personId)
      
 
       // navigate to add or update relatives
@@ -255,7 +255,7 @@ export default function AddPerson() {
               <i className="fa-regular fa-trash-can"></i>
             </button>
           </div>}
-          {imageError && <p className='error'>{imageError}</p>}
+          {fileError && <p className='error'>{fileError}</p>}
           <label>
             <span>marriage comments (dates, locations, etc.) </span>
             <input 

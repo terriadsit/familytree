@@ -2,8 +2,8 @@ import { useState } from "react"
 import { serverTimestamp } from 'firebase/firestore'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { useFirestore } from "../../hooks/useFirestore"
-import { uploadImage } from "../../manageFileStorage/uploadImage"
-import  checkImage from "../../manageFileStorage/checkImage"
+import { uploadFile } from "../../manageFileStorage/uploadFile"
+import  checkFile from "../../manageFileStorage/checkFile"
 import CommentList from "./CommentList"
 
 export default function PersonComments({ person }) {
@@ -14,19 +14,35 @@ export default function PersonComments({ person }) {
   const createdAt = serverTimestamp()
   const [image, setImage] = useState(null)
   const [imageUrl, setImageUrl] = useState(null)
-  const [imageError, setImageError] = useState(null)
+  const [fileError, setFileError] = useState(null)
+  const [pdf, setPdf] = useState(null)
+  const [pdfUrl, setPdfUrl] = useState(null)
   
   const handleImageChange = (e) => {
     setImage(null)
-    setImageError(null)
+    setFileError(null)
     let selected = e.target.files[0]
     if (selected) {
-     const error = checkImage(selected)
+     const error = checkFile('image', selected)
        if (!error) {
         setImage(selected)
         setImageUrl('')
        } else {
-        setImageError(error)
+        setFileError(error)
+       }
+    }
+   }
+   const handlePdfChange = (e) => {
+    setPdf(null)
+    setFileError(null)
+    let selected = e.target.files[0]
+    if (selected) {
+     const error = checkFile('pdf', selected)
+       if (!error) {
+        setPdf(selected)
+        setPdfUrl('')
+       } else {
+        setFileError(error)
        }
     }
    }
@@ -39,19 +55,21 @@ export default function PersonComments({ person }) {
         createdBy: {createdBy: user.uid, name: user.displayName },
         comment: newComment,
         createdAt,
-        imageUrl
+        imageUrl,
+        pdfUrl
       }
 
       let commentId = await addDocument(commentToAdd)
-      console.log('person comments', person.id)
-      // now add image to storage, uploadImage will update  imageUrl 
-      await uploadImage(image, commentToAdd.personId, commentId)
-
+      // now add image, pdf to storage, uploadFile will update  imageUrl 
+      await uploadFile('image',image, commentToAdd.personId, commentId)
+      await uploadFile('pdf', pdf, commentToAdd.personId, commentId )
+      console.log('pdf', pdf, commentToAdd.personId, commentId )
       // clear form
       setNewComment('')
       setImageUrl(null)
       setImage(null)
-      
+      setPdf(null)
+      setPdfUrl(null)
   }  
   
   return (
@@ -73,7 +91,14 @@ export default function PersonComments({ person }) {
                 onChange={handleImageChange}
               />
             </label>
-            {imageError && <p className='error'>{imageError}</p>}
+            <label>
+              <span>upload a pdf file</span>
+              <input 
+                type="file"
+                onChange={handlePdfChange}
+              />
+            </label>
+            {fileError && <p className='error'>{fileError}</p>}
             <button className="btn">Add</button>
 
         </form>

@@ -52,6 +52,10 @@
     box-shadow: 3px 3px 5px rgba(0,0,0,0.05);
     background: #fff;
 }
+.comment-list a {
+    padding: 10px;
+    text-decoration: none;
+}
 .comment-author {
     display: flex;
     align-items: center;
