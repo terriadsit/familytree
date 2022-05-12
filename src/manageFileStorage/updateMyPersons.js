@@ -1,3 +1,5 @@
+// update the user data base to add or remove people that the user would like on their home page
+
 import { dbFirestore } from "../firebase/config"
 import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'
 
@@ -8,6 +10,7 @@ async function updateMyPersons(uid, personId, birthDate, whChange) {
         personId,
         birthDate
     }
+    console.log('update my person',personInfo)
     switch(whChange) {
        case "add": {
            await updateDoc(userRef, {

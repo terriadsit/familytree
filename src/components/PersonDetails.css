@@ -6,7 +6,7 @@
 } */
 .person-details {
    background-color: #fff; 
-   padding: 30px;
+   padding: 20px;
    border-radius: 4px;
 }
 .person-details {
@@ -14,10 +14,20 @@
     line-height: 1.8em;
     font-size: 0.9em;
 }
-.person-details h4 {
+.person-details .heading {
+    display: flex;
+    align-items: center;
+    max-width: 320px;
+    margin: 0 auto;
     color: var(--text-color);
     font-size: 1.2em;
     font-weight: bold;
+}
+.person-details h4 {
+    margin-right: auto;
+}
+.person-details .toggle {
+    margin-left: 40px;
 }
 .person-details .image {
     border-radius: 6px;
