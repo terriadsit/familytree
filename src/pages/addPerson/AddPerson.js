@@ -152,7 +152,7 @@ export default function AddPerson() {
       await uploadFile('image', image, personId, personId)
      
       // add personid and Birthday to users home page personList
-      updateMyPersons(uid, personId, birthDate, 'add')
+      updateMyPersons(uid, personId, 'add')
       
       // navigate to add relatives or home
       if (e.target.value === 'home') {

@@ -3,12 +3,11 @@
 import { dbFirestore } from "../firebase/config"
 import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'
 
-async function updateMyPersons(uid, personId, birthDate, whChange) {
+async function updateMyPersons(uid, personId, whChange) {
     const userRef = doc(dbFirestore, 'users', uid)
-    birthDate = birthDate ? birthDate : 'unknown' 
+     
     const personInfo = { 
-        personId,
-        birthDate
+        personId
     }
     console.log('update my person',personInfo)
     switch(whChange) {

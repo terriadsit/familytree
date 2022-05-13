@@ -52,11 +52,11 @@ export default function PersonDetails({...person}) {
     // remove or add to users list of home page persons, MyPersons
     if (onHome) {
       console.log('in add to home')
-      updateMyPersons(user.uid, person.id, person.birthDate, 'add')
+      updateMyPersons(user.uid, person.id,  'add')
     } else {
       console.log('in else')
-      console.log(user.uid, person.id, person.birthDate, 'remove')
-      updateMyPersons(user.uid, person.id, person.birthDate, 'remove')
+      console.log(user.uid, person.id,  'remove')
+      updateMyPersons(user.uid, person.id,  'remove')
     }
   }
 
