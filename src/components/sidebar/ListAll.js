@@ -1,3 +1,4 @@
+// List all the people in the DB in the sidebar as links
 import { useCollection } from '../../hooks/useCollection'
 
 // styles
