@@ -1,3 +1,6 @@
+// a user's home page displays a snippet of each person they have chosen
+// to display on their home page. The ids are in the 'users' db as 'myPersons'
+
 import { useEffect, useState } from 'react'
 import PersonSnippet from './PersonSnippet'
 import { useAuthContext } from '../../hooks/useAuthContext'
@@ -16,26 +19,18 @@ function Home() {
   const { data } = useDocument('users', uid)
   let peopleIds = []  // people's ids
   
-  let newPerson
-  let orderedPeople = []
-  
   useEffect(() => {
     // get people ids which user would like displayed
     if(data){
        data.myPersons.map((p) => {
         return peopleIds.push(p)
        })
-
-       console.log('peopleids', peopleIds)
-       
+ 
        // get entire persons details
        getPeopleFromIds(peopleIds).then((res) => {setTempPeople(res)})
     }  
-    console.log('res,tempPeople',tempPeople[0]) 
   },[data])
 
-  console.log('people array', tempPeople, orderedPeople)
-  
   // sort people by their birthdate
   const people = tempPeople
   people.sort(function(a, b) {
@@ -52,9 +47,6 @@ function Home() {
       return 0;
   }) 
   
-  console.log('sorted people',people)
-  
-
   if (error) {
     return <p className="error">${error}</p>
   }
@@ -62,7 +54,7 @@ function Home() {
   return (
     <div className='person-list'>
       {people && people.map((p) => (
-        <PersonSnippet personInfo={p} />
+        <PersonSnippet key={p.id} personInfo={p} />
        ))
       }
             

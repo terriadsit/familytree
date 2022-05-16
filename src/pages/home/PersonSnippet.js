@@ -10,15 +10,14 @@ export default function PersonSnippet({...personInfo}) {
   const person = { ...personInfo.personInfo }
   let id = person.id
   const newUrl = `/person/${id}`
-  console.log('snippet', person)
-
+  
   // let the user know if birthdate and city are unknown, don't try to display a null url
   const tempBirthDate = person.birthDate ? person.birthDate : 'unknown'
   const tempBirthCity = person.birthCity ? person.birthCity : 'unknown'
 
   return (
     <div className="person-list">
-      <NavLink to={newUrl}>
+      <NavLink to={newUrl} >
         <h4>{person.name}</h4>
         <p>born in: {tempBirthCity} </p>
         <p>birth date: {tempBirthDate}</p>

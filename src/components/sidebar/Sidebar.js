@@ -1,7 +1,6 @@
 
 import { NavLink } from 'react-router-dom'
 import { useAuthContext } from '../../hooks/useAuthContext'
-import Search from './Search'
 import ListAll from './ListAll'
 
 // styles and images
