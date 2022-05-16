@@ -57,7 +57,7 @@ export default function PersonSummary({...tempPerson }) {
            // find those users who have this person on their home page, myPersons
            const displayedBy = person.onUsers
            displayedBy.map((uid) => (
-             updateMyPersons(uid, person.id, person.birthDate, 'remove')
+             updateMyPersons(uid, person.id, 'remove')
            ))
           
           // remove this person from any relatives
