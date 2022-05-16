@@ -4,14 +4,17 @@ export default function PersonSnippet({...personInfo}) {
   let tempBirthday = 'unknown'
   let tempBirthCity = 'unknown'
   let tempImageUrl = null
-  let id = personInfo.personId
+  const person = { ...personInfo.personInfo }
+  let id = person.id
   const newUrl = `/person/${id}`
-  console.log('snippet', personInfo)
+  console.log('snippet', person)
+
 
   return (
     <div>
       
-        {personInfo.personInfo.name}
+        {person.name}
+        {newUrl}
     </div>
   )
 }

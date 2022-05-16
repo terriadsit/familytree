@@ -18,7 +18,7 @@ async function getPeopleFromIds(personIds) {
       const docSnap = await getDoc(ref)
          
        if (docSnap.exists()) {
-         person = { ...docSnap.data() }
+         person = { id: id.personId, ...docSnap.data() }
          console.log('person in docsnap', person)
          return person
        }  
