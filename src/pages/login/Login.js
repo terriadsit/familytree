@@ -1,5 +1,7 @@
 import { useLogin } from '../../hooks/useLogin'
 import { useState } from 'react'
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+
 
 // styles
 import './Login.css' 
@@ -26,6 +28,23 @@ export default function Login() {
     }
   }
 
+  const handleGetPassword = () => {
+    
+    const auth = getAuth();
+    sendPasswordResetEmail(auth, email)
+     .then(() => {
+       alert('password email sent to provided email')
+    // Password reset email sent!
+    // ..
+     })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      alert('error sending password email, please provide a valid password', error.message)
+    // ..
+    });
+  }
+
   return (
     <form onSubmit={handleSubmit} className="auth-form">
       <h2>Login</h2>
@@ -49,7 +68,16 @@ export default function Login() {
         />
       </label>
       
+        
+          
         {!isPending && <button className="btn">Login</button>}
+        <span>             </span>
+        <button
+          className='btn'
+          type="button"
+          onClick={handleGetPassword}
+        > Forgot Password     
+        </button>
         {isPending && <button className="btn" disabled>loading...</button>}
         {error && <div className="error">{error}</div>}
       </form>

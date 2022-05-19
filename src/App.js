@@ -31,7 +31,7 @@ function App() {
              />
              <Route 
                path="/signup" 
-               element={!user ? <Signup /> : <Home /> } 
+               element={!user  ? <Signup /> : <Home /> } 
              />
              <Route 
                path="/login" 
