@@ -1,21 +1,18 @@
 // add or update a new person to the db depending on "action"
 // then navigate to <AddRelatives> to add or update relatives
-
+import { useNavigate, useLocation, useParams } from "react-router-dom"
 import { useEffect, useState } from 'react'
 import { useFirestore } from '../../hooks/useFirestore'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { serverTimestamp, doc, getDoc } from 'firebase/firestore'
 import { dbFirestore } from '../../firebase/config'
-
+import deleteStoredImage from '../../manageFileStorage/deleteStoredImage'
 import checkFile from '../../manageFileStorage/checkFile'
 import updateMyPersons from '../../manageFileStorage/updateMyPersons'
 import { uploadFile } from '../../manageFileStorage/uploadFile'
 
-import { useNavigate, useLocation, useParams } from "react-router-dom"
-
 // styles
 import './AddPerson.css'
-import deleteStoredImage from '../../manageFileStorage/deleteStoredImage'
 
 export default function AddPerson() {
   //Query Parameters, action is 'create' for new add, no action for update
@@ -74,8 +71,7 @@ export default function AddPerson() {
       setChildren(person.children)
 
     } catch(err) {
-      
-      console.log('error', err)
+       console.log('error', err)
     }
   }
 

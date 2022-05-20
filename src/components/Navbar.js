@@ -18,10 +18,15 @@ export default function Navbar() {
                <span>Family Tree and Archive</span>
            </li>
                
-            {user && <li><Link to="/">Home</Link></li>}
+            {user && (
+              <>
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/updateuser">Update Your Account</Link></li>
+              </>
+            )}
             {!user && (
               <>
-                <li><Link to="/signup">Sign Up</Link></li>
+                <li><Link to="/signup?action=create">Sign Up</Link></li>
                 <li><Link to="/login">Login</Link></li>
               </>
             )}

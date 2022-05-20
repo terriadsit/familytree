@@ -34,6 +34,10 @@ function App() {
                element={!user  ? <Signup /> : <Home /> } 
              />
              <Route 
+               path="/updateuser" 
+               element={user ? <Signup /> : <Login />} 
+             />
+             <Route 
                path="/login" 
                element={!user ? <Login /> : <Home />} 
              />
