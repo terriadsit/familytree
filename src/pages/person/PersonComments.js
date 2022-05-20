@@ -1,3 +1,6 @@
+// add or delete comments, call comment list
+// displayed on <Person />
+
 import { useState } from "react"
 import { serverTimestamp } from 'firebase/firestore'
 import { useAuthContext } from '../../hooks/useAuthContext'
@@ -11,13 +14,14 @@ export default function PersonComments({ person }) {
   const { addDocument } = useFirestore('comments')
   const [newComment, setNewComment] = useState('')
   const { user } = useAuthContext()
-  const createdAt = serverTimestamp()
   const [image, setImage] = useState(null)
   const [imageUrl, setImageUrl] = useState(null)
   const [fileError, setFileError] = useState(null)
   const [pdf, setPdf] = useState(null)
   const [pdfUrl, setPdfUrl] = useState(null)
   
+
+  // images will post images to firebase storage
   const handleImageChange = (e) => {
     setImage(null)
     setFileError(null)
@@ -32,6 +36,8 @@ export default function PersonComments({ person }) {
        }
     }
    }
+
+   // pdf will post to firebase storage
    const handlePdfChange = (e) => {
     setPdf(null)
     setFileError(null)
@@ -47,6 +53,7 @@ export default function PersonComments({ person }) {
     }
    }
 
+   // add comment to db and clear entry form
   const handleSubmit = async (e) => {
       e.preventDefault()
       
@@ -54,7 +61,7 @@ export default function PersonComments({ person }) {
         personId: person.id,
         createdBy: {createdBy: user.uid, name: user.displayName },
         comment: newComment,
-        createdAt,
+        createdAt: serverTimestamp(),
         imageUrl,
         pdfUrl
       }
@@ -63,7 +70,6 @@ export default function PersonComments({ person }) {
       // now add image, pdf to storage, uploadFile will update  imageUrl 
       await uploadFile('image',image, commentToAdd.personId, commentId)
       await uploadFile('pdf', pdf, commentToAdd.personId, commentId )
-      console.log('pdf', pdf, commentToAdd.personId, commentId )
       // clear form
       setNewComment('')
       setImageUrl(null)
@@ -99,7 +105,7 @@ export default function PersonComments({ person }) {
               />
             </label>
             {fileError && <p className='error'>{fileError}</p>}
-            <button className="btn">Add</button>
+            <button className="btn">Add Comment</button>
 
         </form>
     </div>

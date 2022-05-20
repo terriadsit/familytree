@@ -7,6 +7,7 @@
 import { useCollection } from "../../hooks/useCollection"
 import { useAuthContext } from "../../hooks/useAuthContext"
 import { useState } from "react"
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import deleteComment from "./deleteComment"
 import CreatedBy from "../../components/createdBy/CreatedBy"
 
@@ -39,6 +40,9 @@ export default function CommentList({ person }) {
                     <br></br>
                     {comment.pdfUrl && <a href={comment.pdfUrl} alt="user added pdf" >a pdf applying to {person.name} </a>}
                     <CreatedBy props={comment.createdBy.createdBy}/>
+                    <div className="comment-date">
+                      <p>{formatDistanceToNow(comment.createdAt.toDate(), { addSuffix: true })}</p>
+                    </div>
                     <button className="deleteBtn" 
                       onClick={() => handleClick({commentId: comment.id, commentData: comment})}
                     >
