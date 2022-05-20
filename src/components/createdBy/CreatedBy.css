@@ -1,0 +1,19 @@
+.creator {
+    position: relative;
+    display: inline-block;
+    color: blueviolet;
+    cursor: help;
+}
+/* tooltip styles  */
+.tip{
+    position: absolute;
+    width: 150px;
+    background-color: #ff6565;
+    color: #fff;
+    text-align: center;
+    border-radius: 10px;
+    padding: 5px 15px 5px 5px;
+    transition: opacity 0.3s;
+  }
+  
+ 

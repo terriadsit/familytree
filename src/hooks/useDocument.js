@@ -1,3 +1,6 @@
+// get a document from firebase db using the collection 
+// name and document id
+
 import { useEffect, useState } from "react"
 import { dbFirestore } from "../firebase/config"
 import { doc, onSnapshot } from "firebase/firestore"

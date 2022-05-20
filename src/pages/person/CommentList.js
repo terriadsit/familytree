@@ -8,6 +8,7 @@ import { useCollection } from "../../hooks/useCollection"
 import { useAuthContext } from "../../hooks/useAuthContext"
 import { useState } from "react"
 import deleteComment from "./deleteComment"
+import CreatedBy from "../../components/createdBy/CreatedBy"
 
 export default function CommentList({ person }) {
   const [deleteError, setDeleteError] = useState('')
@@ -25,6 +26,8 @@ export default function CommentList({ person }) {
     console.log(error)
   }
 
+  
+
   return (
     <div className="comment-list">
         <ul>
@@ -35,7 +38,7 @@ export default function CommentList({ person }) {
                     {comment.imageUrl && <img className="image" src={comment.imageUrl} alt="user added" />}
                     <br></br>
                     {comment.pdfUrl && <a href={comment.pdfUrl} alt="user added pdf" >a pdf applying to {person.name} </a>}
-                    <p className="comment-author">added by: {comment.createdBy.name}</p>
+                    <CreatedBy props={comment.createdBy.createdBy}/>
                     <button className="deleteBtn" 
                       onClick={() => handleClick({commentId: comment.id, commentData: comment})}
                     >

@@ -2,11 +2,12 @@
 // called by <PersonSummary > and <AddRelatives >
 // receives a person with all their details
 // will allow person to be added to home page of user
+import { useDocument } from '../hooks/useDocument'
 import { useAuthContext } from '../hooks/useAuthContext'
 import ToggleSwitch from "./ToggleSwitch"
 import formatNameList from "../sharedFunctions/formatNameList"
 import updateMyPersons from '../manageFileStorage/updateMyPersons'
-import { useDocument } from '../hooks/useDocument'
+import CreatedBy from './createdBy/CreatedBy'
 
 // styles
 import './PersonDetails.css'
@@ -51,16 +52,11 @@ export default function PersonDetails({...person}) {
     console.log('handleToggle', onHome)
     // remove or add to users list of home page persons, MyPersons
     if (onHome) {
-      console.log('in add to home')
       updateMyPersons(user.uid, person.id,  'add')
     } else {
-      console.log('in else')
-      console.log(user.uid, person.id,  'remove')
       updateMyPersons(user.uid, person.id,  'remove')
     }
   }
-
-  
 
   return (
     <div className="person-details">
@@ -90,7 +86,7 @@ export default function PersonDetails({...person}) {
         </p>
         <p>children: {children}</p>
         {person.comments && <p>comments: {person.comments}</p>}
-        <p className="created-by">Entry created by: {person.createdBy.createdByName} </p> 
+        <CreatedBy props={person.createdBy.uid} /> 
     </div>
   )
 }
