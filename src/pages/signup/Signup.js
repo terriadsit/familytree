@@ -4,6 +4,7 @@ import { useLocation, useParams } from 'react-router-dom'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { dbFirestore } from '../../firebase/config'
 import { doc, getDoc } from 'firebase/firestore'
+import { updateEmail, EmailAuthProvider } from "firebase/auth";
 
 // styles
 import './Signup.css'
@@ -15,6 +16,7 @@ export default function Signup() {
   const queryParams = new URLSearchParams(queryString);
   const action = queryParams.get('action');
   console.log('signup', action)
+  const buttonLabel = action ? 'Signup' : 'Update'
 
   // form fields
   const [email, setEmail] = useState('')
@@ -22,10 +24,12 @@ export default function Signup() {
   const [displayName, setDisplayName] = useState('')
   const [checked, setChecked] = useState(false) 
   const [checkPassword, setCheckPassword] = useState('')
+  const [prevPassword, setPrevPassword] = useState('')
 
   const { signup, isPending, error } = useSignup()
   const { user } = useAuthContext()
   let userDetails
+  let prevEmail = ''
 
   // if updating, need users details
   async function getUsersDetails() {
@@ -42,6 +46,7 @@ export default function Signup() {
       setDisplayName(userDetails.displayName)
       setChecked(userDetails.shareEmail)
       setEmail(userDetails.email)
+      prevEmail = email
       
     } catch(err) {
        console.log('error', err)
@@ -81,31 +86,51 @@ export default function Signup() {
     }
   }
 
-  // passwords should match
+  // passwords should match and not be empty
   const checkForMatch = (checkPW) => {
     const passwordError = document.getElementById('password-error')
     passwordError.innerText = ""
-    if(password.trim() !== checkPW.trim()){
-      passwordError.innerText ='password fields must match'
+    if(password.trim() !== checkPW.trim() || password.trim() === '') {
+      passwordError.innerText ='password fields must match and not be blank'
       return false
     } else {
       return true
     }
   }
-
+ 
+ 
  // create a new user if action is create, 
  // else update a user
   const handleSubmit = e => {
     e.preventDefault()
-    if(checkForMatch(checkPassword)){
+    // if a new user
       if (action === 'create') {
-       signup(email, password, displayName, checked)
+        // passwords must match
+        if(checkForMatch(checkPassword)) {
+          signup(email, password, displayName, checked)
+        }
       } else {
-        console.log('in update')
-        getUsersDetails()
+        // need user credential for updates
+        const credential = EmailAuthProvider.credential(
+          user.email,
+          prevPassword
+        )
+        // update password if it is changed
+
+        // update email if it has been changed 
+        // update in firebase auth and in firestore user db
+        if (prevEmail !== email) {
+          console.log('new Email', credential, user, email)
+          updateEmail(user, email).then(() => {
+              console.log('email updated',email)
+  
+          }).catch((error) => {
+            alert('an error occurred updating your email address', error.message)
+          });
+        }
       }
-    } 
-  }
+  } 
+  
 
   return (
     <form onSubmit={handleSubmit} className="auth-form">
@@ -119,30 +144,44 @@ export default function Signup() {
           value={email}
         />
       </label>
-      <label>
-        <span className='trigger' onClick={handleTriggerClick}>password:</span>
-        <input 
-          required
-          id='password1'
-          type="password"
-          onChange={e => setPassword(e.target.value)}
-          value={password}
-        />
+      
+      {!action && 
+        <label>
+          <span >Current Password:</span>
+          <input 
+            required
+            id='prevPassword'
+            type="password"
+            onChange={e => setPrevPassword(e.target.value)}
+            value={prevPassword}
+          />
         </label>
-      <label>
-        <span onClick={handleTriggerClick}>check password (click here to view or hide both):</span>
-        <input 
-          required
-          id='password2'
-          type="password"
-          onChange={e => {
-            setCheckPassword(e.target.value)
-            checkForMatch(e.target.value)
-          }}
-          value={checkPassword}
-        />
-      <span id="password-error"></span>
+      }
+        <label>
+          <span className='trigger' onClick={handleTriggerClick}>password:</span>
+          <input 
+            required
+            id='password1'
+            type="password"
+            onChange={e => setPassword(e.target.value)}
+            value={password}
+          />
       </label>
+      <label>
+          <span onClick={handleTriggerClick}>check password (click here to view or hide both):</span>
+          <input 
+            required
+            id='password2'
+            type="password"
+            onChange={e => {
+              setCheckPassword(e.target.value)
+              checkForMatch(e.target.value)
+            }}
+            value={checkPassword}
+          />
+        <span id="password-error"></span>
+      </label>
+      
       <label>
         <span>Display Name (will be shown to all users next to your entries):</span>
         <input 
@@ -160,9 +199,13 @@ export default function Signup() {
           checked={checked}
         />
       </label>
-        {!isPending && <button className="btn">Sign up</button>}
+        
+        {!isPending && <button className="btn">{buttonLabel}</button>}
         {isPending && <button className="btn" disabled>loading</button>}
         {error && <div className="error">{error}</div>}
+        {!action &&      
+         <p>Passwords may be updated using the "forgot password" link on the Login Page</p> 
+        }
       </form>
   )
 }
