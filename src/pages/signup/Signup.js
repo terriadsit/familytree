@@ -1,4 +1,5 @@
 import { useSignup } from '../../hooks/useSignup'
+import { useFirestore } from '../../hooks/useFirestore'
 import { useState, useEffect } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
 import { useAuthContext } from '../../hooks/useAuthContext'
@@ -31,6 +32,7 @@ export default function Signup() {
   const [prevPassword, setPrevPassword] = useState('')
 
   const { signup, isPending, error } = useSignup()
+  const { updateDocument } = useFirestore('users')
   const { user } = useAuthContext()
   let userDetails
   let prevEmail = ''
@@ -133,7 +135,6 @@ export default function Signup() {
           if (checkForMatch(checkPassword)) {
             updatePassword(user, password).then(() => {
               // Update successful.
-              console.log('password updated')
             }).catch((error) => {
               // An error ocurred
               alert('password update unsuccessful')
@@ -143,16 +144,18 @@ export default function Signup() {
         // update email if it has been changed 
         // update in firebase auth and in firestore user db while updating entire user 
         if (prevEmail !== email) {
-          console.log('new Email', credential, user, email)
           updateEmail(user, email).then(() => {
-              console.log('email updated',email)
-  
           }).catch((error) => {
             alert('an error occurred updating your email address', error.message)
           });
         }
         // update entire user in user db
-        
+        const updates = {
+          email,
+          shareEmail: checked,
+          displayName
+        }
+        updateDocument(user.uid, updates)
       }
   } 
   
