@@ -1,3 +1,6 @@
+// update, delete and add documents to firebase db collections
+// returns the function required when invoked with the desired collection
+
 import { useReducer, useEffect, useState } from "react"
 import { dbFirestore } from "../firebase/config"
 import { collection, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore'
@@ -71,7 +74,8 @@ export const useFirestore = (whCollection) => {
     }
   }
 
-  // update a document
+  // update a document, updates is an object which contains those fields to 
+  // be updated. id is document id.
   const updateDocument = async (id, updates) => {
     dispatch({ type: 'IS_PENDING' })
     const docRef = doc(ref, id)

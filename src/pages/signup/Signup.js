@@ -4,7 +4,11 @@ import { useLocation, useParams } from 'react-router-dom'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { dbFirestore } from '../../firebase/config'
 import { doc, getDoc } from 'firebase/firestore'
-import { updateEmail, EmailAuthProvider } from "firebase/auth";
+import { updateEmail, 
+         EmailAuthProvider, 
+         updatePassword,
+         reauthenticateWithCredential } 
+         from "firebase/auth";
 
 // styles
 import './Signup.css'
@@ -90,8 +94,8 @@ export default function Signup() {
   const checkForMatch = (checkPW) => {
     const passwordError = document.getElementById('password-error')
     passwordError.innerText = ""
-    if(password.trim() !== checkPW.trim() || password.trim() === '') {
-      passwordError.innerText ='password fields must match and not be blank'
+    if(password.trim() !== checkPW.trim()) {
+      passwordError.innerText ='password fields must match'
       return false
     } else {
       return true
@@ -101,24 +105,43 @@ export default function Signup() {
  
  // create a new user if action is create, 
  // else update a user
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
     // if a new user
       if (action === 'create') {
-        // passwords must match
+        // passwords must match and may not be blank when signing up
         if(checkForMatch(checkPassword)) {
-          signup(email, password, displayName, checked)
+          if (password.trim()) {
+            signup(email, password, displayName, checked)
+          } else {
+            alert('a password is required')
+          }
         }
       } else {
-        // need user credential for updates
+        // update current user
+        // need new user credential for updates
         const credential = EmailAuthProvider.credential(
           user.email,
           prevPassword
         )
+        const result = await reauthenticateWithCredential(
+          user, 
+          credential
+        )
         // update password if it is changed
-
+        if (password) {
+          if (checkForMatch(checkPassword)) {
+            updatePassword(user, password).then(() => {
+              // Update successful.
+              console.log('password updated')
+            }).catch((error) => {
+              // An error ocurred
+              alert('password update unsuccessful')
+            });
+          }
+        }
         // update email if it has been changed 
-        // update in firebase auth and in firestore user db
+        // update in firebase auth and in firestore user db while updating entire user 
         if (prevEmail !== email) {
           console.log('new Email', credential, user, email)
           updateEmail(user, email).then(() => {
@@ -128,6 +151,8 @@ export default function Signup() {
             alert('an error occurred updating your email address', error.message)
           });
         }
+        // update entire user in user db
+        
       }
   } 
   
@@ -160,7 +185,7 @@ export default function Signup() {
         <label>
           <span className='trigger' onClick={handleTriggerClick}>password:</span>
           <input 
-            required
+            
             id='password1'
             type="password"
             onChange={e => setPassword(e.target.value)}
@@ -170,7 +195,7 @@ export default function Signup() {
       <label>
           <span onClick={handleTriggerClick}>check password (click here to view or hide both):</span>
           <input 
-            required
+            
             id='password2'
             type="password"
             onChange={e => {

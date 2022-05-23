@@ -1,3 +1,8 @@
+// obtain documents from the firebase firestore db
+// parameters for which collection of files, query criteria and  
+// order to retrieve, default order is by name field 
+// NOTE!! if selected db has no name field, an error will occur if 
+// no order is submitted on call
 import { useEffect, useState, useRef } from "react"
 
 // firebase imports 
