@@ -18,11 +18,13 @@
     align-items: center;
     margin-right: auto;
   }
-  .navbar .logo img {
-    margin-right: 10px;
+  .navbar .logo i {
+    width: 26px;
+    margin-right: 5px;
     filter: invert(25%);
-    width: 36px;
-    margin-top: -8px;
+    line-height: 10;
+    margin-top: 2px;
+    
   }
   .navbar a {
     color: #333;

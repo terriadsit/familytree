@@ -4,7 +4,7 @@ import { useAuthContext } from '../hooks/useAuthContext'
 
 // styles and images
 import './Navbar.css'
-import Temple from '../assets/temple.svg'
+
 
 export default function Navbar() {
   const { logout, isPending } = useLogout()
@@ -14,10 +14,14 @@ export default function Navbar() {
     <div className="navbar">
         <ul>
            <li className='logo'>
-               <img src={Temple} alt="logo" />
+               <i class="fa-brands fa-pagelines"></i>
                <span>Family Tree and Archive</span>
            </li>
-               
+           <li>
+                <Link to="/contact">
+                 Contact
+                </Link>
+            </li>  
             {user && (
               <>
                 <li><Link to="/">Home</Link></li>

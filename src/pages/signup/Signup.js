@@ -1,27 +1,36 @@
 import { useSignup } from '../../hooks/useSignup'
 import { useFirestore } from '../../hooks/useFirestore'
 import { useState, useEffect } from 'react'
-import { useLocation, useParams } from 'react-router-dom'
+import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { dbFirestore } from '../../firebase/config'
 import { doc, getDoc } from 'firebase/firestore'
 import { updateEmail, 
          EmailAuthProvider, 
          updatePassword,
+         updateProfile,
          reauthenticateWithCredential } 
          from "firebase/auth";
 
 // styles
 import './Signup.css'
 
-export default function Signup() {
-
+export default function Signup({...props}) {
+  // here a temporary Display Name tied to State in Parent <App />
+  // in order to keep state updated in <Sidebar />
+  // displayName in this <Signup /> is a form field and requires
+  // state here
+  let tempDisplayName = props.displayName
+  const updateDisplayName = props.updateDisplayName
+  console.log('tempDisplayName', props)
   //Query Parameters, action is 'create' for new add, no action for update
   const queryString = useLocation().search;
   const queryParams = new URLSearchParams(queryString);
   const action = queryParams.get('action');
-  console.log('signup', action)
-  const buttonLabel = action ? 'Signup' : 'Update'
+  
+  // ui interface words
+  const pageAction = action ? 'Signup' : 'Update'
+  const toDo = action ? '' : 'update'
 
   // form fields
   const [email, setEmail] = useState('')
@@ -34,6 +43,7 @@ export default function Signup() {
   const { signup, isPending, error } = useSignup()
   const { updateDocument } = useFirestore('users')
   const { user } = useAuthContext()
+  const navigate = useNavigate()
   let userDetails
   let prevEmail = ''
 
@@ -46,7 +56,6 @@ export default function Signup() {
          
        if (docSnap.exists()) {
          userDetails = { ...docSnap.data() }
-         console.log('user details', userDetails)
       } 
      
       setDisplayName(userDetails.displayName)
@@ -109,6 +118,7 @@ export default function Signup() {
  // else update a user
   const handleSubmit = async e => {
     e.preventDefault()
+    updateDisplayName(displayName)
     // if a new user
       if (action === 'create') {
         // passwords must match and may not be blank when signing up
@@ -149,6 +159,10 @@ export default function Signup() {
             alert('an error occurred updating your email address', error.message)
           });
         }
+        // update display name in firebase auth
+        updateProfile(user, {
+          displayName: displayName
+        })
         // update entire user in user db
         const updates = {
           email,
@@ -157,14 +171,15 @@ export default function Signup() {
         }
         updateDocument(user.uid, updates)
       }
+      navigate('/')
   } 
   
 
   return (
     <form onSubmit={handleSubmit} className="auth-form">
-      <h2>Sign up</h2>
+      <h2>{pageAction}</h2>
       <label>
-        <span>email:</span>
+        <span>{toDo} email:</span>
         <input 
           required
           type="email"
@@ -175,7 +190,7 @@ export default function Signup() {
       
       {!action && 
         <label>
-          <span >Current Password:</span>
+          <span >current password:</span>
           <input 
             required
             id='prevPassword'
@@ -186,9 +201,8 @@ export default function Signup() {
         </label>
       }
         <label>
-          <span className='trigger' onClick={handleTriggerClick}>password:</span>
+          <span className='trigger' onClick={handleTriggerClick}>{toDo} password:</span>
           <input 
-            
             id='password1'
             type="password"
             onChange={e => setPassword(e.target.value)}
@@ -211,7 +225,7 @@ export default function Signup() {
       </label>
       
       <label>
-        <span>Display Name (will be shown to all users next to your entries):</span>
+        <span>{toDo} display name (will be shown to all users next to your entries):</span>
         <input 
           required
           type="text"
@@ -228,12 +242,10 @@ export default function Signup() {
         />
       </label>
         
-        {!isPending && <button className="btn">{buttonLabel}</button>}
+        {!isPending && <button className="btn">{pageAction}</button>}
         {isPending && <button className="btn" disabled>loading</button>}
         {error && <div className="error">{error}</div>}
-        {!action &&      
-         <p>Passwords may be updated using the "forgot password" link on the Login Page</p> 
-        }
+        
       </form>
   )
 }

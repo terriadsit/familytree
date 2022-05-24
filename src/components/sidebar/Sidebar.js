@@ -5,13 +5,20 @@ import ListAll from './ListAll'
 
 // styles and images
 import './Sidebar.css'
-// import DashboardIcon from '../../assets/dashboard_icon.svg'
 import AddIcon from '../../assets/add_icon.svg'
+import { useEffect, useState } from 'react'
 
-export default function Sidebar() {
+export default function Sidebar({...props}) {
   const { user } = useAuthContext()
-  
-  const displayName = user ? user.displayName : ''
+  let displayName = props.displayName
+  //const [displayName, setDisplayName] = useState('')
+  console.log('user', props)
+
+  // let tempDisplayName = user ? user.displayName : ''
+
+  // useEffect(() => {
+  //   setDisplayName(tempDisplayName)
+  // }, [tempDisplayName])
 
   return (
     <div className="sidebar">

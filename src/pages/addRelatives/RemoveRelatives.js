@@ -11,9 +11,9 @@ export default function RemoveRelatives({...props}) {
   
   // remove this relative from the state in parent component
   // then remove from ui in stateless list
-  const handleClick = (e) => {
-    props.removePrevRelative(e)
-    const removeRef = document.getElementById(e.target.value)
+  const handleClick = (id, name) => {
+    props.removePrevRelative(id, name)
+    const removeRef = document.getElementById(id)
     removeRef.innerHTML = ''
   }
 
@@ -31,7 +31,7 @@ export default function RemoveRelatives({...props}) {
                 {r.name}
                 <button 
                   className="btn delete-btn"
-                  onClick={handleClick} 
+                  onClick={() => handleClick(r.id, r.name)} 
                   value={r.id} 
                   name={r.name}
                   type='button'>
