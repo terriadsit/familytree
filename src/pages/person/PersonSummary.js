@@ -1,6 +1,7 @@
 // displays person details along with the ability to delete or edit 
-// when called from <AddPerson />
 // called by <Person /> receives person from db as props 
+// only the creator of the person should be able to delete or edit
+// this person
 
 import { useState } from "react"
 import { dbFirestore } from "../../firebase/config"
@@ -24,7 +25,7 @@ export default function PersonSummary({...tempPerson }) {
 
     let personDetailsProps = {...person}
    
-    // edit person
+    //  user may edit person if they created the person
     const handleEdit = () => {
       if (person.createdBy.uid === user.uid) {
          navigate('/updateperson/' + person.id)
@@ -33,7 +34,7 @@ export default function PersonSummary({...tempPerson }) {
       }
     }
 
-    // delete person
+    // user may delete person if they created the person
     async function handleDelete(person) {
         const id = person.createdBy.uid
         if (user.uid === id ) {
@@ -95,7 +96,7 @@ export default function PersonSummary({...tempPerson }) {
         <div className="person-summary">
           
           <PersonDetails {...personDetailsProps} />
-           
+          {person.createdBy.uid === user.uid && 
             <div className="edit-btns">
              <button className="deleteBtn" 
                onClick={() => handleDelete(person)}
@@ -108,7 +109,8 @@ export default function PersonSummary({...tempPerson }) {
                <i className="fa-solid fa-pen"></i>
             </button>
             </div>
-            {error && <p className="error">Error: {error}</p> }
+          }
+          {error && <p className="error">Error: {error}</p> }
         </div>
     </div>
   )
