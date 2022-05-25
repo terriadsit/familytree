@@ -4,6 +4,9 @@
 
 import { useEffect } from "react"
 
+// styles
+import './AddRelatives.css'
+
 export default function RemoveRelatives({...props}) {
   const addPrevRelatives = props.addPrevRelatives
   const relatives = props.person[props.relationship]
@@ -22,15 +25,15 @@ export default function RemoveRelatives({...props}) {
   },[relatives, relationship])
     
   return (
-    <div className="relatives">
-      {relatives.length > 1 && <p>{relationship} to remove:</p>}
-      <ul className="relative-list">
+    <div className="relative-container">
+      <p className="heading">{relationship} to remove:</p>
+      <ul className="relative-list" >
         {
           relatives.map(r => (
              <li key={r.id} id={r.id}>
                 {r.name}
                 <button 
-                  className="btn delete-btn"
+                  className="delete-btn"
                   onClick={() => handleClick(r.id, r.name)} 
                   value={r.id} 
                   name={r.name}

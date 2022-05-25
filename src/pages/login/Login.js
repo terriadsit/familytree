@@ -38,13 +38,13 @@ export default function Login() {
     // ..
      })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      alert('error sending password email, please provide a valid password', error.message)
-    // ..
+      alert('error sending password email, please provide a valid password', error, error.code)
     });
   }
 
+  if (error) {
+    return <p className='error'>error logging in. {error.message}</p>
+  }
   return (
     <form onSubmit={handleSubmit} className="auth-form">
       <h2>Login</h2>

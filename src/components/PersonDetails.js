@@ -1,13 +1,16 @@
 // displays details of a person
-// called by <PersonSummary > and <AddRelatives >
-// receives a person with all their details
+// called by <PersonSummary /> and <AddRelatives />
+// receives a person with all their details as props
 // will allow person to be added to home page of user
+// do not display person.comments if on /addrelatives pages
+
 import { useDocument } from '../hooks/useDocument'
 import { useAuthContext } from '../hooks/useAuthContext'
 import ToggleSwitch from "./ToggleSwitch"
 import formatNameList from "../sharedFunctions/formatNameList"
 import updateMyPersons from '../manageFileStorage/updateMyPersons'
 import CreatedBy from './createdBy/CreatedBy'
+import { useLocation } from 'react-router-dom'
 
 // styles
 import './PersonDetails.css'
@@ -15,7 +18,11 @@ import './PersonDetails.css'
 export default function PersonDetails({...person}) {
   const { user } = useAuthContext()
   const { data } = useDocument('users', user.uid)
+  const location = useLocation()
   
+  // don't display person.comments on /addrelatives
+  const onAdd = location.pathname.includes('add')
+    
   let onHome
 
   const checkIfOnHome  = () => {
@@ -24,7 +31,6 @@ export default function PersonDetails({...person}) {
       found = data.myPersons.find(el => el.personId === person.id)
     }
     onHome = found ? true : false
-    console.log('found',onHome)
   }
   
   checkIfOnHome()
@@ -60,13 +66,12 @@ export default function PersonDetails({...person}) {
 
   return (
     <div className="person-details">
-        <div className="heading">
+          <div>
             <h4>
               {person.name} 
-              {person.otherName && <span>, ({person.otherName})</span>}
+              {person.otherName && <span> ({person.otherName})</span>}
             </h4>
-            <span className="toggle"><ToggleSwitch {...toggleProps} /></span>
-         </div>
+          </div>
         <br></br>
         
         {person.imageUrl && 
@@ -76,17 +81,19 @@ export default function PersonDetails({...person}) {
             alt="person" 
         />}
                              
-        <p>born: {person.birthDate ? person.birthDate : 'unknown'} to {person.deathDate ? person.deathDate : 'unknown'}</p>
-        <p>at: {person.birthCity ? person.birthCity : 'unknown'}</p>
-        <p>parents: {parents}</p>
-        <p>sibling(s): {siblings}</p>
-        <p>married to: {spouses} {person.marriageComments && spouses ? 
+        <p><b>born: </b>{person.birthDate ? person.birthDate : 'unknown'} to {person.deathDate ? person.deathDate : 'unknown'}</p>
+        <p><b>at: </b>{person.birthCity ? person.birthCity : 'unknown'}</p>
+        <p><b>parents: </b>{parents}</p>
+        <p><b>sibling(s): </b>{siblings}</p>
+        <p><b>married to: </b>{spouses} {person.marriageComments && spouses ? 
           `, ${person.marriageComments}` :
           person.marriageComments }
         </p>
-        <p>children: {children}</p>
-        {person.comments && <p>comments: {person.comments}</p>}
+        <p><b>children: </b>{children}</p>
+        {(!onAdd && person.comments) && <p><b>comments: </b>{person.comments}</p>}
         <CreatedBy props={person.createdBy.uid} /> 
+        <span className="toggle"><ToggleSwitch {...toggleProps} /></span>
+        
     </div>
   )
 }

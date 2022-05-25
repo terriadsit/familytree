@@ -14,7 +14,7 @@ export default function Navbar() {
     <div className="navbar">
         <ul>
            <li className='logo'>
-               <i class="fa-brands fa-pagelines"></i>
+               <i className="fa-brands fa-pagelines"></i>
                <span>Family Tree and Archive</span>
            </li>
            <li>

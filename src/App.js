@@ -1,3 +1,5 @@
+// manages state for displayName which is sent as props to <Signup />
+
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useAuthContext } from './hooks/useAuthContext'
@@ -23,8 +25,7 @@ function App() {
   const { user, authIsReady } = useAuthContext()
   const [displayName, setDisplayName] = useState('')
   let tempDisplayName = user ? user.displayName : ''
-  console.log('app display name', displayName)
-
+  
   const updateDisplayName = (newName) => {
     setDisplayName(newName)
   }

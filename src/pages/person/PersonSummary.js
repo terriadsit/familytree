@@ -1,5 +1,6 @@
 // displays person details along with the ability to delete or edit 
-// when called from <AddPerson>
+// when called from <AddPerson />
+// called by <Person /> receives person from db as props 
 
 import { useState } from "react"
 import { dbFirestore } from "../../firebase/config"

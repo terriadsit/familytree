@@ -1,5 +1,5 @@
 // a toggle component, manged by props to show checked 
-// and also to manage a clidk
+// and also to manage a click
 
 import { useEffect } from "react";
 
@@ -9,12 +9,7 @@ import "./ToggleSwitch.css";
 const ToggleSwitch = ({...props }) => {
   
   const isChecked = props.checked
-  console.log('checkbox', isChecked)
-  // if props say box should be pre checked
-  // if (checked) {
-  //   checkBoxRef.setAttribute('checked', true)
-  // }
-
+ 
   useEffect(() => {
     if (isChecked) {
       document.getElementById("myCheck").checked = true

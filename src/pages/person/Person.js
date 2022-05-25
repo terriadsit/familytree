@@ -1,3 +1,6 @@
+// displays all of the persons details and allows additional comments
+// to be added
+
 import { useDocument } from '../../hooks/useDocument'
 import { useParams } from 'react-router-dom'
 import PersonSummary from './PersonSummary'
@@ -10,7 +13,7 @@ export default function Person() {
   let params = useParams()
   const personId = params.id
   const { data, error } = useDocument('people', personId )
- 
+
   if (error) {
     return <div className="error">{error}</div>
   }

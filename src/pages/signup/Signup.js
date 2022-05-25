@@ -1,7 +1,11 @@
+// signup sets up a firebase auth user if action is create or updates a user  
+// also receives props to keep welcome user dispay name state correct in sidebar
+// user display name state is managed by <App />
+
 import { useSignup } from '../../hooks/useSignup'
 import { useFirestore } from '../../hooks/useFirestore'
 import { useState, useEffect } from 'react'
-import { useNavigate, useLocation, useParams } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { dbFirestore } from '../../firebase/config'
 import { doc, getDoc } from 'firebase/firestore'
@@ -20,15 +24,14 @@ export default function Signup({...props}) {
   // in order to keep state updated in <Sidebar />
   // displayName in this <Signup /> is a form field and requires
   // state here
-  let tempDisplayName = props.displayName
-  const updateDisplayName = props.updateDisplayName
-  console.log('tempDisplayName', props)
+ const updateDisplayName = props.updateDisplayName
+  
   //Query Parameters, action is 'create' for new add, no action for update
   const queryString = useLocation().search;
   const queryParams = new URLSearchParams(queryString);
   const action = queryParams.get('action');
   
-  // ui interface words
+  // ui interface words to display
   const pageAction = action ? 'Signup' : 'Update'
   const toDo = action ? '' : 'update'
 
@@ -125,6 +128,7 @@ export default function Signup({...props}) {
         if(checkForMatch(checkPassword)) {
           if (password.trim()) {
             signup(email, password, displayName, checked)
+            
           } else {
             alert('a password is required')
           }
@@ -171,10 +175,14 @@ export default function Signup({...props}) {
         }
         updateDocument(user.uid, updates)
       }
-      navigate('/')
+      if (user) {
+        navigate('/')
+      }
   } 
   
-
+  if (error) {
+    return <p className='error'>error signing up, {error}</p>
+  }
   return (
     <form onSubmit={handleSubmit} className="auth-form">
       <h2>{pageAction}</h2>

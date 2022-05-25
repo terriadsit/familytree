@@ -13,7 +13,8 @@ import ChooseRelatives from './ChooseRelatives'
 import RemoveRelatives from './RemoveRelatives'
 
 // styles
-import './AddRelatives.css'
+//import './AddRelatives.css'
+
 function AddRelatives() {
   
   const navigate = useNavigate()

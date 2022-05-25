@@ -1,13 +1,16 @@
 import Select from 'react-select'
 
+// styles
+import './AddRelatives.css'
+
 export default function ChooseRelatives({...props}) {
     const relationship = props.relationship
     const people = props.people
       
   return (
-    <div>
+    <div className='relative-container'>
       <label>
-        <span>choose {relationship} to add:</span>
+        <p className='heading'>choose {relationship} to add:</p>
           <Select className="relative"
             isMulti
             onChange={(option, action) => {props.handleRelativeOption(option, action)}}
