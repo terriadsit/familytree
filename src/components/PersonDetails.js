@@ -55,7 +55,6 @@ export default function PersonDetails({...person}) {
 
   // called by <ToggleSwitch /> by props to update home page of user
   const handleToggle = (onHome) => {
-    console.log('handleToggle', onHome)
     // remove or add to users list of home page persons, MyPersons
     if (onHome) {
       updateMyPersons(user.uid, person.id,  'add')

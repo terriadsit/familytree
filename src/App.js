@@ -14,8 +14,7 @@ import Navbar from './components/Navbar'
 import Sidebar from './components/sidebar/Sidebar'
 import AddRelatives from './pages/addRelatives/AddRelatives'
 import Search from './components/sidebar/Search'
-import Contact from './components/Contact'
-
+import Faq from './pages/faq/Faq'
 
 // styles
 import './App.css'
@@ -48,8 +47,8 @@ function App() {
            <Navbar />
            <Routes>
              <Route 
-               path="/contact" 
-               element={<Contact />} 
+               path="/faq" 
+               element={<Faq />} 
              />
              <Route 
                path="/" 

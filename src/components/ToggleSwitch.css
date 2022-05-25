@@ -2,13 +2,13 @@
     text-align: right;
     }
     .toggle-switch {
-    position: relative;
-    width: 50px;
+    
+    
     display: inline-block;
-    text-align: left;
-    top: 8px;
+    
+    
     }
-    .checkbox {
+    /* .checkbox {
     display: none;
     }
     .label {
@@ -68,5 +68,5 @@
     }
     .checkbox:checked + .label .switch {
     right: 0px;
-    }
+    } */
     

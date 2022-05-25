@@ -15,7 +15,6 @@ async function updateMyPersons(uid, personId, whChange) {
 
     const personRef = doc(dbFirestore, 'people', personId) 
     
-    console.log('update my person', personId)
     switch(whChange) {
        case "add": {
            await updateDoc(userRef, {

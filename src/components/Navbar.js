@@ -18,8 +18,8 @@ export default function Navbar() {
                <span>Family Tree and Archive</span>
            </li>
            <li>
-                <Link to="/contact">
-                 Contact
+                <Link to="/faq">
+                 FAQ
                 </Link>
             </li>  
             {user && (

@@ -140,7 +140,7 @@ export default function Signup({...props}) {
           user.email,
           prevPassword
         )
-        const result = await reauthenticateWithCredential(
+        await reauthenticateWithCredential(
           user, 
           credential
         )

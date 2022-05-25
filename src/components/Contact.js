@@ -22,6 +22,7 @@ export default function Contact() {
 
   return (
     <form className="contact-form" ref={form} onSubmit={sendEmail}>
+      <h4>Contact Us:</h4>
       <label>Name</label>
       <input type="text" name="name" />
       <label>Email</label>
