@@ -8,6 +8,7 @@ import { useDocument } from '../../hooks/useDocument'
 import './CreatedBy.css'
 
 export default function CreatedBy({...props}) {
+  // state for showing tooltip "creator email"
   const [isShown, setIsShown] = useState(false)
   
   // get creator of this entry's details
@@ -25,16 +26,14 @@ export default function CreatedBy({...props}) {
   }
   return (
     <div className='creator'>
-    <p 
-     
-      onMouseEnter={() => setIsShown(true)}
-      onMouseLeave={() => setIsShown(false)}
-    >
+      <p 
+        onMouseEnter={() => setIsShown(true)}
+        onMouseLeave={() => setIsShown(false)}
+      >
         Entry Created By: {creator.displayName}
-        
-    </p>
+      </p>
     
-    {isShown && <p className='tip'>{emailMessage}</p>}
+      {isShown && <p className='tip'>{emailMessage}</p>}
     </div>
   )
 }

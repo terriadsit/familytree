@@ -4,6 +4,7 @@ import { useAuthContext } from '../hooks/useAuthContext'
 
 // styles and images
 import './Navbar.css'
+import FamilyTree from '../assets/family-tree.svg' 
 
 
 export default function Navbar() {
@@ -14,7 +15,7 @@ export default function Navbar() {
     <div className="navbar">
         <ul>
            <li className='logo'>
-               <i className="fa-brands fa-pagelines"></i>
+               <img src={FamilyTree} alt='family tree logo' />
                <span>Family Tree and Archive</span>
            </li>
            <li>

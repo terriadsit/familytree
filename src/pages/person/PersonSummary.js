@@ -18,6 +18,12 @@ import PersonDetails from "../../components/PersonDetails"
 export default function PersonSummary({...tempPerson }) {
     const person = {...tempPerson.person}
     const [error, setError] = useState('')
+
+    // state for tooltip on delete and edit buttons
+    const [deleteIsShown, setDeleteIsShown] = useState(false)
+    const [editIsShown, setEditIsShown] = useState(false)
+
+
     let commentsToDelete = []
     const { user } = useAuthContext()
     const { deleteDocument } = useFirestore('people')
@@ -98,11 +104,21 @@ export default function PersonSummary({...tempPerson }) {
           <PersonDetails {...personDetailsProps} />
           {person.createdBy.uid === user.uid && 
             <div className="edit-btns">
-             <button className="deleteBtn" 
-               onClick={() => handleDelete(person)}
-             >
-               <i className="fa-regular fa-trash-can"></i>
-             </button>
+              <p 
+                onMouseEnter={() => setDeleteIsShown(true)}
+                onMouseLeave={() => setDeleteIsShown(false)}
+              >
+                <button className="deleteBtn" 
+                  onClick={() => handleDelete(person)}
+                >
+                  <i className="fa-regular fa-trash-can"></i>
+                </button>
+              </p>
+    
+              {deleteIsShown && <p className='tip'>Delete</p>}
+             
+             
+        
              <button className="deleteBtn" 
                onClick={() => handleEdit(person)}
              >

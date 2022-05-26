@@ -31,3 +31,7 @@
     text-decoration: none;
     margin-right: 20px;
   }
+  .navbar img {
+    width: 26px;
+    padding: 20px;
+  }

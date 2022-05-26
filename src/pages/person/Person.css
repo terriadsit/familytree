@@ -28,6 +28,10 @@
 .person-summary .btn {
     margin-top:20px
 }
+.person-summary i {
+    margin: 10px;
+    
+}
 /* person comments */
 .comments {
     color: var(--text-color);
@@ -80,4 +84,5 @@
   }
 .deleteBtn {
     border: none;
+    background-color: #fff;
 }
