@@ -19,11 +19,6 @@ export default function PersonSummary({...tempPerson }) {
     const person = {...tempPerson.person}
     const [error, setError] = useState('')
 
-    // state for tooltip on delete and edit buttons
-    const [deleteIsShown, setDeleteIsShown] = useState(false)
-    const [editIsShown, setEditIsShown] = useState(false)
-
-
     let commentsToDelete = []
     const { user } = useAuthContext()
     const { deleteDocument } = useFirestore('people')
@@ -57,16 +52,16 @@ export default function PersonSummary({...tempPerson }) {
           querySnapshot.forEach(doc => { 
              commentsToDelete.push({ commentId: doc.id, commentData: doc.data()})
           })
-         // delete associated comments, if any
+          // delete associated comments, if any
           for (let i = 0; i < commentsToDelete.length; i++) {
              deleteComment(commentsToDelete[i], user, person)
-           }
+          }
            
-           // find those users who have this person on their home page, myPersons
-           const displayedBy = person.onUsers
-           displayedBy.map((uid) => (
+          // find those users who have this person on their home page, myPersons
+          const displayedBy = person.onUsers
+          displayedBy.map((uid) => (
              updateMyPersons(uid, person.id, 'remove')
-           ))
+          ))
           
           // remove this person from any relatives
           // update any siblings
@@ -95,35 +90,26 @@ export default function PersonSummary({...tempPerson }) {
         }
         // redirect to home page
         navigate('/')
-      }
+    }
     
   return (
     <div>
         <div className="person-summary">
-          
           <PersonDetails {...personDetailsProps} />
           {person.createdBy.uid === user.uid && 
             <div className="edit-btns">
-              <p 
-                onMouseEnter={() => setDeleteIsShown(true)}
-                onMouseLeave={() => setDeleteIsShown(false)}
-              >
-                <button className="deleteBtn" 
+              <button className="deleteBtn" 
                   onClick={() => handleDelete(person)}
-                >
+              >
                   <i className="fa-regular fa-trash-can"></i>
-                </button>
-              </p>
-    
-              {deleteIsShown && <p className='tip'>Delete</p>}
-             
-             
-        
-             <button className="deleteBtn" 
-               onClick={() => handleEdit(person)}
-             >
-               <i className="fa-solid fa-pen"></i>
-            </button>
+                  <span className="icon-text">delete</span>
+              </button>
+              <button className="deleteBtn" 
+                  onClick={() => handleEdit(person)}
+              >
+                <i className="fa-solid fa-pen"></i>
+                <span className="icon-text">edit</span>
+              </button>
             </div>
           }
           {error && <p className="error">Error: {error}</p> }

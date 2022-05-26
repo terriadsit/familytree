@@ -8,6 +8,7 @@
    background-color: #fff; 
    padding: 30px;
    border-radius: 4px;
+   margin-bottom: 20px;
 }
 .person-summary {
     color: var(--text-color);
@@ -28,10 +29,7 @@
 .person-summary .btn {
     margin-top:20px
 }
-.person-summary i {
-    margin: 10px;
-    
-}
+
 /* person comments */
 .comments {
     color: var(--text-color);
@@ -77,12 +75,25 @@
 .comment-list-item {
     display: block;
 }
-.fa-regular {
-    justify-content: flex-end;
-    margin-top: 3px;
-    display: block;
-  }
+
+/* edit and delete buttons */
+.edit-btns {
+    display: flex;
+}
 .deleteBtn {
     border: none;
     background-color: #fff;
+  
 }
+.person-summary i {
+    margin: 20px 5px 20px 5px;
+    padding: 5px 5px 5px 5px;
+    cursor: pointer;
+}
+.person-summary .tip {
+    padding: 20px;
+}
+.icon-text {
+    padding: 0px 25px 0px 0px;
+}
+
