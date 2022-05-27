@@ -133,11 +133,11 @@ export default function Signup({...props}) {
         // passwords must match and may not be blank when signing up
         if(checkForMatch(checkPassword)) {
           if (password.trim()) {
-            await signup(email, password, displayName, checked)
-              const auth =  getAuth()
-              sendEmailVerification(auth.currentUser)
-              .then(logout())
-              navigate('/login')
+            const res = await signup(email, password, displayName, checked)
+              .then((res) => sendEmailVerification(res.user))
+            logout()
+            alert('An email has been sent to you. Please verify your email.')
+            navigate('/login')
           } else {
             alert('a password is required')
           }

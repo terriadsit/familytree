@@ -1,21 +1,39 @@
+// log users in but if they are not email verified, log them out again
+// and resend a verification email to them
 import { useLogin } from '../../hooks/useLogin'
 import { useState } from 'react'
-import { getAuth, sendPasswordResetEmail } from "firebase/auth";
-
+import { getAuth, sendPasswordResetEmail, sendEmailVerification } from "firebase/auth";
+import { useLogout } from '../../hooks/useLogout';
+import { useNavigate } from 'react-router-dom';
 
 // styles
 import './Login.css' 
-
-
 
 export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const { login, isPending, error } = useLogin()
+  const { logout } = useLogout()
+  const navigate = useNavigate()
+  
+  // users must be verified
+  const manageVerification = (user) => {
+    if (!user.emailVerified) {
+      sendEmailVerification(user)
+      logout()
+      alert('An email has been sent to you. Please verify your email.')
+      navigate('/login')
+    }
+  }
 
-  const handleSubmit = e => {
-    e.preventDefault()
-    login(email, password)
+  const handleSubmit = async e => {
+    try {
+      e.preventDefault()
+      const res = await login(email, password)
+        .then((res) => manageVerification(res.user))
+    } catch(err) {
+      alert('error logging in', err)
+    }
   }
 
   const handleTriggerClick = () => {
@@ -43,7 +61,7 @@ export default function Login() {
   }
 
   if (error) {
-    return <p className='error'>error logging in. {error.message}</p>
+    return <p className='error'>error logging in. {error}</p>
   }
   return (
     <form onSubmit={handleSubmit} className="auth-form">

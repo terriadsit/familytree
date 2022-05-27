@@ -27,6 +27,7 @@ export const useLogin = () => {
         setIsPending(false)
         setError(null)
       }
+      return res
     } 
     catch(err) {
       if (!isCancelled) {
@@ -34,6 +35,7 @@ export const useLogin = () => {
         setIsPending(false)
       }
     }
+    
   }
 
   useEffect(() => {
