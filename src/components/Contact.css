@@ -5,3 +5,13 @@
 .contact-form label {
     margin: 10px 0 0 0;
 }
+.contact-form .response {
+    background-color: blue;
+    color: white;
+    margin: 10px;
+    padding: 10px;
+    text-align: center;
+}
+.contact-form .btn {
+    margin-bottom: 20px;
+}

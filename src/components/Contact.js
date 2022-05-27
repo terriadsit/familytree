@@ -1,11 +1,12 @@
 // provide ability for users to email admin
-import  { useRef } from 'react';
+import  { useRef, useState } from 'react';
 import emailjs from 'emailjs-com';
 
 // styles 
 import './Contact.css'
 
 export default function Contact() {
+  const [showResponse, setShowResponse] = useState(false)
   const form = useRef();
 
   const sendEmail = (e) => {
@@ -18,13 +19,20 @@ export default function Contact() {
           console.log(error.text);
       });
     e.target.reset()
+    setShowResponse(true)
+
   };
 
   return (
     <form className="contact-form" ref={form} onSubmit={sendEmail}>
+      {showResponse && 
+        <div className="response">
+          Thank you for your email!
+        </div>
+      }
       <h4>Contact Us:</h4>
       <label>Name</label>
-      <input type="text" name="name" />
+      <input type="text" name="name" onChange={() => setShowResponse(false)}/>
       <label>Email</label>
       <input type="email" name="email" />
       <label>Subject</label>
@@ -32,6 +40,7 @@ export default function Contact() {
       <label>Message</label>
       <textarea name="message" />
       <input type="submit" className='btn' value="Send" />
+
     </form>
   );
 };

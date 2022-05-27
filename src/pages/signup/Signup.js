@@ -6,14 +6,17 @@ import { useSignup } from '../../hooks/useSignup'
 import { useFirestore } from '../../hooks/useFirestore'
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useLogout } from '../../hooks/useLogout'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { dbFirestore } from '../../firebase/config'
 import { doc, getDoc } from 'firebase/firestore'
-import { updateEmail, 
+import { updateEmail,
+         getAuth, 
          EmailAuthProvider, 
          updatePassword,
          updateProfile,
-         reauthenticateWithCredential } 
+         reauthenticateWithCredential, 
+         sendEmailVerification} 
          from "firebase/auth";
 
 // styles
@@ -44,6 +47,7 @@ export default function Signup({...props}) {
   const [prevPassword, setPrevPassword] = useState('')
 
   const { signup, isPending, error } = useSignup()
+  const { logout } = useLogout()
   const { updateDocument } = useFirestore('users')
   const { user } = useAuthContext()
   const navigate = useNavigate()
@@ -83,6 +87,8 @@ export default function Signup({...props}) {
       setChecked(false)
     }
   },[action])
+
+  
 
   // toggle checking box to allow or hide email from other users
   const handleChange = () => {
@@ -127,8 +133,11 @@ export default function Signup({...props}) {
         // passwords must match and may not be blank when signing up
         if(checkForMatch(checkPassword)) {
           if (password.trim()) {
-            signup(email, password, displayName, checked)
-            
+            await signup(email, password, displayName, checked)
+              const auth =  getAuth()
+              sendEmailVerification(auth.currentUser)
+              .then(logout())
+              navigate('/login')
           } else {
             alert('a password is required')
           }
