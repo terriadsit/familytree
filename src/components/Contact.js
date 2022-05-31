@@ -1,12 +1,14 @@
 // provide ability for users to email admin
-import  { useRef, useState } from 'react';
+import  { useRef } from 'react';
+import { useSnackbar } from 'notistack'
 import emailjs from 'emailjs-com';
+
 
 // styles 
 import './Contact.css'
 
 export default function Contact() {
-  const [showResponse, setShowResponse] = useState(false)
+  const { enqueueSnackbar } = useSnackbar();
   const form = useRef();
 
   const sendEmail = (e) => {
@@ -19,20 +21,18 @@ export default function Contact() {
           console.log(error.text);
       });
     e.target.reset()
-    setShowResponse(true)
+    enqueueSnackbar('Thank you for your message!', { 
+      variant: 'success',
+    });
+    //enqueueSnackbar('Thank you for your message!')
 
   };
 
   return (
     <form className="contact-form" ref={form} onSubmit={sendEmail}>
-      {showResponse && 
-        <div className="response">
-          Thank you for your email!
-        </div>
-      }
       <h4>Contact Us:</h4>
       <label>Name</label>
-      <input type="text" name="name" onChange={() => setShowResponse(false)}/>
+      <input type="text" name="name" />
       <label>Email</label>
       <input type="email" name="email" />
       <label>Subject</label>

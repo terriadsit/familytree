@@ -3,8 +3,9 @@
 import { useLogin } from '../../hooks/useLogin'
 import { useState } from 'react'
 import { getAuth, sendPasswordResetEmail, sendEmailVerification } from "firebase/auth";
-import { useLogout } from '../../hooks/useLogout';
-import { useNavigate } from 'react-router-dom';
+import { useLogout } from '../../hooks/useLogout'
+import { useNavigate } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
 
 // styles
 import './Login.css' 
@@ -15,13 +16,16 @@ export default function Login() {
   const { login, isPending, error } = useLogin()
   const { logout } = useLogout()
   const navigate = useNavigate()
+  const { enqueueSnackbar } = useSnackbar() 
   
   // users must be verified
   const manageVerification = (user) => {
     if (!user.emailVerified) {
       sendEmailVerification(user)
       logout()
-      alert('An email has been sent to you. Please verify your email.')
+      enqueueSnackbar('A verification email has been sent to you. It may be in your spam folder.', { 
+        variant: 'info',
+      });
       navigate('/login')
     }
   }
@@ -32,7 +36,10 @@ export default function Login() {
       const res = await login(email, password)
         .then((res) => manageVerification(res.user))
     } catch(err) {
-      alert('error logging in', err)
+      enqueueSnackbar(`an error occurred logging in, ${err}`, { 
+        variant: 'error',
+      })
+      navigate('/login')
     }
   }
 
@@ -51,19 +58,19 @@ export default function Login() {
     const auth = getAuth();
     sendPasswordResetEmail(auth, email)
      .then(() => {
-       alert('password email sent to provided email')
-    // Password reset email sent!
-    // ..
+       enqueueSnackbar('A reset password email has been sent, it may be in your spam folder', { 
+          variant: 'success',
+       });
      })
     .catch((error) => {
-      alert('error sending password email, please provide a valid password', error, error.code)
+      console.log('error seding password', error)
+      enqueueSnackbar(`an error occurred, please enter your email address, ${error} ${error.code}`, { 
+        variant: 'error',
+      })
     });
   }
 
-  if (error) {
-    return <p className='error'>error logging in. {error}</p>
-  }
-  return (
+   return (
     <form onSubmit={handleSubmit} className="auth-form">
       <h2>Login</h2>
       <label>

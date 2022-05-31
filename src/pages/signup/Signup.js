@@ -2,6 +2,7 @@
 // also receives props to keep welcome user dispay name state correct in sidebar
 // user display name state is managed by <App />
 
+import { useSnackbar } from 'notistack'
 import { useSignup } from '../../hooks/useSignup'
 import { useFirestore } from '../../hooks/useFirestore'
 import { useState, useEffect } from 'react'
@@ -11,7 +12,6 @@ import { useAuthContext } from '../../hooks/useAuthContext'
 import { dbFirestore } from '../../firebase/config'
 import { doc, getDoc } from 'firebase/firestore'
 import { updateEmail,
-         getAuth, 
          EmailAuthProvider, 
          updatePassword,
          updateProfile,
@@ -46,6 +46,7 @@ export default function Signup({...props}) {
   const [checkPassword, setCheckPassword] = useState('')
   const [prevPassword, setPrevPassword] = useState('')
 
+  const { enqueueSnackbar } = useSnackbar()
   const { signup, isPending, error } = useSignup()
   const { logout } = useLogout()
   const { updateDocument } = useFirestore('users')
@@ -71,6 +72,9 @@ export default function Signup({...props}) {
       prevEmail = email
       
     } catch(err) {
+        enqueueSnackbar(`an error occurred ${err}`, { 
+        variant: 'error',
+      })
        console.log('error', err)
     }
   }
@@ -136,10 +140,14 @@ export default function Signup({...props}) {
             const res = await signup(email, password, displayName, checked)
               .then((res) => sendEmailVerification(res.user))
             logout()
-            alert('An email has been sent to you. Please verify your email.')
+            enqueueSnackbar(`A verification email has been sent to you, it may be in your spam folder.`, { 
+              variant: 'info',
+          })
             navigate('/login')
           } else {
-            alert('a password is required')
+            enqueueSnackbar('a password is required', { 
+              variant: 'error',
+          })
           }
         }
       } else {
@@ -160,7 +168,9 @@ export default function Signup({...props}) {
               // Update successful.
             }).catch((error) => {
               // An error ocurred
-              alert('password update unsuccessful')
+              enqueueSnackbar(`password update was unsuccessful, ${error}`, { 
+                variant: 'error',
+            })
             });
           }
         }
@@ -169,7 +179,9 @@ export default function Signup({...props}) {
         if (prevEmail !== email) {
           updateEmail(user, email).then(() => {
           }).catch((error) => {
-            alert('an error occurred updating your email address', error.message)
+            enqueueSnackbar(`an error occurred updating your email address ${error.message}`, { 
+              variant: 'error',
+            })
           });
         }
         // update display name in firebase auth

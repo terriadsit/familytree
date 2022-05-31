@@ -2,7 +2,9 @@ import deleteStoredImage from "../../manageFileStorage/deleteStoredImage"
 import { dbFirestore } from "../../firebase/config"
 import { deleteDoc, doc, collection } from "firebase/firestore"
 
+
 async function deleteComment(comment, user, person) {
+  
   // comment is an object { commentId, commentData }
     let deleteError = ''
     const createdById = comment.commentData.createdBy.createdBy
@@ -22,7 +24,7 @@ async function deleteComment(comment, user, person) {
         }
       }
     } else {
-     alert('only the creator of this person or this comment may delete it')
+      alert('Only the creator of this comment or person may delete this comment.')
     } 
     return deleteError
 }
