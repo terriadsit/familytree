@@ -24,13 +24,12 @@ export default function Contact() {
     enqueueSnackbar('Thank you for your message!', { 
       variant: 'success',
     });
-    //enqueueSnackbar('Thank you for your message!')
-
+   
   };
 
   return (
     <form className="contact-form" ref={form} onSubmit={sendEmail}>
-      <h4>Contact Us:</h4>
+      
       <label>Name</label>
       <input type="text" name="name" />
       <label>Email</label>

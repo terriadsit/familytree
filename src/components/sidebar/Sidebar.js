@@ -13,7 +13,8 @@ export default function Sidebar({...props}) {
     <div className="sidebar">
         <div className="sidebar-content">
             <div className="user">
-                <p>Welcome {displayName}!</p>
+                {!displayName && <p>Welcome! <br></br>Please Sign Up and Login to access the options below.</p>}
+                {displayName && <p>Welcome {displayName}!</p>}
             </div>
             <nav className="links">
               <ul>

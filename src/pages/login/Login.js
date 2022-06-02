@@ -33,7 +33,7 @@ export default function Login() {
   const handleSubmit = async e => {
     try {
       e.preventDefault()
-      const res = await login(email, password)
+      await login(email, password)
         .then((res) => manageVerification(res.user))
     } catch(err) {
       enqueueSnackbar(`an error occurred logging in, ${err}`, { 

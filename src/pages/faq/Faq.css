@@ -1,3 +1,21 @@
+.container {
+  background-color: #fff; 
+  padding: 30px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  color: var(--text-color);
+  line-height: 1.8em;
+  font-size: 0.9em;
+  
+}
+.contact {
+  /* margin: 0px 0px 40px 0px; */
+  cursor: pointer;
+}
+.tip {
+  /* position: relative;
+  top: -30px; */
+}
 .faq-list ul {
   list-style-type: square;
 }

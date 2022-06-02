@@ -1,9 +1,18 @@
+// FAQ are available to all. Only signed in users may use the <Contact />
+// form. Other viewers may see a contact email address as a tooltip
+
 import Contact from '../../components/Contact'
+import { useState } from 'react'
+import { useAuthContext } from '../../hooks/useAuthContext'
 
 // styles
 import './Faq.css'
 
 export default function Faq() {
+
+  const { user } = useAuthContext()
+  const [isShown, setIsShown] = useState(false)
+
   return (
     <div className='container'>
         <h4 className='heading'>Frequently Asked Questions</h4>
@@ -30,7 +39,7 @@ export default function Faq() {
                 share a memory or a photo.
               </li>
               <li>
-                  This is a family friendly site. Please use the contact us form below
+                  This is a family friendly site. Please contact us
                   if you see inappropriate content.
               </li>
             </ul>
@@ -58,15 +67,21 @@ export default function Faq() {
               </li>
               <li>
                   If you have an interest in paying for storage in order to upload
-                  larger photos, please use
-                  the Contact form below. 
+                  larger photos, please contact us. 
               </li>
             </ul>
         </div>
         <br></br>
-        <div>
-            
-            <Contact />
+        <div >
+            <p 
+              className='contact'
+              onMouseEnter={() => setIsShown(true)}
+              onMouseLeave={() => setIsShown(false)}
+            >
+              <b>Contact Us:</b>
+            </p>
+            {(!user && isShown) && <p className='tip'>email: TerriAdsit@yahoo.com</p>}
+            {user && <Contact />}
         </div>
 
     </div>
