@@ -210,6 +210,7 @@ export default function Signup({...props}) {
       <label>
         <span>{toDo} email:</span>
         <input 
+          placeholder="email"
           required
           type="email"
           onChange={e => setEmail(e.target.value)}
@@ -222,6 +223,7 @@ export default function Signup({...props}) {
           <span >current password:</span>
           <input 
             required
+            placeholder="current password"
             id='prevPassword'
             type="password"
             onChange={e => setPrevPassword(e.target.value)}
@@ -233,6 +235,7 @@ export default function Signup({...props}) {
           <span className='trigger' onClick={handleTriggerClick}>{toDo} password:</span>
           <input 
             id='password1'
+            placeholder="password"
             type="password"
             onChange={e => setPassword(e.target.value)}
             value={password}
@@ -241,7 +244,7 @@ export default function Signup({...props}) {
       <label>
           <span onClick={handleTriggerClick}>check password (click here to view or hide both):</span>
           <input 
-            
+            placeholder="check password"
             id='password2'
             type="password"
             onChange={e => {
@@ -257,6 +260,7 @@ export default function Signup({...props}) {
         <span>{toDo} display name (will be shown to all users next to your entries):</span>
         <input 
           required
+          placeholder="display name"
           type="text"
           onChange={e => setDisplayName(e.target.value)}
           value={displayName}
