@@ -95,7 +95,7 @@ export default function Login() {
       
         
           
-        {!isPending && <button className="btn">Login</button>}
+        {!isPending && <button cy-test-id='loginBtn' className="btn">Login</button>}
         <span>             </span>
         <button
           className='btn'

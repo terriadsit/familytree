@@ -10,7 +10,17 @@
 //
 //
 // -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
+Cypress.Commands.add('login', (email, password) => { 
+    cy.window().then((win) => {
+        win.sessionStorage.clear()
+    })
+    cy.visit('/')
+    cy.get("[cy-test-id='logoutBtn']").click( { force: true })
+    cy.get("[href='\/login']").click()
+    cy.get("[type='email']").type(email)
+    cy.get("[type='password']").type(password)
+    cy.get("[cy-test-id='loginBtn']").click()
+})
 //
 //
 // -- This is a child command --

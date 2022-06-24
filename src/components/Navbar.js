@@ -31,14 +31,14 @@ export default function Navbar() {
             )}
             {!user && (
               <>
-                <li><Link to="/signup?action=create">Sign Up</Link></li>
+                <li><Link to="/signup?action=create">Signup</Link></li>
                 <li><Link to="/login">Login</Link></li>
               </>
             )}
 
             {user && (
             <li>
-                {!isPending && <button className="btn" onClick={logout}>Logout</button>}
+                {!isPending && <button cy-test-id="logoutBtn" className="btn" onClick={logout}>Logout</button>}
                 { isPending && <button className="btn" disabled>Logging out...</button>}
             </li>
             )}

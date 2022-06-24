@@ -137,13 +137,18 @@ export default function Signup({...props}) {
         // passwords must match and may not be blank when signing up
         if(checkForMatch(checkPassword)) {
           if (password.trim()) {
-            const res = await signup(email, password, displayName, checked)
-              .then((res) => sendEmailVerification(res.user))
-            logout()
-            enqueueSnackbar(`A verification email has been sent to you, it may be in your spam folder.`, { 
-              variant: 'info',
-          })
-            navigate('/login')
+            await signup(email, password, displayName, checked)
+              .then((res) => {
+                if (res) {
+                  sendEmailVerification(res.user)
+                  logout()
+                  enqueueSnackbar(`A verification email has been sent to you, it may be in your spam folder.`, 
+                    { 
+                    variant: 'info',
+                    })
+                  navigate('/login')
+                }
+              })
           } else {
             enqueueSnackbar('a password is required', { 
               variant: 'error',
@@ -201,9 +206,7 @@ export default function Signup({...props}) {
       }
   } 
   
-  if (error) {
-    return <p className='error'>error signing up, {error}</p>
-  }
+  
   return (
     <form onSubmit={handleSubmit} className="auth-form">
       <h2>{pageAction}</h2>
@@ -242,7 +245,7 @@ export default function Signup({...props}) {
           />
       </label>
       <label>
-          <span onClick={handleTriggerClick}>check password (click here to view or hide both):</span>
+          <span onClick={handleTriggerClick} cy-test-id='triggerBtn'>check password (click here to view or hide both):</span>
           <input 
             placeholder="check password"
             id='password2'
@@ -277,7 +280,11 @@ export default function Signup({...props}) {
         
         {!isPending && <button className="btn">{pageAction}</button>}
         {isPending && <button className="btn" disabled>loading</button>}
-        {error && <div className="error">{error}</div>}
+        {error && 
+            <div className="error">{error}  <br></br>
+               Please fix the error and click the Signup button again
+            </div>
+        }
         
       </form>
   )
