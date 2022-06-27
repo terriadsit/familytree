@@ -10,17 +10,31 @@
 //
 //
 // -- This is a parent command --
-Cypress.Commands.add('login', (email, password) => { 
-    cy.window().then((win) => {
-        win.sessionStorage.clear()
-    })
-    cy.visit('/')
-    cy.get("[cy-test-id='logoutBtn']").click( { force: true })
-    cy.get("[href='\/login']").click()
-    cy.get("[type='email']").type(email)
-    cy.get("[type='password']").type(password)
-    cy.get("[cy-test-id='loginBtn']").click()
-})
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/database';
+import 'firebase/compat/firestore';
+import { attachCustomCommands } from 'cypress-firebase';
+
+
+
+const fbConfig = {
+    // Your config from Firebase Console
+        apiKey: "AIzaSyAJDGT8620eCev8xvBPHjVQqN7RwqSVTBA",
+        authDomain: "family-tree-434ad.firebaseapp.com",
+        projectId: "family-tree-434ad",
+        storageBucket: "family-tree-434ad.appspot.com",
+        messagingSenderId: "214645809497",
+        appId: "1:214645809497:web:e0c39f6b6456479fd4ec48"
+      
+};
+
+
+firebase.initializeApp(fbConfig);
+
+attachCustomCommands({ Cypress, cy, firebase });
+
+
 //
 //
 // -- This is a child command --
@@ -34,3 +48,4 @@ Cypress.Commands.add('login', (email, password) => {
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 import '@testing-library/cypress/add-commands'
+

@@ -1,4 +1,4 @@
-// a toggle component, manged by props to show checked 
+// a toggle component, managed by props to show checked 
 // and also to manage a click
 
 import { useEffect } from "react";

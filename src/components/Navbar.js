@@ -5,11 +5,17 @@ import { useAuthContext } from '../hooks/useAuthContext'
 // styles and images
 import './Navbar.css'
 import FamilyTree from '../assets/family-tree.svg' 
+import { useNavigate } from 'react-router-dom'
 
 
 export default function Navbar() {
+  const navigate = useNavigate()
   const { logout, isPending } = useLogout()
   const { user } = useAuthContext()
+  const handleLogout = () => {
+    logout()
+    navigate('/')
+  }
 
   return (
     <div className="navbar">
@@ -38,7 +44,7 @@ export default function Navbar() {
 
             {user && (
             <li>
-                {!isPending && <button cy-test-id="logoutBtn" className="btn" onClick={logout}>Logout</button>}
+                {!isPending && <button cy-test-id="logoutBtn" className="btn" onClick={handleLogout}>Logout</button>}
                 { isPending && <button className="btn" disabled>Logging out...</button>}
             </li>
             )}
