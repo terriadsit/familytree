@@ -31,13 +31,13 @@ export default function Contact() {
     <form className="contact-form" ref={form} onSubmit={sendEmail}>
       
       <label>Name</label>
-      <input type="text" name="name" />
+      <input type="text" required name="name" />
       <label>Email</label>
-      <input type="email" name="email" />
+      <input type="email" required name="email" />
       <label>Subject</label>
-      <input type="text" name="subject" />
+      <input type="text" required name="subject" />
       <label>Message</label>
-      <textarea name="message" />
+      <textarea required name="message" />
       <input type="submit" className='btn' value="Send" />
 
     </form>

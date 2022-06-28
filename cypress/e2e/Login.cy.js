@@ -29,7 +29,6 @@ describe('Login page appears and works correctly, allows verified users only', (
   it("sends an error message if the forgot password has an invalid email", () => {
     cy.get("[type='email']").type('invalid99323@mailinator.com')
     cy.get('[cy-test-id=forgot-password]').click()
-    //cy.findByText("an error occurred, please enter your email address, FirebaseError: Firebase: Error (auth/user-not-found). auth/user-not-found",{ timeout: 3000 }, { exact: false}).should('be.visible')
     cy.findByText(/an error occurred/,{ timeout: 3000 }).should('be.visible')
   })
   
