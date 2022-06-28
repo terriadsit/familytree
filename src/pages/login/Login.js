@@ -83,7 +83,7 @@ export default function Login() {
         />
       </label>
       <label>
-        <span onClick={handleTriggerClick}>Password (click here to view or hide):</span>
+        <span onClick={handleTriggerClick}>password (click here to view or hide):</span>
         <input 
           required
           id='password'
@@ -98,6 +98,7 @@ export default function Login() {
         {!isPending && <button cy-test-id='loginBtn' className="btn">Login</button>}
         <span>             </span>
         <button
+          cy-test-id="forgot-password"
           className='btn'
           type="button"
           onClick={handleGetPassword}
