@@ -12,7 +12,7 @@ export default function ListAll() {
     <div className="people-list">
       {error && <div className='error'>{error}</div>}
       <h4>All People (Birth Names):</h4>
-      <ul>
+      <ul cy-test-id="people-list">
       {documents && documents.map(person => (
         <li key={person.id} >
           <a className="person-list-item" href={'/person/' + person.id}>

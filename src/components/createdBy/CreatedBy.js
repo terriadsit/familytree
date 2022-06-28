@@ -1,5 +1,5 @@
 // take in the creator (a name and uid db) of a comment or person. Display email
-// in a tool tip or display, email not shared
+// in a tool tip or display "email not shared"
 // called by <PersonDetails /> and <CommentList >
 import { useState } from 'react'
 import { useDocument } from '../../hooks/useDocument'
