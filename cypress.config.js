@@ -15,6 +15,7 @@ module.exports = defineConfig({
     TEST_UID: "MnsICqG2ehSrvhU5jXu9Pnox0Lv2",
     PERSON_ID: "Q6QeWPIAToKj422Yyxrl",
     EMAIL: "terriadsit@yahoo.com",
+    DISPLAY_NAME: "test",
     UNVERIFIED: "test_unverified@mailinator.com",
     PASSWORD: "testing123"
   },
@@ -36,6 +37,6 @@ module.exports = defineConfig({
        return extendedConfig;
       // implement node event listeners here
     },
-    baseUrl: "http://localhost:3001"
+    baseUrl: "http://localhost:3000"
   },
 });

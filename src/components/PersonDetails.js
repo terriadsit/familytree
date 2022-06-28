@@ -66,7 +66,7 @@ export default function PersonDetails({...person}) {
   return (
     <div className="person-details">
           <div>
-            <h4>
+            <h4 cy-test-id="person-name">
               {person.name} 
               {person.otherName && <span> ({person.otherName})</span>}
             </h4>
