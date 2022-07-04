@@ -47,22 +47,15 @@ describe('Signup component should appear and operate correctly', () => {
   })
 
   // skip this unless you want to clear out new users from firebase
-  it.skip('is submitted when valid then redirects to the login page', () => {
+  it.only('is submitted when valid then redirects to the login page', () => {
     const random = Math.random().toString(36).substring(2) 
     const email = `test${random}@mailinator.com`
+    const $password = Cypress.env('PASSWORD')
     // box checked not being tested
     fillInForm(email,'testing123', 'testing123', 'test person' )
     cy.get("input[type='checkbox']").check()
-    cy.intercept('POST','https://identitytoolkit.googleapis.com/v1/accounts:signUp**').as('signup')
-    cy.get('.btn').click()
-    cy.wait('@signup')
-      .its('response.statusCode')
-      .should('eq', 200)
-    // popup appears
-    cy.findByText('A verification email has been sent to you, it may be in your spam folder.').should('be.visible')
-    // page redirects
-    cy.url().should('contain','login')
-    
+    cy.checkSignup()
+    cy.deleteThisUser(email, $password)
   })
 
   it('displays or hides password when clicked', () => {

@@ -2,6 +2,7 @@
 // also receives props to keep welcome user dispay name state correct in sidebar
 // user display name state is managed by <App />
 
+import getNewAuth from '../../sharedFunctions/getNewAuth'
 import { useSnackbar } from 'notistack'
 import { useSignup } from '../../hooks/useSignup'
 import { useFirestore } from '../../hooks/useFirestore'
@@ -45,6 +46,8 @@ export default function Signup({...props}) {
   const [checked, setChecked] = useState(false) 
   const [checkPassword, setCheckPassword] = useState('')
   const [prevPassword, setPrevPassword] = useState('')
+  const [prevEmail, setPrevEmail] = useState('')
+  const [passwordError, setPasswordError] = useState('')
 
   const { enqueueSnackbar } = useSnackbar()
   const { signup, isPending, error } = useSignup()
@@ -53,7 +56,7 @@ export default function Signup({...props}) {
   const { user } = useAuthContext()
   const navigate = useNavigate()
   let userDetails
-  let prevEmail = ''
+  
 
   // if updating, need users details
   async function getUsersDetails() {
@@ -69,7 +72,9 @@ export default function Signup({...props}) {
       setDisplayName(userDetails.displayName)
       setChecked(userDetails.shareEmail)
       setEmail(userDetails.email)
-      prevEmail = email
+      setPrevEmail(userDetails.email)
+      console.log('in getuserdetails prevemail, ', prevEmail,'email',email,'ud',userDetails.email,'dName', displayName)
+         
       
     } catch(err) {
         enqueueSnackbar(`an error occurred ${err}`, { 
@@ -101,6 +106,7 @@ export default function Signup({...props}) {
 
   // toggle showing or hiding both passwords
   const handleTriggerClick = () => {
+    console.log('trigger click', email, 'prevemail', prevEmail)
     const ref1 = document.getElementById('password1')
     const ref2 = document.getElementById('password2')
     if(ref1.getAttribute('type') === 'password'){
@@ -116,16 +122,33 @@ export default function Signup({...props}) {
 
   // passwords should match and not be empty
   const checkForMatch = (checkPW) => {
-    const passwordError = document.getElementById('password-error')
-    passwordError.innerText = ""
+    setPasswordError('')
     if(password.trim() !== checkPW.trim()) {
-      passwordError.innerText ='password fields must match'
+      setPasswordError('password fields must match')
       return false
     } else {
       return true
     }
   }
  
+function authError(error) {
+  enqueueSnackbar(`Error updating. Please Login again. ${error}`,  { 
+    autoHideDuration: 7000,
+    variant: 'error',
+    })
+    logout()
+}
+
+
+function getVerified(user) {
+  sendEmailVerification(user)
+  logout()
+  enqueueSnackbar(`A verification email has been sent to you, it may be in your spam folder.`, 
+    { 
+      variant: 'info',
+    })
+  navigate('/login')
+}
  
  // create a new user if action is create, 
  // else update a user
@@ -140,55 +163,57 @@ export default function Signup({...props}) {
             await signup(email, password, displayName, checked)
               .then((res) => {
                 if (res) {
-                  sendEmailVerification(res.user)
-                  logout()
-                  enqueueSnackbar(`A verification email has been sent to you, it may be in your spam folder.`, 
-                    { 
-                    variant: 'info',
-                    })
-                  navigate('/login')
+                  getVerified(res.user)
                 }
               })
           } else {
             enqueueSnackbar('a password is required', { 
               variant: 'error',
-          })
+            })
           }
         }
       } else {
         // update current user
         // need new user credential for updates
-        const credential = EmailAuthProvider.credential(
-          user.email,
-          prevPassword
-        )
-        await reauthenticateWithCredential(
-          user, 
-          credential
-        )
-        // update password if it is changed
-        if (password) {
-          if (checkForMatch(checkPassword)) {
-            updatePassword(user, password).then(() => {
-              // Update successful.
+        // else error occurs if it has been a while since user signed in
+        getNewAuth(user, email, prevPassword, authError)
+        .then(() => {
+          // update password if it is changed
+          if (password) {
+            if (checkForMatch(checkPassword)) {
+              try {
+              updatePassword(user, password).then(() => {
+                // Update successful.
+                getNewAuth(user, email, password, authError)
+                // prevPassword used to update email if email is updated below
+                setPrevPassword(password)
+              })
+              } catch (error) {
+                // An error ocurred
+                enqueueSnackbar(`password update was unsuccessful, ${error}`, { 
+                  variant: 'error',
+                })
+                logout()
+              };
+            }
+          }
+        
+          // update email if it has been changed 
+          // update in firebase auth and in firestore user db while updating entire user 
+          console.log('before prevemail, ', prevEmail,'email',email)
+          
+          if (prevEmail !== email) {
+            console.log('prevemail, ', prevEmail,'email',email)
+            updateEmail(user, email)
+            .then(() => {
+                getVerified(user)
             }).catch((error) => {
-              // An error ocurred
-              enqueueSnackbar(`password update was unsuccessful, ${error}`, { 
+              enqueueSnackbar(`an error occurred updating your email address ${error.message}`, { 
                 variant: 'error',
-            })
+              })
             });
           }
-        }
-        // update email if it has been changed 
-        // update in firebase auth and in firestore user db while updating entire user 
-        if (prevEmail !== email) {
-          updateEmail(user, email).then(() => {
-          }).catch((error) => {
-            enqueueSnackbar(`an error occurred updating your email address ${error.message}`, { 
-              variant: 'error',
-            })
-          });
-        }
+        })
         // update display name in firebase auth
         updateProfile(user, {
           displayName: displayName
@@ -256,7 +281,7 @@ export default function Signup({...props}) {
             }}
             value={checkPassword}
           />
-        <span id="password-error"></span>
+        {passwordError && <span id="password-error">{passwordError}</span>}
       </label>
       
       <label>
@@ -278,7 +303,7 @@ export default function Signup({...props}) {
         />
       </label>
         
-        {!isPending && <button className="btn">{pageAction}</button>}
+        {!isPending && <button cy-test-id="submit-form" className="btn">{pageAction}</button>}
         {isPending && <button className="btn" disabled>loading</button>}
         {error && 
             <div className="error">{error}  <br></br>

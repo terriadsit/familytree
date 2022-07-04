@@ -10,13 +10,14 @@
 //
 //
 // -- This is a parent command --
+import getNewAuth from '../../src/sharedFunctions/getNewAuth';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/database';
 import 'firebase/compat/firestore';
 import { attachCustomCommands } from 'cypress-firebase';
-
-
+import { getAuth, deleteUser, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../../src/firebase/config'
 
 const fbConfig = {
     // Your config from Firebase Console
@@ -34,7 +35,58 @@ firebase.initializeApp(fbConfig);
 
 attachCustomCommands({ Cypress, cy, firebase });
 
+const newLocal = 'uiLogin';
+Cypress.Commands.add(newLocal, (email, password) => {
+    cy.visit('/login')
+    cy.get("[type='email']").type(email)
+    cy.get("input#password").type(password)
+    cy.get('[cy-test-id=loginBtn]').click()
+})
 
+Cypress.Commands.add('checkSignup', () => {
+    cy.intercept('POST','https://identitytoolkit.googleapis.com/v1/accounts:signUp**').as('signup')
+    cy.get('[cy-test-id=submit-form]').click()
+    cy.wait('@signup')
+      .its('response.statusCode')
+      .should('eq', 200)
+    // popup appears
+    cy.findByText('A verification email has been sent to you, it may be in your spam folder.').should('be.visible')
+    // page redirects
+    cy.url().should('contain','login')
+})
+
+Cypress.Commands.add('deleteThisUser', (email, password) => {
+  let user
+  //const auth = getAuth()
+  function handleError(error) {
+    console.log('an error deleteing occurred', error)
+  }
+
+  signInWithEmailAndPassword(auth, email, password) 
+   .then(() => {
+        
+        const user = auth.currentUser;
+        console.log('before delete', user)
+        
+        deleteUser(user)
+    })
+    .then((res) => {
+      // User deleted.
+      console.log('user deleted', res)
+    })
+    .catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      if (errorCode === 'auth/wrong-password') {
+        alert('Wrong password.');
+      } else {
+        alert(errorMessage);
+     }
+     handleError(error);
+  });
+  
+})
 //
 //
 // -- This is a child command --

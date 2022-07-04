@@ -48,7 +48,7 @@ export default function UpdatePerson() {
   }
   
   if (!document) {
-    return <div className="loading">Loading...</div>
+    return <div className="loading">/*Loading...</div>
   }
 
 
