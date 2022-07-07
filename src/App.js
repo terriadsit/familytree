@@ -3,6 +3,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useAuthContext } from './hooks/useAuthContext'
+import { useCollection } from './hooks/useCollection'
 
 // pages and components
 import AddPerson from './pages/addPerson/AddPerson'
@@ -22,27 +23,36 @@ import './App.css'
 function App() {
   
   const { user, authIsReady } = useAuthContext()
-  const [displayName, setDisplayName] = useState('')
-  let tempDisplayName = user ? user.displayName : ''
   
+  let tempDisplayName = user ? user.displayName : ''
+  const [sbDisplayName, setSbDisplayName] = useState('')
+  console.log('in app after setDn', sbDisplayName,'tempname', tempDisplayName )
+  
+
   const updateDisplayName = (newName) => {
-    setDisplayName(newName)
+    console.log('in updateDisplay Name', 'dn',sbDisplayName, 'nn', newName)
+    setSbDisplayName(newName)
+    console.log('after updateDisplay Name', sbDisplayName, 'nn', newName)
+    
   }
 
   const displayNameProps = {
-    displayName,
+    sbDisplayName,
     updateDisplayName: (newName) => updateDisplayName(newName)
   }
 
    useEffect(() => {
-     setDisplayName(tempDisplayName)
-   }, [tempDisplayName])
+     updateDisplayName(tempDisplayName)
+     //tempDisplayName = user ? user.displayName : ''
+     console.log('in useEffect', 'dn',sbDisplayName, 'temp', tempDisplayName)
+     
+    }, [user])
 
   return (
     <div className="App">
       {authIsReady && (
         <BrowserRouter>
-         <Sidebar {...displayNameProps}/>
+         <Sidebar sbDisplayName={sbDisplayName} />
          <div className="container">
            <Navbar />
            <Routes>

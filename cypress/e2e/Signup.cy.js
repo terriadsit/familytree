@@ -1,26 +1,22 @@
 
 describe('Signup component should appear and operate correctly', () => {
   function fillInForm(email, password1, password2, displayName) {
-    cy.findByPlaceholderText('email').clear()
-    cy.findByPlaceholderText('password').clear()
-    cy.findByPlaceholderText('check password').clear()
-    cy.findByPlaceholderText('display name').clear()
-   
-    cy.findByPlaceholderText('email').type(email)
-    cy.findByPlaceholderText('password').type(password1)
-    cy.findByPlaceholderText('check password').type(password2)
-    cy.findByPlaceholderText('display name').type(displayName)
+    
+    cy.findByPlaceholderText('email').clear().type(email)
+    cy.findByPlaceholderText('password').clear().type(password1)
+    cy.findByPlaceholderText('check password').clear().type(password2)
+    cy.findByPlaceholderText('display name').clear().type(displayName)
     
   }
   
   beforeEach(() => {
     cy.visit ('/signup?action=create')
-    
+    cy.wait(5000)
   })
 
   it('Signup component loads and contains required fields, links and text', () => {
     fillInForm('1', '2', '3', '4')
-    cy.findByLabelText('Check to allow other users access to your email address:')
+    cy.findByLabelText('check to allow other users to view your email address')
     cy.get("input[type='checkbox']").should('not.be.checked')
     cy.get('.btn').contains('Signup')
   })
@@ -46,15 +42,15 @@ describe('Signup component should appear and operate correctly', () => {
       cy.get('input:invalid').should('have.length', 1)
   })
 
-  // skip this unless you want to clear out new users from firebase
-  it.only('is submitted when valid then redirects to the login page', () => {
+  
+  it('is submitted when valid then redirects to the login page', () => {
     const random = Math.random().toString(36).substring(2) 
     const email = `test${random}@mailinator.com`
     const $password = Cypress.env('PASSWORD')
     // box checked not being tested
     fillInForm(email,'testing123', 'testing123', 'test person' )
     cy.get("input[type='checkbox']").check()
-    cy.checkSignup()
+    cy.checkSignupBtn('signUp')
     cy.deleteThisUser(email, $password)
   })
 

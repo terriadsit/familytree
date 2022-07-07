@@ -2,6 +2,7 @@
 // also receives props to keep welcome user dispay name state correct in sidebar
 // user display name state is managed by <App />
 
+import getAUser from '../../manageFileStorage/getAUser'
 import getNewAuth from '../../sharedFunctions/getNewAuth'
 import { useSnackbar } from 'notistack'
 import { useSignup } from '../../hooks/useSignup'
@@ -10,13 +11,9 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useLogout } from '../../hooks/useLogout'
 import { useAuthContext } from '../../hooks/useAuthContext'
-import { dbFirestore } from '../../firebase/config'
-import { doc, getDoc } from 'firebase/firestore'
 import { updateEmail,
-         EmailAuthProvider, 
          updatePassword,
          updateProfile,
-         reauthenticateWithCredential, 
          sendEmailVerification} 
          from "firebase/auth";
 
@@ -28,7 +25,9 @@ export default function Signup({...props}) {
   // in order to keep state updated in <Sidebar />
   // displayName in this <Signup /> is a form field and requires
   // state here
- const updateDisplayName = props.updateDisplayName
+
+  // update function from parent, App, to manage sidebar displayName
+  const updateDisplayName = props.updateDisplayName
   
   //Query Parameters, action is 'create' for new add, no action for update
   const queryString = useLocation().search;
@@ -55,34 +54,20 @@ export default function Signup({...props}) {
   const { updateDocument } = useFirestore('users')
   const { user } = useAuthContext()
   const navigate = useNavigate()
-  let userDetails
+  
   
 
   // if updating, need users details
-  async function getUsersDetails() {
-    try {
-      const ref = doc(dbFirestore, 'users', user.uid)
- 
-      const docSnap = await getDoc(ref)
-         
-       if (docSnap.exists()) {
-         userDetails = { ...docSnap.data() }
-      } 
-     
-      setDisplayName(userDetails.displayName)
-      setChecked(userDetails.shareEmail)
-      setEmail(userDetails.email)
-      setPrevEmail(userDetails.email)
-      console.log('in getuserdetails prevemail, ', prevEmail,'email',email,'ud',userDetails.email,'dName', displayName)
-         
-      
-    } catch(err) {
-        enqueueSnackbar(`an error occurred ${err}`, { 
-        variant: 'error',
-      })
-       console.log('error', err)
-    }
-  }
+  function getUsersDetails() {
+    getAUser(user.uid)
+      .then((userDetails) => {
+        setDisplayName(userDetails.displayName)
+        setChecked(userDetails.shareEmail)
+        setEmail(user.email)
+        setPrevEmail(user.email)
+        console.log('in getuserdetails prevemail, ', 'us dn',userDetails.displayName, 'display Name', displayName)
+     })
+   }
   
   // load form fields if updating 
   
@@ -137,6 +122,7 @@ function authError(error) {
     variant: 'error',
     })
     logout()
+    throw "error authenticating"
 }
 
 
@@ -156,15 +142,22 @@ function getVerified(user) {
     e.preventDefault()
     updateDisplayName(displayName)
     // if a new user
-      if (action === 'create') {
+    if (action === 'create') {
         // passwords must match and may not be blank when signing up
         if(checkForMatch(checkPassword)) {
+          setPasswordError('')
           if (password.trim()) {
             await signup(email, password, displayName, checked)
               .then((res) => {
                 if (res) {
                   getVerified(res.user)
                 }
+              }).catch((err) => {
+                enqueueSnackbar(`An error occurred while signing up. ${err}`, 
+                  { 
+                    autoHideDuration: 7000,
+                    variant: 'error',
+                  })
               })
           } else {
             enqueueSnackbar('a password is required', { 
@@ -172,65 +165,87 @@ function getVerified(user) {
             })
           }
         }
-      } else {
+    } else {
         // update current user
         // need new user credential for updates
         // else error occurs if it has been a while since user signed in
-        getNewAuth(user, email, prevPassword, authError)
-        .then(() => {
-          // update password if it is changed
-          if (password) {
-            if (checkForMatch(checkPassword)) {
-              try {
-              updatePassword(user, password).then(() => {
-                // Update successful.
-                getNewAuth(user, email, password, authError)
-                // prevPassword used to update email if email is updated below
-                setPrevPassword(password)
-              })
-              } catch (error) {
-                // An error ocurred
-                enqueueSnackbar(`password update was unsuccessful, ${error}`, { 
-                  variant: 'error',
+        try {
+          getNewAuth(user, user.email, prevPassword, authError)
+          .then(() => {
+            // update password if it is changed
+            if (password) {
+              if (checkForMatch(checkPassword)) {
+                updatePassword(user, password)
+                .then(() => {
+                  console.log('in update password then')
+                  // Update successful.
+                  getNewAuth(user, user.email, password, authError)
+                  // prevPassword used to update email if email is updated below
+                  
+                }).catch((err) => {
+                  enqueueSnackbar(`An error occurred while updating. ${err}`, 
+                    { 
+                      autoHideDuration: 7000,
+                      variant: 'error',
+                    })
                 })
-                logout()
-              };
+              }
             }
-          }
         
-          // update email if it has been changed 
-          // update in firebase auth and in firestore user db while updating entire user 
-          console.log('before prevemail, ', prevEmail,'email',email)
+            // update email if it has been changed 
+            // update in firebase auth and in firestore user db while updating entire user 
+            console.log('before prevemail, ', prevEmail,'email',email)
           
-          if (prevEmail !== email) {
-            console.log('prevemail, ', prevEmail,'email',email)
-            updateEmail(user, email)
-            .then(() => {
+            if (prevEmail !== email) {
+              const passwordToUse = password ? password : prevPassword
+              console.log('prevemail, ', prevEmail,'email',email)
+              updateEmail(user, email)
+              .then(() => {
+                //getNewAuth(user, email, passwordToUse)
                 getVerified(user)
-            }).catch((error) => {
-              enqueueSnackbar(`an error occurred updating your email address ${error.message}`, { 
-                variant: 'error',
+              }).catch((err) => {
+                enqueueSnackbar(`An error occurred while updating. ${err}`, 
+                  { 
+                    autoHideDuration: 7000,
+                    variant: 'error',
+                  })
               })
+            }
+            // update display name in firebase auth
+            // not sure why this works temporarily then AuthContext user 
+            // display name appears to override
+            console.log('before update profile', displayName)
+            updateProfile(user, {
+              displayName: displayName
+            })
+            .then(() => {
+            // Profile updated!
+              console.log('updated user', user)
+            }).catch((error) => {
+            // An error occurred
+              console.log('error occurred updating user', error)
             });
+            // update entire user in user db
+            const updates = {
+              email,
+              shareEmail: checked,
+              displayName
+            }
+            updateDocument(user.uid, updates)
+          })
+        } catch(err) {
+          enqueueSnackbar(`An error occurred while updating. ${err}`, 
+           { 
+            autoHideDuration: 7000,
+            variant: 'error',
+           })
+        } finally {
+          if (user) {
+            navigate('/')
           }
-        })
-        // update display name in firebase auth
-        updateProfile(user, {
-          displayName: displayName
-        })
-        // update entire user in user db
-        const updates = {
-          email,
-          shareEmail: checked,
-          displayName
         }
-        updateDocument(user.uid, updates)
-      }
-      if (user) {
-        navigate('/')
-      }
-  } 
-  
+    } 
+  }
   
   return (
     <form onSubmit={handleSubmit} className="auth-form">
@@ -294,15 +309,17 @@ function getVerified(user) {
           value={displayName}
         />
       </label>
-      <label>
-        <span>Check to allow other users access to your email address:</span>
+      <div >
+        <label className="get-inline">
         <input 
+          className='checkbox'
           type="checkbox"
           onChange={handleChange}
           checked={checked}
-        />
-      </label>
-        
+        />check to allow other users to view your email address
+       </label>
+      </div>
+              
         {!isPending && <button cy-test-id="submit-form" className="btn">{pageAction}</button>}
         {isPending && <button className="btn" disabled>loading</button>}
         {error && 

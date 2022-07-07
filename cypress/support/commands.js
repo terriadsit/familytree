@@ -43,21 +43,22 @@ Cypress.Commands.add(newLocal, (email, password) => {
     cy.get('[cy-test-id=loginBtn]').click()
 })
 
-Cypress.Commands.add('checkSignup', () => {
-    cy.intercept('POST','https://identitytoolkit.googleapis.com/v1/accounts:signUp**').as('signup')
+Cypress.Commands.add('checkSignupBtn', (type) => {
+  // type should be signUp or update
+    const url = `https://identitytoolkit.googleapis.com/v1/accounts:${type}**`
+    cy.intercept('POST', url).as('signup')
     cy.get('[cy-test-id=submit-form]').click()
     cy.wait('@signup')
       .its('response.statusCode')
       .should('eq', 200)
     // popup appears
-    cy.findByText('A verification email has been sent to you, it may be in your spam folder.').should('be.visible')
+    cy.findByText(/A verification email has been/, { timeout: 3000 }).should('be.visible')
     // page redirects
     cy.url().should('contain','login')
 })
 
 Cypress.Commands.add('deleteThisUser', (email, password) => {
   let user
-  //const auth = getAuth()
   function handleError(error) {
     console.log('an error deleteing occurred', error)
   }

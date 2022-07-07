@@ -13,9 +13,9 @@ const cypressFirebasePlugin = require("cypress-firebase").plugin;
 module.exports = defineConfig({
   env: {
     // TEST_UID used by cy.login() unless cy.login() is passed arguments
-    TEST_UID: "MnsICqG2ehSrvhU5jXu9Pnox0Lv2",
+    TEST_UID: "KX9RUGyNIMO7wjVO7noTgVNUXhh2",
     PERSON_ID: "Q6QeWPIAToKj422Yyxrl",
-    EMAIL: "familyTree1@dispostable.com",
+    EMAIL: "familyTree100@dispostable.com",
     DISPLAY_NAME: "test",
     UNVERIFIED: "test_unverified@mailinator.com",
     PASSWORD: "testing123"

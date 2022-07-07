@@ -66,10 +66,10 @@ export default function PersonDetails({...person}) {
   return (
     <div className="person-details">
           <div>
-            <h4 cy-test-id="person-name">
+            <h3 cy-test-id="person-name">
               {person.name} 
               {person.otherName && <span> ({person.otherName})</span>}
-            </h4>
+            </h3>
           </div>
         <br></br>
         
@@ -80,16 +80,16 @@ export default function PersonDetails({...person}) {
             alt="person" 
         />}
                              
-        <p><b>born: </b>{person.birthDate ? person.birthDate : 'unknown'} to {person.deathDate ? person.deathDate : 'unknown'}</p>
-        <p><b>at: </b>{person.birthCity ? person.birthCity : 'unknown'}</p>
-        <p><b>parents: </b>{parents}</p>
-        <p><b>sibling(s): </b>{siblings}</p>
-        <p><b>married to: </b>{spouses} {person.marriageComments && spouses ? 
+        <p cy-test-id="born"><b>born: </b>{person.birthDate ? person.birthDate : 'unknown'} to {person.deathDate ? person.deathDate : 'unknown'}</p>
+        <p cy-test-id="birth-city"><b>at: </b>{person.birthCity ? person.birthCity : 'unknown'}</p>
+        <p cy-test-id="parents"><b>parents: </b>{parents}</p>
+        <p cy-test-id="siblings"><b>sibling(s): </b>{siblings}</p>
+        <p cy-test-id="spouse"><b>married to: </b>{spouses}{person.marriageComments && spouses ? 
           `, ${person.marriageComments}` :
           person.marriageComments }
         </p>
-        <p><b>children: </b>{children}</p>
-        {(!onAdd && person.comments) && <p><b>comments: </b>{person.comments}</p>}
+        <p cy-test-id="children"><b>children: </b>{children}</p>
+        {(!onAdd && person.comments) && <p cy-test-id="comments"><b>comments: </b>{person.comments}</p>}
         <CreatedBy props={person.createdBy.uid} /> 
         <span className="toggle"><ToggleSwitch {...toggleProps} /></span>
         

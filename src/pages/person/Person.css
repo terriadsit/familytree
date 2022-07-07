@@ -10,7 +10,7 @@
    border-radius: 4px;
    margin-bottom: 20px;
 }
-.person-summary {
+/* .person-summary {
     color: var(--text-color);
     line-height: 1.8em;
     font-size: 0.9em;
@@ -20,7 +20,7 @@
     color: var(--text-color);
     font-size: 1.2em;
     font-weight: bold;
-}
+} */
 .person-summary .image {
     border-radius: 6px;
     max-width: 200px;
