@@ -6,6 +6,7 @@ import PersonSnippet from './PersonSnippet'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { useDocument } from '../../hooks/useDocument'
 import getPeopleFromIds from '../../manageFileStorage/getPeopleFromIds'
+import sortPeopleByBD from '../../sharedFunctions/sortPeopleByBD'
 
 // styles
 import './Home.css'
@@ -23,7 +24,8 @@ function Home() {
     // get people ids which user would like displayed
     if(data){
        data.myPersons.map((p) => {
-        return peopleIds.push(p)
+        let id = p.personId
+        return peopleIds.push(id)
        })
  
        // get entire persons details
@@ -32,21 +34,9 @@ function Home() {
   },[data])
 
   // sort people by their birthdate
-  const people = tempPeople
-  people.sort(function(a, b) {
-      const dateA = a.birthDate.toUpperCase(); // ignore upper and lowercase
-      const dateB = b.birthDate.toUpperCase(); // ignore upper and lowercase
-      if (dateA < dateB) {
-        return -1;
-      }
-      if (dateA > dateB) {
-        return 1;
-      }
+  let people = tempPeople
+  people = sortPeopleByBD(people)
     
-      // names must be equal
-      return 0;
-  }) 
-  
   if (error) {
     return <p className="error">${error}</p>
   }

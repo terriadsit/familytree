@@ -1,6 +1,7 @@
  
 // called by <Home /> to retrieve a person's details from the 'people' db.
 // receives a list of person id's 
+// returns their full information
 
 import { dbFirestore } from "../firebase/config"
 import { doc, getDoc } from "firebase/firestore"
@@ -12,11 +13,11 @@ async function getPeopleFromIds(personIds) {
   
   // go through each id and retrieve the promise of data
   const promises = personIds.map(async id => {
-  const ref = doc(dbFirestore, 'people', id.personId)
-  const docSnap = await getDoc(ref)
+    const ref = doc(dbFirestore, 'people', id)
+    const docSnap = await getDoc(ref)
        
        if (docSnap.exists()) {
-         person = { id: id.personId, ...docSnap.data() }
+         person = { id: id, ...docSnap.data() }
          return person
        }  
   })

@@ -6,21 +6,10 @@
 }
 .person-summary {
    background-color: #fff; 
-   padding: 30px;
+   padding: 0px;
    border-radius: 4px;
    margin-bottom: 20px;
 }
-/* .person-summary {
-    color: var(--text-color);
-    line-height: 1.8em;
-    font-size: 0.9em;
-}
-.person-summary h4 {
-    
-    color: var(--text-color);
-    font-size: 1.2em;
-    font-weight: bold;
-} */
 .person-summary .image {
     border-radius: 6px;
     max-width: 200px;

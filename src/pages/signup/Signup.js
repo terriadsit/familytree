@@ -311,12 +311,12 @@ function getVerified(user) {
       </label>
       <div >
         <label className="get-inline">
-        <input 
-          className='checkbox'
-          type="checkbox"
-          onChange={handleChange}
-          checked={checked}
-        />check to allow other users to view your email address
+          <input 
+            className='checkbox'
+            type="checkbox"
+            onChange={handleChange}
+            checked={checked}
+          />check to allow other users to view your email address
        </label>
       </div>
               

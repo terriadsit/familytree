@@ -22,13 +22,14 @@ const ToggleSwitch = ({...props }) => {
   }
 
   return (
-    <div className="toggle-container">
-      <div className="toggle-switch">
-        <div>
-          on Home Page? <input type="checkbox" id="myCheck" onChange={handleClick} />
-        </div>
+    
+      <div >
+        <label className="get-inline">
+          <input type="checkbox" id="myCheck" onChange={handleClick} />
+          on my Home Page? 
+        </label>
       </div>
-    </div>
+    
   )
 }
   
