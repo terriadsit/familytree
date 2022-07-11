@@ -11,12 +11,12 @@ export default function PersonSnippet({...personInfo}) {
   let id = person.id
   const newUrl = `/person/${id}`
   
-  // let the user know if birthdate and city are unknown, don't try to display a null url
+  // let the user know if birthdate and city are unknown, don't try to display a null Imageurl
   const tempBirthDate = person.birthDate ? person.birthDate : 'unknown'
   const tempBirthCity = person.birthCity ? person.birthCity : 'unknown'
 
   return (
-    <div className="person-list">
+    <div className="person-list" cy-test-id={person.id}>
       <NavLink to={newUrl} >
         <h4>{person.name}</h4>
         <p>born in: {tempBirthCity} </p>
