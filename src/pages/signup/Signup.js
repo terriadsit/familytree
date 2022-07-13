@@ -122,7 +122,8 @@ function authError(error) {
     variant: 'error',
     })
     logout()
-    throw "error authenticating"
+    throw new Error("error authenticating")
+    
 }
 
 
@@ -197,7 +198,6 @@ function getVerified(user) {
             console.log('before prevemail, ', prevEmail,'email',email)
           
             if (prevEmail !== email) {
-              const passwordToUse = password ? password : prevPassword
               console.log('prevemail, ', prevEmail,'email',email)
               updateEmail(user, email)
               .then(() => {

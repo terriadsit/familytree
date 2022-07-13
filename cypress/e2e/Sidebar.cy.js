@@ -34,13 +34,13 @@ describe('Sidebar should appear correctly and be functionally correct', () => {
       expect(loc.pathname).to.eq('/search')
     })
     // clicking on person in list works
-    cy.get("li:nth-of-type(1) > .person-list-item > .person-in-list")
+    cy.get(".person-in-list").eq(0)
       .invoke('text')
       .then((text1) => {
         //get name up to comma
         const name1 = text1.substring(0, text1.indexOf(","));
         //click on this person, loaded page has this person
-        cy.get("li:nth-of-type(1) > .person-list-item > .person-in-list").click()
+        cy.get(".person-in-list").eq(0).click()
           .then(() => {
             cy.get('[cy-test-id=person-name]').should('contain.text', name1)
           })

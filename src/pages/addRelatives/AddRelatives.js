@@ -266,15 +266,15 @@ function AddRelatives() {
          <PersonDetails {...personDetailsProps} />
          
         <form onSubmit={handleSubmit}>
-          {person && <RemoveRelatives {...removeSiblingProps} />}
+          {person.siblings.length > 0 && <RemoveRelatives {...removeSiblingProps} />}
           <ChooseRelatives {...chooseSiblingProps} />
-          {person && <RemoveRelatives {...removeParentProps} />}
+          {person.parents.length > 0 && <RemoveRelatives {...removeParentProps} />}
           <ChooseRelatives {...chooseParentsProps} /> 
-          {person && <RemoveRelatives {...removeChildrenProps} />}   
+          {person.children.length > 0 && <RemoveRelatives {...removeChildrenProps} />}   
           <ChooseRelatives {...chooseChildrenProps} /> 
-          {person && <RemoveRelatives {...removeSpouseProps} />}
+          {person.spouses.length > 0 && <RemoveRelatives {...removeSpouseProps} />}
           <ChooseRelatives {...chooseSpousesProps} /> 
-          <button className="btn">Add Relatives</button>
+          <button cy-test-id="add-relatives-btn" className="btn">Add Relatives</button>
       </form>
     </div>
   )

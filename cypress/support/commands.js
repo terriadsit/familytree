@@ -10,6 +10,8 @@
 //
 //
 // -- This is a parent command --
+import 'cypress-file-upload';
+
 import getNewAuth from '../../src/sharedFunctions/getNewAuth';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';

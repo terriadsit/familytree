@@ -3,7 +3,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { useAuthContext } from './hooks/useAuthContext'
-import { useCollection } from './hooks/useCollection'
 
 // pages and components
 import AddPerson from './pages/addPerson/AddPerson'

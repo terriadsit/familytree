@@ -86,6 +86,7 @@ export default function PersonComments({ person }) {
             <label>
                 <span>Add new comment:</span>
                 <textarea
+                    cy-test-id="comment-to-add"
                     onChange={e => setNewComment(e.target.value)}
                     value={newComment}
                     ></textarea>
@@ -105,7 +106,7 @@ export default function PersonComments({ person }) {
               />
             </label>
             {fileError && <p className='error'>{fileError}</p>}
-            <button className="btn">Add Comment</button>
+            <button cy-test-id="add-comment-btn" className="btn">Add Comment</button>
 
         </form>
     </div>

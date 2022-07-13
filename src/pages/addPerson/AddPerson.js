@@ -191,6 +191,7 @@ export default function AddPerson() {
           <label>
             <span>person's full birth name</span>
             <input 
+              cy-test-id="name"
               required
               type="text"
               onChange={e => setName(e.target.value)}
@@ -233,6 +234,7 @@ export default function AddPerson() {
              <label>
               <span>upload an image</span>
               <input 
+                cy-test-id="image"
                 type="file"
                 onChange={handleImageChange}
               />
@@ -280,6 +282,7 @@ export default function AddPerson() {
           </button>
           <span> or </span>
           <button 
+            cy-test-id="submit-form"
             className="btn"
             type="button"
             value="home"

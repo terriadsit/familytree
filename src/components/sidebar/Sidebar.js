@@ -21,7 +21,7 @@ export default function Sidebar({...props}) {
                 <li>
                   <NavLink to="/addperson?action=create">
                     <img src={AddIcon} alt="add icon" />
-                    <span>Add a Person</span>
+                    <span cy-test-id="add-person-link">Add a Person</span>
                   </NavLink> 
                 </li>
                 <li>

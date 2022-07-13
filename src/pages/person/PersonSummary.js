@@ -3,14 +3,13 @@
 // only the creator of the person should be able to delete or edit
 // this person
 
+import fetchComments from "../../manageFileStorage/fetchComments"
 import { useState } from "react"
-import { dbFirestore } from "../../firebase/config"
 import { useNavigate } from "react-router-dom"
 import { useAuthContext } from "../../hooks/useAuthContext"
 import deleteComment from "./deleteComment"
 import { useFirestore } from "../../hooks/useFirestore"
 import deleteStoredImage from "../../manageFileStorage/deleteStoredImage"
-import { query, collection, where, getDocs } from 'firebase/firestore'
 import updateMyPersons from "../../manageFileStorage/updateMyPersons"
 import updateARelative from "../../manageFileStorage/updateARelative"
 import PersonDetails from "../../components/PersonDetails"
@@ -19,7 +18,6 @@ export default function PersonSummary({...tempPerson }) {
     const person = {...tempPerson.person}
     const [error, setError] = useState('')
 
-    let commentsToDelete = []
     const { user } = useAuthContext()
     const { deleteDocument } = useFirestore('people')
     let navigate = useNavigate()
@@ -46,16 +44,14 @@ export default function PersonSummary({...tempPerson }) {
           }
           
           // fetch ids of comments to be deleted
-          let ref = collection(dbFirestore, 'comments')
-          let q = query(ref, where('personId', '==', person.id))  
-          const querySnapshot = await getDocs(q)
-          querySnapshot.forEach(doc => { 
-             commentsToDelete.push({ commentId: doc.id, commentData: doc.data()})
-          })
-          // delete associated comments, if any
-          for (let i = 0; i < commentsToDelete.length; i++) {
-             deleteComment(commentsToDelete[i], user, person)
-          }
+          fetchComments(person.id)
+            .then((commentsToDelete) => {
+              // delete associated comments, if any
+              for (let i = 0; i < commentsToDelete.length; i++) {
+                deleteComment(commentsToDelete[i], user, person)
+              }
+            })
+          
            
           // find those users who have this person on their home page, myPersons
           const displayedBy = person.onUsers
@@ -66,19 +62,19 @@ export default function PersonSummary({...tempPerson }) {
           // remove this person from any relatives
           // update any siblings
           for (let i = 0; i < person.siblings.length; i++) {
-            updateARelative(person.siblings[i].id, person.id, person.name, 'siblings', 'remove')
+            await updateARelative(person.siblings[i].id, person.id, person.name, 'siblings', 'remove')
           }
           // update any spouses
           for (let i = 0; i < person.spouses.length; i++) {
-            updateARelative(person.spouses[i].id, person.id, person.name, 'spouses', 'remove')
+            await updateARelative(person.spouses[i].id, person.id, person.name, 'spouses', 'remove')
           } 
           // update any parents by removing this person from children list
           for (let i = 0; i < person.parents.length; i++) {
-            updateARelative(person.parents[i].id, person.id, person.name, 'children', 'remove')
+            await updateARelative(person.parents[i].id, person.id, person.name, 'children', 'remove')
           } 
           // update any children by removing this person from the parents list
           for (let i = 0; i < person.children.length; i++) {
-            updateARelative(person.children[i].id, person.id, person.name, 'parents', 'remove')
+            await updateARelative(person.children[i].id, person.id, person.name, 'parents', 'remove')
           }
 
           // last, delete person
@@ -98,13 +94,17 @@ export default function PersonSummary({...tempPerson }) {
           <PersonDetails {...personDetailsProps} />
           {person.createdBy.uid === user.uid && 
             <div className="edit-btns">
-              <button className="deleteBtn" 
+              <button 
+                  cy-test-id="delete-button"
+                  className="deleteBtn" 
                   onClick={() => handleDelete(person)}
               >
                   <i className="fa-regular fa-trash-can"></i>
                   <span className="icon-text">delete</span>
               </button>
-              <button className="deleteBtn" 
+              <button 
+                  cy-test-id="edit-button"
+                  className="deleteBtn" 
                   onClick={() => handleEdit(person)}
               >
                 <i className="fa-solid fa-pen"></i>

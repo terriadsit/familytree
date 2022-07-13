@@ -49,6 +49,7 @@
   "devDependencies": {
     "@testing-library/cypress": "^8.0.3",
     "cypress": "^10.2.0",
+    "cypress-file-upload": "^5.0.8",
     "cypress-firebase": "^2.2.1",
     "firebase-admin": "^9.12.0"
   }
