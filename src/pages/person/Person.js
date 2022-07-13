@@ -1,5 +1,5 @@
 // displays all of the persons details and allows additional comments
-// to be added
+// to be added calls <PersonSummary /> and <PersonComments />
 
 import { useDocument } from '../../hooks/useDocument'
 import { useParams } from 'react-router-dom'

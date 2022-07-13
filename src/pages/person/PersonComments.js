@@ -1,4 +1,4 @@
-// add or delete comments, call comment list
+// add or delete comments, call <comment list />
 // displayed on <Person />
 
 import { useState } from "react"

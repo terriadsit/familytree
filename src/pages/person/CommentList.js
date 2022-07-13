@@ -1,8 +1,10 @@
 // comments are stored in db in their own file 
-// with a field that contains the person's id 
+// with a field that contains the person's id who the comment applies to
+// as well as the creator's uid as a field 
 // list through these
 // only allow deletions by creator of the person or the creator of the comment
 // loaded by <PersonComments > wh/ handles adding new comments
+// calls <createcBy />
 
 import { useCollection } from "../../hooks/useCollection"
 import { useAuthContext } from "../../hooks/useAuthContext"
@@ -44,11 +46,15 @@ export default function  CommentList({ person }) {
                         <p>{formatDistanceToNow(comment.createdAt.toDate(), { addSuffix: true })}</p>
                       </div>
                     }
-                    <button className="deleteBtn" 
-                      onClick={() => handleClick({commentId: comment.id, commentData: comment})}
-                    >
-                      <i className="fa-regular fa-trash-can"></i>
-                    </button>
+                    {(user.uid === person.createdBy.uid ||
+                     comment.createdBy.createdBy === user.uid) &&
+                       <button className="deleteBtn" 
+                        onClick={() => handleClick({commentId: comment.id, commentData: comment})}
+                       >
+                         <i className="fa-regular fa-trash-can"> delete</i>
+                       </button>
+                      
+                    }
                 </li>
                 
             ))}
