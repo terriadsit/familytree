@@ -20,10 +20,31 @@
 }
 
 /* person comments */
+
 .comments {
-    color: var(--text-color);
-    
-}
+    background-color: #fff; 
+    padding: 0px;
+    border-radius: 4px;
+ }
+ .comments {
+     color: var(--text-color);
+     line-height: 1.8em;
+     font-size: 0.9em;
+ }
+ .comments .heading {
+     top: 0px;
+     left: 0px;
+     max-width: 320px;
+     margin: 0 auto;
+     color: var(--text-color);
+     font-size: 1.2em;
+     font-weight: bold;
+ }
+ .comments h4 {
+     text-align: left;
+     display: inline;
+ }
+
 .comments label {
     margin-bottom: 0px;
 }
@@ -45,7 +66,7 @@
     background: #fff;
 }
 .comment-list a {
-    padding: 10px;
+    padding: 0px;
     text-decoration: none;
 }
 .comment-author {

@@ -30,7 +30,7 @@ export default function CreatedBy({...props}) {
         onMouseEnter={() => setIsShown(true)}
         onMouseLeave={() => setIsShown(false)}
       >
-        Entry Created By: {creator.displayName}
+        entry created by: {creator.displayName}
       </p>
     
       {isShown && <p className='tip'>{emailMessage}</p>}

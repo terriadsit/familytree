@@ -35,17 +35,19 @@ export default function  CommentList({ person }) {
         <ul>
             {documents && documents.map(comment => (
                 <li key={comment.id} className="comment-list-item">
-                    <p className="comment-content">{comment.comment}</p>
+                    <p cy-test-id="comment-content" className="comment-content">{comment.comment}</p>
                     
                     {comment.imageUrl && <img className="image" src={comment.imageUrl} alt="user added" />}
                     <br></br>
-                    {comment.pdfUrl && <a href={comment.pdfUrl} alt="user added pdf" >a pdf applying to {person.name} </a>}
+                    {comment.pdfUrl && <a href={comment.pdfUrl} target="_blank" alt="user added pdf" >a pdf for {person.name} </a>}
+                    
                     <CreatedBy props={comment.createdBy.createdBy}/>
                     {comment.createdAt &&
                       <div className="comment-date">
                         <p>{formatDistanceToNow(comment.createdAt.toDate(), { addSuffix: true })}</p>
                       </div>
                     }
+                    
                     {(user.uid === person.createdBy.uid ||
                      comment.createdBy.createdBy === user.uid) &&
                        <button className="deleteBtn" 
