@@ -11,11 +11,11 @@ export default function checkFile(type, selected) {
       } else {
           if (!selected.type.includes('pdf')) {
           error = 'selected file must be a pdf, the free app, AdobeScan can save files as .pdf'
-        }
+          }
+          if (selected.size > 100000) {
+            error = 'selected pdf file must be smaller than 100kb, see FAQ page'
+          }
       }
-        if (selected.size > 100000) {
-          error = 'selected file must be smaller than 100kb, the PC software, Paint, can resize photos'
-        }
     }
         return error
 }

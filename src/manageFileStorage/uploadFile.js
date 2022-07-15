@@ -12,7 +12,8 @@ export async function uploadFile(type, file, personId, commentId) {
       try {
         // create path, commentId and personId are equal on main person entry
         const folder = type === 'image' ? 'images' : 'files'
-        const uploadPath = `${folder}/${personId}/${commentId}/${file.name}`
+        const now = new Date()
+        const uploadPath = `${folder}/${personId}/${commentId}/${now}`
         const storageRef = ref(storage, uploadPath)
         await uploadBytes(storageRef, file)
         fileUrl = await getDownloadURL(storageRef)

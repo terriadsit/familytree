@@ -3,7 +3,6 @@
 // receives a list of person id's 
 // returns their full information
 
-import getAPersonById from "./getAPersonById"
 import { dbFirestore } from "../firebase/config"
 import { doc, getDoc } from "firebase/firestore"
 

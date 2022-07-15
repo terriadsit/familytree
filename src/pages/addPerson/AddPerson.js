@@ -6,10 +6,10 @@ import { useFirestore } from '../../hooks/useFirestore'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { serverTimestamp, doc, getDoc } from 'firebase/firestore'
 import { dbFirestore } from '../../firebase/config'
+import checkFile from "../../manageFileStorage/checkFile"
+import compressImage from '../../manageFileStorage/compressImage'
 import deleteStoredImage from '../../manageFileStorage/deleteStoredImage'
-import checkFile from '../../manageFileStorage/checkFile'
 import updateMyPersons from '../../manageFileStorage/updateMyPersons'
-import { uploadFile } from '../../manageFileStorage/uploadFile'
 
 // styles
 import './AddPerson.css'
@@ -97,18 +97,18 @@ export default function AddPerson() {
     }
   },[action, personId])
 
- const handleImageChange = (e) => {
-   setFileError(null)
-   let selected = e.target.files[0]
-   if (selected) {
-    const error = checkFile('image',selected)
-      if (!error) {
-       setImage(selected)
-       setImageUrl('')
-      } else {
-        setFileError(error)
-      }
-   }
+  const handleImageChange = (e) => {
+    setFileError(null)
+    let selected = e.target.files[0]
+    if (selected) {
+     const error = checkFile('image',selected)
+       if (!error) {
+        setImage(selected)
+        setImageUrl('')
+       } else {
+         setFileError(error)
+       }
+    }
   }
 
   const deleteImage = () => {
@@ -145,7 +145,8 @@ export default function AddPerson() {
       let personId = await addDocument(person)
        
       // now add image to storage, uploadFile will update person imageUrl 
-      await uploadFile('image', image, personId, personId)
+      // compressImage will call uploadFile()
+      compressImage(image, personId, personId)
      
       // add personid and Birthday to users home page personList
       updateMyPersons(uid, personId, 'add')
@@ -173,7 +174,8 @@ export default function AddPerson() {
       await updateDocument(personId, updatedPerson)
 
       // now add image to storage, uploadFile will update person imageUrl 
-      await uploadFile('image',image, personId, personId)
+      // uploadImage called in compressImage
+      compressImage(image, personId, personId)
      
       // navigate to add relatives or home
       if (e.target.value === 'home') {

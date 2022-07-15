@@ -39,7 +39,7 @@ export default function  CommentList({ person }) {
                     
                     {comment.imageUrl && <img className="image" src={comment.imageUrl} alt="user added" />}
                     <br></br>
-                    {comment.pdfUrl && <a href={comment.pdfUrl} target="_blank" alt="user added pdf" >a pdf for {person.name} </a>}
+                    {comment.pdfUrl && <a href={comment.pdfUrl} target="_blank" rel="noreferrer" alt="user added pdf" >a pdf for {person.name} </a>}
                     
                     <CreatedBy props={comment.createdBy.createdBy}/>
                     {comment.createdAt &&
