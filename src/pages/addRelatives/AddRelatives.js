@@ -11,6 +11,7 @@ import updateARelative from "../../manageFileStorage/updateARelative"
 import PersonDetails from "../../components/PersonDetails"
 import ChooseRelatives from './ChooseRelatives'
 import RemoveRelatives from './RemoveRelatives'
+import { useAuthContext } from '../../hooks/useAuthContext'
 
 // styles
 //import './AddRelatives.css'
@@ -18,7 +19,7 @@ import RemoveRelatives from './RemoveRelatives'
 function AddRelatives() {
   
   const navigate = useNavigate()
-
+  const { user } = useAuthContext()
   // 'people' to populate drop down selects
   const { documents } = useCollection('people', null, null)
   const [people, setPeople] = useState([])
@@ -33,6 +34,7 @@ function AddRelatives() {
     }
   },[documents])
  
+      
 
   // person who is getting relatives added
   let params = useParams()
@@ -42,7 +44,7 @@ function AddRelatives() {
   const name = person.name   
 
   let error = !person.name ? 'this person does not exist' : ''
-    
+  
   // form fields
   const [spouses, setSpouses] = useState([])
   const [siblings, setSiblings] = useState([])
@@ -220,7 +222,7 @@ function AddRelatives() {
     
   const handleSubmit = (e) => {
       e.preventDefault()
-      console.log('submig', siblings)
+      console.log('submit', siblings)
       // note: updateARelative parameters are:
       // (personToUpdateId, relativeId, relativeName, whRelative, whChange)
       
@@ -257,7 +259,11 @@ function AddRelatives() {
       return <div className="error">{error}</div>
     }
     
-    if (!document) {
+    if (user.uid !== person.createdBy.uid) {
+      return <div className="error">only the creator of this entry for {person.name} may add relatives</div>
+    }
+
+    if (!documents) {
       return <div className="loading">Loading...</div>
     } 
     
@@ -275,7 +281,7 @@ function AddRelatives() {
           {person.spouses.length > 0 && <RemoveRelatives {...removeSpouseProps} />}
           <ChooseRelatives {...chooseSpousesProps} /> 
           <button cy-test-id="add-relatives-btn" className="btn">Add Relatives</button>
-      </form>
+        </form>
     </div>
   )
 }
