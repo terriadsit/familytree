@@ -52,7 +52,7 @@ export default function Faq() {
                 ask a sibling before adding them in case they prefer to add themselves.
             </p>
             <br></br>
-            <b>Photo and PDF size limitations</b>
+            <b>PDF size limitations</b>
             <ul>
               <li>The size limitations on file uploads are in place because
                 Google only provides a certain amount of free file storage. 

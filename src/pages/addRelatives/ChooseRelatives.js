@@ -1,3 +1,6 @@
+// a React Select Dropdown, state is managed by calling Component,
+// Add Relatives manages state and changing values in the Select
+
 import Select from 'react-select'
 
 // styles

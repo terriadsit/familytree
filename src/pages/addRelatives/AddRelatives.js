@@ -265,7 +265,7 @@ function AddRelatives() {
       <div>
          <PersonDetails {...personDetailsProps} />
          
-        <form onSubmit={handleSubmit}>
+        <form cy-test-id="relative-form" onSubmit={handleSubmit}>
           {person.siblings.length > 0 && <RemoveRelatives {...removeSiblingProps} />}
           <ChooseRelatives {...chooseSiblingProps} />
           {person.parents.length > 0 && <RemoveRelatives {...removeParentProps} />}

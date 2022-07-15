@@ -146,8 +146,9 @@ export default function AddPerson() {
        
       // now add image to storage, uploadFile will update person imageUrl 
       // compressImage will call uploadFile()
-      compressImage(image, personId, personId)
-     
+      if (image) {
+        compressImage(image, personId, personId)
+      }
       // add personid and Birthday to users home page personList
       updateMyPersons(uid, personId, 'add')
       
@@ -175,8 +176,9 @@ export default function AddPerson() {
 
       // now add image to storage, uploadFile will update person imageUrl 
       // uploadImage called in compressImage
-      compressImage(image, personId, personId)
-     
+      if (image) {
+        compressImage(image, personId, personId)
+      }
       // navigate to add relatives or home
       if (e.target.value === 'home') {
         navigate('/')
