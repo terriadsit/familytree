@@ -3,22 +3,13 @@
 ///<reference types="cypress" />
 
 describe('allows users to choose relatives', () => {
-  function choose (number, relationship) {
-    const testId = `[cy-test-id=${relationship}]`
-    const person = `second ${relationship} test 100`
-
-    cy.get('.css-6j8wv5-Input')
-      .eq(number)
-      .click()
-      .type(`${person}{enter}`)
-    cy.get(testId).should('include.text', person)
-  }
+  
 
   function chooseAndRemove (number, relationship) {
     const testId = `[cy-test-id=${relationship}]`
     const person = `second ${relationship} test 100`
 
-    choose(number, relationship)
+    cy.choose(number, relationship)
     cy.get('.css-1rhbuit-multiValue')
       .eq(0)
       .find('svg')
@@ -40,16 +31,16 @@ describe('allows users to choose relatives', () => {
 
   it('allows the choice of each realtive to be made and saved', () => {
     // add relatives
-    choose(0, 'siblings')
-    choose(1, 'parents')
-    choose(2, 'children')
-    choose(3, 'spouse')
+    cy.choose(0, 'siblings')
+    cy.choose(1, 'parents')
+    cy.choose(2, 'children')
+    cy.choose(3, 'spouse')
     cy.wait(5000)
     // save relatives
     cy.get('[cy-test-id=add-relatives-btn]').click()
     cy.wait(5000)
     cy.visit('/person/w24t8yLaxdS4Qw6V2VTo')
-    cy.wait(5000)
+    cy.wait(10000)
     cy.get('[cy-test-id=siblings]').should(
       'include.text',
       'second siblings test 100'
@@ -68,6 +59,7 @@ describe('allows users to choose relatives', () => {
     )
     // remove these added relatives
     cy.visit('/addrelatives/w24t8yLaxdS4Qw6V2VTo')
+    cy.wait(5000)
     cy.get('[cy-test-id=relative-form]')
       .find("[value='8nDk5GhtsY1o0MgoX0LJ']")
       .click()

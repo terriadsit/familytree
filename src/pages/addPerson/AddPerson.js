@@ -39,11 +39,15 @@ export default function AddPerson() {
   const [siblings, setSiblings] = useState([])
   const [parents, setParents] = useState([])
   const [children, setChildren] = useState([])
+
+  // need persons creator to allow updates, keep seperate from createdBy for adding persons
+  const [personCreator, setPersonCreator] = useState([])
   
   const { addDocument, updateDocument } = useFirestore('people')
   const { user } = useAuthContext()
   let navigate = useNavigate()
   let error = ''
+  
   
   // if updating, need persons details
   async function getPersonDetails() {
@@ -70,7 +74,8 @@ export default function AddPerson() {
       setSiblings(person.siblings)
       setParents(person.parents)
       setChildren(person.children)
-      error = user.uid !== personId ? `only the creator of this entry for ${person.name} may edit` : ''
+      setPersonCreator(person.createdBy.uid)
+      error = user.uid !== personCreator ? `only the creator of this entry for ${person.name} may edit` : ''
     } catch(err) {
        console.log('error', err)
     }
@@ -188,7 +193,7 @@ export default function AddPerson() {
       }
     }
   }
-  if (!action && (user.uid !== personId)) {
+  if (!action && (user.uid !== personCreator)) {
     return <div className="error">only the creator of this entry for {name} is able to edit</div>
   }
   return (

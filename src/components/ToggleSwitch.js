@@ -7,9 +7,8 @@ import { useEffect } from "react";
 import "./ToggleSwitch.css";
   
 const ToggleSwitch = ({...props }) => {
+  const isChecked = props.onHome
   
-  const isChecked = props.checked
- 
   useEffect(() => {
     if (isChecked) {
       document.getElementById("myCheck").checked = true
@@ -19,6 +18,7 @@ const ToggleSwitch = ({...props }) => {
   // calling component manages event
   const handleClick = (e) => {
     props.handleToggle(e.target.checked)
+    console.log('handleClick', e.target.checked)
   }
 
   return (

@@ -11,7 +11,7 @@ import formatNameList from "../sharedFunctions/formatNameList"
 import updateMyPersons from '../manageFileStorage/updateMyPersons'
 import CreatedBy from './createdBy/CreatedBy'
 import { useLocation } from 'react-router-dom'
-
+import { useEffect } from 'react'
 // styles
 import './PersonDetails.css'
 
@@ -23,7 +23,7 @@ export default function PersonDetails({...person}) {
   // don't display person.comments on /addrelatives
   const onAdd = location.pathname.includes('add')
     
-  let onHome
+  let onHome 
 
   const checkIfOnHome  = () => {
     let found = ''
@@ -34,8 +34,7 @@ export default function PersonDetails({...person}) {
   }
   
   checkIfOnHome()
-   
-
+ 
   // put commas in between names
   const parents = formatNameList(person.parents)
   const siblings = formatNameList(person.siblings)
@@ -45,7 +44,7 @@ export default function PersonDetails({...person}) {
   // allow user to be added to home page
   const toggleProps = {
     label: '',
-    checked: onHome,
+    onHome: onHome,
     handleToggle: (onHome) => handleToggle(onHome) 
   }
 
