@@ -213,6 +213,7 @@ export default function AddPerson() {
           <label>
             <span>other names: married, nickname, etc.</span>
             <input 
+              cy-test-id="other-name"
               type="text"
               onChange={e => setOtherName(e.target.value)}
               value={otherName}
@@ -221,6 +222,7 @@ export default function AddPerson() {
           <label>
             <span>birth date</span>
             <input 
+              cy-test-id="birth-date"
               type="date"
               onChange={e => setBirthDate(e.target.value)}
               value={birthDate}
@@ -229,6 +231,7 @@ export default function AddPerson() {
           <label>
             <span>death date</span>
             <input 
+              cy-test-id="death-date"
               type="date"
               onChange={e => setDeathDate(e.target.value)}
               value={deathDate}
@@ -237,6 +240,7 @@ export default function AddPerson() {
           <label>
             <span>city and state of birth</span>
             <input 
+              cy-test-id="birth-place"
               type="text"
               onChange={e => setBirthCity(e.target.value)}
               value={birthCity}
@@ -255,11 +259,13 @@ export default function AddPerson() {
           {imageUrl && 
           <div>
             <img 
+              cy-test-id="image"
               className="image"
               src={imageUrl} 
               alt="person" 
             />
             <button 
+              cy-test-id="delete-image"
               type="button"
               onClick={deleteImage}
             >
@@ -270,6 +276,7 @@ export default function AddPerson() {
           <label>
             <span>marriage comments (dates, locations, etc.) </span>
             <input 
+              cy-test-id="marriage-comments"
               type="text"
               onChange={e => setMarriageComments(e.target.value)}
               value={marriageComments}
@@ -279,12 +286,14 @@ export default function AddPerson() {
           <label>
             <span>comments, memories, stories, etc.</span>
             <textarea 
+              cy-test-id="comments"
               type="text"
               onChange={e => setComments(e.target.value)}
               value={comments}
             ></textarea>
           </label>
           <button 
+            cy-test-id="add-relatives"
             className="btn"
             type="button"
             value="add-relatives"

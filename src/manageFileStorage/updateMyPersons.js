@@ -19,19 +19,25 @@ async function updateMyPersons(uid, personId, whChange) {
        case "add": {
            await updateDoc(userRef, {
                 myPersons: arrayUnion(personInfo)
-           })
+           }).catch(error => console.log(error))
            await updateDoc(personRef, {
                onUsers: arrayUnion(uid)
-           })
+           }).catch(error => console.log(error))
         break
        }
        case "remove": {
-           await updateDoc(userRef, {
-               myPersons: arrayRemove(personInfo)
-           })
-           await updateDoc(personRef, {
-            onUsers: arrayRemove(uid)
-           })
+            
+              await updateDoc(userRef, {
+                myPersons: arrayRemove(personInfo)
+              }).catch(error => console.log(error))
+              console.log('after first update in remove', uid, 'personid', personId )
+           
+           
+              await updateDoc(personRef, {
+                onUsers: arrayRemove(uid)
+              }).catch(error => console.log(error))
+              console.log('after second update in remove', uid, 'personid', personId )
+            
         break
        }
        default: {

@@ -39,11 +39,11 @@ function AddRelatives() {
   // person who is getting relatives added
   let params = useParams()
   const personId = params.id
-  const { data: tempdoc } = useDocument('people', personId )
+  const { data: tempdoc, error } = useDocument('people', personId )
   const person = { ...tempdoc }
   const name = person.name   
 
-  let error = !person.name ? 'this person does not exist' : ''
+  let personError = !person.name ? 'this person does not exist' : ''
   
   // form fields
   const [spouses, setSpouses] = useState([])
@@ -255,18 +255,21 @@ function AddRelatives() {
       navigate('/')
     }
   
-    if (error) {
-      return <div className="error">{error}</div>
-    }
-    
-    if (user.uid !== person.createdBy.uid) {
-      return <div className="error">only the creator of this entry for {person.name} may add relatives</div>
-    }
-
-    if (!documents) {
+    if (!person) {
       return <div className="loading">Loading...</div>
     } 
     
+    if (error) {
+      return <div className="error">{error}</div>
+    }
+
+    if (personError) {
+      return <div className="personError">Looking for person...</div>
+    }
+
+    if (user.uid !== person.createdBy.uid) {
+      return <div className="error">only the creator of this entry for {person.name} may add relatives</div>
+    }
     return (
       <div>
          <PersonDetails {...personDetailsProps} />
