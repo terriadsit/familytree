@@ -48,7 +48,6 @@ export default function AddPerson() {
   let navigate = useNavigate()
   let error = ''
   
-  
   // if updating, need persons details
   async function getPersonDetails() {
     let person = {}

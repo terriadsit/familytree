@@ -29,7 +29,7 @@ function Home() {
        })
  
        // get entire persons details
-       getPeopleFromIds(peopleIds).then((res) => {setTempPeople(res)})
+       getPeopleFromIds(peopleIds).then((res) => {setTempPeople(res)}).catch(error => console.log(error))
     }  
   },[data])
 
@@ -43,9 +43,9 @@ function Home() {
 
   return (
     <div className='person-list'>
-      {people && people.map((p) => (
-        <PersonSnippet key={p.id} personInfo={p} />
-       ))
+      {people && people.map((p) => {
+          return <PersonSnippet key={p.id} personInfo={p} />
+        })
       }
             
       {error && <p className="error">${error}</p>}

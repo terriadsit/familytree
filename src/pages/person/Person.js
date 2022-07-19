@@ -14,13 +14,14 @@ export default function Person() {
   const personId = params.id
   const { data, error } = useDocument('people', personId )
 
+  if (!data) {
+    return <div className="loading">Loading...</div>
+  }
   if (error) {
     return <div className="error">{error}</div>
   }
   
-  if (!data) {
-    return <div className="loading">Loading...</div>
-  }
+  
   
   return (
     <div className="person-page">

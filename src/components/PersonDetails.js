@@ -11,7 +11,7 @@ import formatNameList from "../sharedFunctions/formatNameList"
 import updateMyPersons from '../manageFileStorage/updateMyPersons'
 import CreatedBy from './createdBy/CreatedBy'
 import { useLocation } from 'react-router-dom'
-import { useEffect } from 'react'
+
 // styles
 import './PersonDetails.css'
 
