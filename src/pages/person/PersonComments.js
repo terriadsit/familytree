@@ -52,6 +52,10 @@ export default function PersonComments({ person }) {
     }
    }
 
+   function tooLargeError()  {
+    setFileError('the image is too large, see FAQ for more information')
+   }
+
    // pdf will post to firebase storage
    const handlePdfChange = (e) => {
     setPdf(null)
@@ -85,11 +89,13 @@ export default function PersonComments({ person }) {
       // now add image, pdf to storage, uploadFile will update  imageUrl 
       // compressImage calls uploadFile wh/ updates imageUrl
       if (image) {
-        compressImage(image, commentToAdd.personId, commentId)
+        compressImage(image, commentToAdd.personId, commentId, tooLargeError)
       }
 
-      await uploadFile('pdf', pdf, commentToAdd.personId, commentId )
-      // clear form
+      if (pdf) {
+        await uploadFile('pdf', pdf, commentToAdd.personId, commentId )
+      }
+        // clear form
       setNewComment('')
       setImageUrl(null)
       setImage(null)

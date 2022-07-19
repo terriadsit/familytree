@@ -1,11 +1,13 @@
 // receive an image and return a compressed image
+
 import { uploadFile } from "./uploadFile"
 
-function compressImage (file, personId, commentId) {
-  const MAX_WIDTH = 1200
-  const MAX_HEIGHT = 1200
+function compressImage (file, personId, commentId, tooLargeError) {
+  
+  const MAX_WIDTH = 600
+  const MAX_HEIGHT = 600
   const MIME_TYPE = 'image/jpeg'
-  const QUALITY = 1.0
+  const QUALITY = 0.9
 
   const blobURL = URL.createObjectURL(file)
   const img = new Image()
@@ -27,14 +29,23 @@ function compressImage (file, personId, commentId) {
     canvas.toBlob(
       blob => {
         // Handle the compressed image. es. upload or save in local state
-        uploadFile('image', blob, personId, commentId)
-        displayInfo('Original file', file)
-        displayInfo('Compressed file', blob)
+       
+          if (blob.size < 100000) {
+            uploadFile('image', blob, personId, commentId)
+          } else {
+            tooLargeError()
+            const error = `image is too big, ${blob.size}`
+            console.log('image too big', error, 'blob',blob.size)
+            return error
+          }
+          displayInfo('Original file', file)
+          displayInfo('Compressed file', blob)
         
-      },
-      MIME_TYPE,
-      QUALITY
-    )
+          },
+          MIME_TYPE,
+          QUALITY
+          
+     )
     //document.getElementById('root').append(canvas)
   }
 

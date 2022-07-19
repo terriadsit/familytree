@@ -1,3 +1,7 @@
+// called by <CommentList /> and <PersonSummary />
+// receives complete comment, user and person as in firestore db
+// 
+
 import deleteStoredImage from "../../manageFileStorage/deleteStoredImage"
 import { dbFirestore } from "../../firebase/config"
 import { deleteDoc, doc, collection } from "firebase/firestore"
@@ -12,6 +16,9 @@ async function deleteComment(comment, user, person) {
     if (user.uid === createdById || user.uid === person.createdBy.uid) {
       if (comment.commentData.imageUrl) {
         deleteError = deleteStoredImage(comment.commentData.imageUrl)
+      }
+      if (comment.commentData.pdfUrl) {
+        deleteError = deleteStoredImage(comment.commentData.pdfUrl)
       }
       if (!deleteError) {
         // collection ref

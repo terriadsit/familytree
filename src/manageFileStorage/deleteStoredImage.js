@@ -1,4 +1,5 @@
 // delete a file from firebase storage when passed an url to that file
+// called by <AddPerson />, deleteComment.js, </PersonSummar />
 
 import { getStorage, ref, deleteObject } from "firebase/storage";
 
