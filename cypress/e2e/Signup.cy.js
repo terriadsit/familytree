@@ -22,9 +22,9 @@ describe('Signup component should appear and operate correctly', () => {
   })
 
   it('outputs an error when passwords do not match or are blank', () => {
-      fillInForm('emailtest@gmail.com', '2', 'testing123', 'test person')
+      fillInForm('emailtest@dispostable.com', '2', 'testing123', 'test person')
       cy.get('#password-error').should('contain','password fields must match')
-      fillInForm('emailtest@gmail.com', 'testing123','2',  'test person')
+      fillInForm('emailtest@dispostable.com', 'testing123','2',  'test person')
       cy.get('#password-error').should('contain','password fields must match')
       cy.findByPlaceholderText('password').clear()
       cy.findByPlaceholderText('check password').clear()
@@ -33,11 +33,11 @@ describe('Signup component should appear and operate correctly', () => {
   })
 
   it('requires email and display name', () => {
-      fillInForm('tempemail@gmail.com','testing123', 'testing123', 'test person' )
+      fillInForm('tempemail@dispostable.com','testing123', 'testing123', 'test person' )
       cy.findByPlaceholderText('email').clear()
       cy.get('.btn').click()
       cy.get('input:invalid').should('have.length', 1)
-      fillInForm('tempemail@gmail.com','testing123', 'testing123', 'test person' )
+      fillInForm('tempemail@dispostable.com','testing123', 'testing123', 'test person' )
       cy.findByPlaceholderText('display name').clear()
       cy.get('input:invalid').should('have.length', 1)
   })
@@ -84,12 +84,12 @@ describe('Signup component should appear and operate correctly', () => {
     cy.get('.error').should('be.visible')
     
     // poor passwords caught by firebase
-    fillInForm('tempeperson@yahoo.com','test', 'test', 'test person' )
+    fillInForm('tempeperson@dispostable.com','test', 'test', 'test person' )
     cy.get('.btn').contains('Signup').click()
     cy.get('.error').should('be.visible')
 
     // email already in use caught by firebase
-    fillInForm('terriadsit@yahoo.com','test123', 'test123', 'test person' )
+    fillInForm('familytree@dispostable.com','test123', 'test123', 'test person' )
     cy.get('.btn').contains('Signup').click()
     cy.get('.error').should('be.visible')
 

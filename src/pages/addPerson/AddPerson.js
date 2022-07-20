@@ -42,12 +42,16 @@ export default function AddPerson() {
 
   // need persons creator to allow updates, keep seperate from createdBy for adding persons
   const [personCreator, setPersonCreator] = useState([])
+  const [loading, setLoading] = useState(true)
   
   const { addDocument, updateDocument } = useFirestore('people')
   const { user } = useAuthContext()
   let navigate = useNavigate()
   let error = ''
-  
+
+  // message at top of page is Add or Update
+  const [message, setMessage] = useState('Add')
+ 
   // if updating, need persons details
   async function getPersonDetails() {
     let person = {}
@@ -74,6 +78,9 @@ export default function AddPerson() {
       setParents(person.parents)
       setChildren(person.children)
       setPersonCreator(person.createdBy.uid)
+      setLoading(false)
+      setMessage('Update')
+       
       error = user.uid !== personCreator ? `only the creator of this entry for ${person.name} may edit` : ''
     } catch(err) {
        console.log('error', err)
@@ -85,6 +92,7 @@ export default function AddPerson() {
       getPersonDetails()
       
     } else {
+      setLoading(false)
       setName('')
       setOtherName('')
       setBirthDate('')
@@ -192,12 +200,15 @@ export default function AddPerson() {
       }
     }
   }
+  if (loading) {
+    return <div>Loading...</div>
+  }
   if (!action && (user.uid !== personCreator)) {
     return <div className="error">only the creator of this entry for {name} is able to edit</div>
   }
   return (
     <div className="add-person">
-        <h2 className="page-title">Add a Person. Except for name, fields may be left blank.</h2>
+        <h2 className="page-title">{message } person details. Except for name, fields may be left blank.</h2>
         <form className="add-person-form" id="add-form" onSubmit={handleSubmit}>
           <label>
             <span>person's full birth name</span>

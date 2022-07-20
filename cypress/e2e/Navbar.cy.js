@@ -29,6 +29,6 @@ describe('Navbar displays and works correctly', () => {
       
     cy.get("[cy-test-id='logoutBtn']").click()
     cy.location('pathname').should('eq', '/')
-   
+    cy.logout()
   })
 })

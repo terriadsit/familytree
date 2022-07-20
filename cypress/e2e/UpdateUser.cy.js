@@ -46,8 +46,6 @@ describe('update user appears and operates correctly', () => {
   })
 
   it('requires corrrect current password before submitting, else errors handled', () => {
-    //cy.logout()
-    //cy.uiLogin($email,$password)
     cy.once('uncaught:exception', () => false)
     cy.wait(15000)
     cy.visit('/updateuser')
@@ -61,7 +59,6 @@ describe('update user appears and operates correctly', () => {
     cy.wait('@getAuth')
       .its('response.statusCode')
       .should('eq', 400)
-    //cy.findByText(/Error updating/, { timeout: 5000 }).should('be.visible')
   })
  
   it('does not allows user to change email address to nonemail type or in use email', () => {
@@ -166,14 +163,6 @@ describe('update user appears and operates correctly', () => {
   afterEach(() => {
     cy.logout()
     cy.wait(5000)
-  })
-
-  describe('these tests do not need to have the same beforeEach', () => {
-    const random = Math.random().toString(36).substring(2) 
-    const $password = Cypress.env('PASSWORD')
-    
-    
-    
   })
 
 })
