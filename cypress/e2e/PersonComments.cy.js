@@ -47,6 +47,16 @@ describe('correctly adds or deletes comments', () => {
     addThenDeleteComment('image','../fixtures/me.jpg')
   })
 
+  it('will not add a comment containing too large an image', () => {
+    cy.get('[cy-test-id=image-file]').attachFile('../fixtures/TooLarge.jpg')
+    cy.wait(5000)
+    cy.get('[cy-test-id=add-comment-btn]').click()
+    cy.wait(5000)
+    cy.get('.error').should('be.visible')
+    // now delete this comment
+    cy.get('.comment-list-item').last().find('.deleteBtn').click()
+  })
+
   it('will not add a comment containing an incorrect image type', () => {
     cy.get('[cy-test-id=image-file]').attachFile('../fixtures/weaving.pdf')
     cy.wait(5000)

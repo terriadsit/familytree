@@ -274,6 +274,11 @@ function AddRelatives() {
       <div>
          <PersonDetails {...personDetailsProps} />
          
+         <p>Relatives must first be added with the "Add a Person" link
+          before they are available to choose in the select drop downs. 
+        </p>
+        <p>The select drop downs may be typed in to find a choice.</p>
+        <br></br>
         <form cy-test-id="relative-form" onSubmit={handleSubmit}>
           {person.siblings.length > 0 && <RemoveRelatives {...removeSiblingProps} />}
           <ChooseRelatives {...chooseSiblingProps} />

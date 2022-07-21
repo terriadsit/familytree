@@ -88,6 +88,7 @@ export default function PersonComments({ person }) {
       }
 
       let commentId = await addDocument(commentToAdd)
+      
       // now add image, pdf to storage, uploadFile will update  imageUrl 
       // compressImage calls uploadFile wh/ updates imageUrl
       if (image) {
@@ -97,7 +98,8 @@ export default function PersonComments({ person }) {
       if (pdf) {
         await uploadFile('pdf', pdf, commentToAdd.personId, commentId )
       }
-        // clear form
+       
+      // clear form
       setNewComment('')
       setImageUrl(null)
       setImage(null)
@@ -107,6 +109,7 @@ export default function PersonComments({ person }) {
       resetsPdfFileInput()
       setFileError(null)
       setPdfError(null)
+        
   }  
   
   return (

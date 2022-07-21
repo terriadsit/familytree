@@ -52,7 +52,7 @@ export default function AddPerson() {
   const { user } = useAuthContext()
   
   let navigate = useNavigate()
-  let error = ''
+  let error = '' // requires this to compile
   
 
   // message at top of page is Add or Update
@@ -68,7 +68,9 @@ export default function AddPerson() {
          
        if (docSnap.exists()) {
          person = { ...docSnap.data() }
-      } 
+      } else {
+        navigate('/')
+      }
       setName(person.name)
       setOtherName(person.otherName)
       setBirthDate(person.birthDate)
@@ -231,9 +233,12 @@ export default function AddPerson() {
   if (!action && (user.uid !== personCreator)) {
     return <div className="error">only the creator of this entry for {name} is able to edit</div>
   }
+  
+
   return (
     <div className="add-person">
         <h2 className="page-title">{message } person details. Except for name, fields may be left blank.</h2>
+        <p>Best practice is to let living persons add themselves. See FAQ for more information.</p>
         <form className="add-person-form" id="add-form" onSubmit={handleSubmit}>
           <label>
             <span>person's full birth name</span>
