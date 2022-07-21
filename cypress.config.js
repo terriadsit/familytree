@@ -11,6 +11,7 @@ const cypressFirebasePlugin = require("cypress-firebase").plugin;
 //   return extendedConfig;
 // };
 module.exports = defineConfig({
+  projectId: 'jdy4pu',
   env: {
     // TEST_UID used by cy.login() unless cy.login() is passed arguments
     TEST_UID: "Yp0pa3HmNLb9Nn3PPGckKRrnnVB2",

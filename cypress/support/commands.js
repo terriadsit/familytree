@@ -54,6 +54,7 @@ Cypress.Commands.add('checkSignupBtn', (type) => {
       .its('response.statusCode')
       .should('eq', 200)
     // popup appears
+    cy.wait(5000)
     cy.findByText(/A verification email has been/, { timeout: 3000 }).should('be.visible')
     // page redirects
     cy.url().should('contain','login')

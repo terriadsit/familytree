@@ -40,6 +40,7 @@ export default function PersonComments({ person }) {
   const handleImageChange = (e) => {
     setImage(null)
     setFileError(null)
+    setPdfError(null)
     let selected = e.target.files[0]
     if (selected) {
      const error = checkFile('image', selected)
@@ -59,6 +60,7 @@ export default function PersonComments({ person }) {
    // pdf will post to firebase storage
    const handlePdfChange = (e) => {
     setPdf(null)
+    setFileError(null)
     setPdfError(null)
     let selected = e.target.files[0]
     if (selected) {

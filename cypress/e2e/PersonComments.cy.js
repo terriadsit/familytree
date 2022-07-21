@@ -12,7 +12,7 @@ describe('correctly adds or deletes comments', () => {
     cy.get(inputField).attachFile(fileName)
     cy.get('[cy-test-id=comment-to-add]').type('a temporary comment by FT100 w/ an image')
     cy.get('[cy-test-id=add-comment-btn]').click()
-    cy.wait(5000)
+    cy.wait(10000)
     cy.get('.comment-list-item').last().find('[cy-test-id=comment-content]')
       .should('include.text','a temporary comment by FT100 w/ an image')
     if (type === 'image') {
@@ -24,7 +24,7 @@ describe('correctly adds or deletes comments', () => {
         }) 
     }
     cy.get('.comment-list-item').last().find('.deleteBtn').click()
-    cy.wait(5000)
+    cy.wait(10000)
     cy.get('.comment-list-item').last().find('[cy-test-id=comment-content]')
       .should('not.have.text','a temporary comment by FT100 w/ an image')
   }
@@ -44,7 +44,7 @@ describe('correctly adds or deletes comments', () => {
   })
 
   it('correctly adds and deletes a comment containing an image', () => {
-    addThenDeleteComment('image','../fixtures/mike.jpg')
+    addThenDeleteComment('image','../fixtures/me.jpg')
   })
 
   it('will not add a comment containing an incorrect image type', () => {

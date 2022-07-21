@@ -7,7 +7,7 @@ describe('Add Person works and dislays correctly, including error messsages', ()
   
   const random = Math.random().toString(36).substring(2) 
  
-  function addAPersonNavigate(name, button, url, allFields) {
+  function addAPersonNavigate(name, button, image, url, allFields) {
     cy.get('[cy-test-id=name]').type(name)
     if (allFields) {
       cy.get('[cy-test-id=other-name]').type('another name')
@@ -16,17 +16,17 @@ describe('Add Person works and dislays correctly, including error messsages', ()
       cy.get('[cy-test-id=birth-place]').type('birth place')
       cy.get('[cy-test-id=marriage-comments]').type('a marriage comment')
       cy.get('[cy-test-id=comments]').type('a comment')
-      cy.get('[cy-test-id=image]').attachFile('../fixtures/mike.jpg')
+      cy.get('[cy-test-id=image]').attachFile(`../fixtures/${image}`)
       cy.wait(5000)
     }
     cy.get(button).click()
     cy.url().should('include', url)
-    cy.wait(10000)
+    cy.wait(1000)
   }
 
   function removeAPerson(name) {
     cy.visit('/')
-    cy.wait(5000)
+    cy.wait(15000)
     cy.findAllByText(name).eq(0).click()
     cy.wait(5000)
     cy.get('[cy-test-id=person-name]').should('include.text', name)
@@ -60,28 +60,36 @@ describe('Add Person works and dislays correctly, including error messsages', ()
     cy.get('[cy-test-id=name]').should('have.attr', 'required')
   })
 
-  it('buttons send user to correct page', () => {
+  it('add Relatives button sends user to correct page', () => {
     const name = 'test AddPerson Cypress Test'
     let button = '[cy-test-id=add-relatives]'
     let url = 'addrelatives'
+    let image = 'me.jpg'
     
     cy.log('in body', name, 'button',button,'url', url)
-    addAPersonNavigate(name, button, url, false)
+    addAPersonNavigate(name, button, image, url, false)
+    removeAPerson(name)
+  })
+
+  it('submit button sends user to correct page', () => {
+    const name = 'test AddPerson Cypress Test'
+    const url = '/'
+    const button = '[cy-test-id=submit-form]'
+    let image = 'me.jpg'
+    cy.get('[cy-test-id=name]').type(name)
+    cy.get(button).click()
+    cy.wait(5000)
     removeAPerson(name)
 
-    url = '/'
-    button = '[cy-test-id=submit-form]'
-    cy.visit('/addperson?action=create')
-    cy.wait(5000)
-    addAPersonNavigate(name, button, url, false)
-    removeAPerson(name)
   })
 
   it('automatically adds new person to users home page', () => {
     const name = 'test AddPerson Cypress Test'
     const url = '/'
     const button = '[cy-test-id=submit-form]'
-    addAPersonNavigate(name, button, url, false)
+    let image = 'me.jpg'
+
+    addAPersonNavigate(name, button, image, url, false)
     cy.get('.container').should('include.text', name)
     removeAPerson(name)
   })
@@ -90,11 +98,23 @@ describe('Add Person works and dislays correctly, including error messsages', ()
     const name = 'test AddPerson Cypress Test'
     const url = '/'
     const button = '[cy-test-id=submit-form]'
-    addAPersonNavigate(name, button, url, true)
-    cy.visit('/')
+    let image = 'me.jpg'
+
+    cy.get('[cy-test-id=name]').type(name)
+    cy.get('[cy-test-id=other-name]').type('another name')
+    cy.get('[cy-test-id=birth-date]').invoke('removeAttr','type').type('2001-01-01{enter}')
+    cy.get('[cy-test-id=death-date]').invoke('removeAttr','type').type('2022-02-02{enter}')
+    cy.get('[cy-test-id=birth-place]').type('birth place')
+    cy.get('[cy-test-id=marriage-comments]').type('a marriage comment')
+    cy.get('[cy-test-id=comments]').type('a comment')
+    cy.get('[cy-test-id=image]').attachFile(`../fixtures/${image}`)
     cy.wait(5000)
+    cy.get(button).click()
+    cy.wait(1000)
+    //addAPersonNavigate does not work here for firefox, weird
+    
     cy.findAllByText(name).eq(0).click()
-    cy.wait(5000)
+    cy.wait(10000)
     cy.get('[cy-test-id=person-name]').should('include.text', name)
     cy.get('[cy-test-id=person-name]').should('include.text', 'another name')
     cy.get('[cy-test-id=born]').should('include.text','2001-01-01')
@@ -103,6 +123,19 @@ describe('Add Person works and dislays correctly, including error messsages', ()
     cy.get('[cy-test-id=spouse]').should('include.text', 'a marriage comment')
     cy.get('[cy-test-id=comments]').should('include.text', 'a comment')
     cy.get('.image').should('be.visible')
+    removeAPerson(name)
+    
+  })
+
+  it('will not allow an image that is too large to be saved', () => {
+    const name = 'test AddPerson Cypress Test'
+    const url = '/'
+    const button = '[cy-test-id=submit-form]'
+    let image = 'TooLarge.jpg'
+
+    addAPersonNavigate(name, button, image, url, true)
+    cy.findByText(/the image is too large/,{ timeout: 3000 }).should('be.visible')
+    cy.wait(5000)
     removeAPerson(name)
   })
 

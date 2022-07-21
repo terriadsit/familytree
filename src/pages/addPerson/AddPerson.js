@@ -10,6 +10,7 @@ import checkFile from "../../manageFileStorage/checkFile"
 import compressImage from '../../manageFileStorage/compressImage'
 import deleteStoredImage from '../../manageFileStorage/deleteStoredImage'
 import updateMyPersons from '../../manageFileStorage/updateMyPersons'
+import { useSnackbar } from 'notistack'
 
 // styles
 import './AddPerson.css'
@@ -44,6 +45,7 @@ export default function AddPerson() {
   const [personCreator, setPersonCreator] = useState([])
   const [loading, setLoading] = useState(true)
   
+  const { enqueueSnackbar } = useSnackbar();
   const { addDocument, updateDocument } = useFirestore('people')
   const { user } = useAuthContext()
   let navigate = useNavigate()
@@ -110,6 +112,13 @@ export default function AddPerson() {
     }
   },[action, personId])
 
+  function tooLargeError()  {
+    setFileError('the image is too large, see FAQ for more information')
+    enqueueSnackbar(`the image is too large, see FAQ for more information`, { 
+      variant: 'error',
+    })
+  }
+
   const handleImageChange = (e) => {
     setFileError(null)
     let selected = e.target.files[0]
@@ -156,11 +165,14 @@ export default function AddPerson() {
       }
       // now get personid
       let personId = await addDocument(person)
-       
+      
       // now add image to storage, uploadFile will update person imageUrl 
       // compressImage will call uploadFile()
+      // now add image, pdf to storage, uploadFile will update  imageUrl 
+      // compressImage calls uploadFile wh/ updates imageUrl
+      
       if (image) {
-        compressImage(image, personId, personId)
+        compressImage(image, personId, personId, tooLargeError)
       }
       // add personid and Birthday to users home page personList
       updateMyPersons(uid, personId, 'add')
@@ -190,7 +202,7 @@ export default function AddPerson() {
       // now add image to storage, uploadFile will update person imageUrl 
       // uploadImage called in compressImage
       if (image) {
-        compressImage(image, personId, personId)
+        compressImage(image, personId, personId, tooLargeError)
       }
       // navigate to add relatives or home
       if (e.target.value === 'home') {
@@ -203,6 +215,8 @@ export default function AddPerson() {
   if (loading) {
     return <div>Loading...</div>
   }
+
+
   if (!action && (user.uid !== personCreator)) {
     return <div className="error">only the creator of this entry for {name} is able to edit</div>
   }

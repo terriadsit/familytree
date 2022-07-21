@@ -1,12 +1,11 @@
 
 describe('Signup component should appear and operate correctly', () => {
+  
   function fillInForm(email, password1, password2, displayName) {
-    
     cy.findByPlaceholderText('email').clear().type(email)
     cy.findByPlaceholderText('password').clear().type(password1)
     cy.findByPlaceholderText('check password').clear().type(password2)
     cy.findByPlaceholderText('display name').clear().type(displayName)
-    
   }
   
   beforeEach(() => {

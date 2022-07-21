@@ -38,6 +38,7 @@ function Home() {
   people = sortPeopleByBD(people)
     
   if (error) {
+    console.log('in if error', error)
     return <p className="error">${error}</p>
   }
 

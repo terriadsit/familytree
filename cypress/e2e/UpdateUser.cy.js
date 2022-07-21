@@ -2,8 +2,9 @@
 import { auth } from '../../src/firebase/config'
 
 describe('update user appears and operates correctly', () => {
-  
+   
   const random = Math.random().toString(36).substring(2) 
+  const $displayName = Cypress.env('DISPLAY_NAME')
   const $password = Cypress.env('PASSWORD')
   const $email = Cypress.env('EMAIL') 
   const newEmail = `familyTree${random}@dispostable.com`
@@ -125,12 +126,20 @@ describe('update user appears and operates correctly', () => {
   
   it('allows user to change display name, is required, updates display name in sidebar', () => {
     const newName = `name${random}`
-    cy.wait(5000)
-    cy.get('input#prevPassword').type($password)
-    cy.get("[placeholder='display name']").clear().type(newName)
-    cy.get('.auth-form > .btn').click()
-    cy.get(".user > p").should('include.text', newName)
-    cy.wait(4000)
+
+    function changeName(name) {
+      cy.wait(5000)
+      cy.get('input#prevPassword').type($password)
+      cy.get("[placeholder='display name']").clear().type(name)
+      cy.get('.auth-form > .btn').click()
+      cy.wait(4000)
+      cy.get(".user > p").should('include.text', name)
+    }
+
+     changeName(newName)
+     // change it back
+     cy.visit('/updateuser')
+     changeName($displayName)
   })
 
   // skip this unless you want to verify email address and change it back
@@ -142,22 +151,32 @@ describe('update user appears and operates correctly', () => {
     cy.findByText(/A verification email/, { timeout: 5000 }).should('be.visible')
   })
 
-  it('allows user change display email address or hide', () => {
-    function clickShareEmail(textExpected) {
+  it('allows user to change display or hide email addres', () => {
+    function clickShareEmail(textExpected, check) {
       cy.get('input#prevPassword').type($password)
-      cy.get('.checkbox').check()
+      if (check) {
+        cy.get('.checkbox').check()
+      } else {
+        cy.get('.checkbox').uncheck()
+      }
       cy.get('.auth-form > .btn').click()
       cy.wait(5000)
-      cy.visit('/person/jg4i4E3kqNWVj65y2GTX')
+      cy.visit('/person/oIjeo62z08fpAi9F55yR')
       cy.get('.creator').trigger('mouseover')
       cy.get('.tip').contains(textExpected, { matchCase: false })
     }
+
+    // should begin test with shared email
     cy.wait(5000)
-    clickShareEmail($email)
+    clickShareEmail($email, true)
     cy.visit('/updateuser')
     cy.wait(5000)
-    clickShareEmail('This user has a private email')
-    
+    cy.visit('/updateuser')
+    clickShareEmail('This user has a private email', false)
+    // put back to shared email
+    cy.wait(5000)
+    cy.visit('/updateuser')
+    clickShareEmail($email, true)
   })
 
   afterEach(() => {

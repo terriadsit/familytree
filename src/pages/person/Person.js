@@ -14,7 +14,7 @@ export default function Person() {
   const personId = params.id
   const { data, error } = useDocument('people', personId )
 
-  if (!data) {
+  if (!error && !data) {
     return <div className="loading">Loading...</div>
   }
   if (error) {

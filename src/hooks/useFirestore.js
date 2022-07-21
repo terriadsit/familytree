@@ -47,15 +47,16 @@ export const useFirestore = (whCollection) => {
   const addDocument = async (doc) => {
     let personId = ''
     dispatch({ type: 'IS_PENDING' })
-
+    console.log('in addDocument', doc)
     try {
       const addedDocument = await addDoc(ref, { ...doc })
       .then(function(docRef) { 
         personId = docRef.id
       })
-      dispatchIfNotCancelled({ type: 'ADDED_DOCUMENT', payload: addedDocument })
+      console.log('after addedDoc', addedDocument)
     }
     catch (err) {
+      console.log('addDoc error', err)
       dispatchIfNotCancelled({ type: 'ERROR', payload: err.message })
     }
     return personId

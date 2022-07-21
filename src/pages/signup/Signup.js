@@ -170,14 +170,12 @@ function getVerified(user) {
         // update current user
         // need new user credential for updates
         // else error occurs if it has been a while since user signed in
-        try {
-          getNewAuth(user, user.email, prevPassword, authError)
-          .then(() => {
+        //try {
+          getNewAuth(user, user.email, prevPassword, authError).then(() => {
             // update password if it is changed
             if (password) {
               if (checkForMatch(checkPassword)) {
-                updatePassword(user, password)
-                .then(() => {
+                updatePassword(user, password).then(() => {
                   console.log('in update password then')
                   // Update successful.
                   getNewAuth(user, user.email, password, authError)
@@ -217,8 +215,7 @@ function getVerified(user) {
             console.log('before update profile', displayName)
             updateProfile(user, {
               displayName: displayName
-            })
-            .then(() => {
+            }).then(() => {
             // Profile updated!
               console.log('updated user', user)
             }).catch((error) => {
@@ -232,19 +229,21 @@ function getVerified(user) {
               displayName
             }
             updateDocument(user.uid, updates)
+          }).catch(err => {
+              enqueueSnackbar(`An error occurred while updating. ${err}`, 
+              { 
+                autoHideDuration: 7000,
+                variant: 'error',
+              })
           })
-        } catch(err) {
-          enqueueSnackbar(`An error occurred while updating. ${err}`, 
-           { 
-            autoHideDuration: 7000,
-            variant: 'error',
-           })
-        } finally {
+          // finally {
           if (user) {
             navigate('/')
           }
-        }
-    } 
+          //  }
+        
+           
+    }
   }
   
   return (
