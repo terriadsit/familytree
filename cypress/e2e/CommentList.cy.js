@@ -51,7 +51,7 @@ describe('comments in list are all displayed correctly', () => {
 
   it('displays comment, createdBy, time stamp, image if available, pdf title if available', () => {
     cy.visit('/person/w24t8yLaxdS4Qw6V2VTo')
-    cy.wait(5000)
+    cy.wait(10000)
     cy.get('.comment-list-item').eq(0).within(() => {
       cy.get('.image').should('be.visible')
       cy.get('.comment-date').should('be.visible')

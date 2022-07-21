@@ -34,7 +34,7 @@ async function updateMyPersons(uid, personId, whChange) {
            
            
               await updateDoc(personRef, {
-                onUsers: arrayRemove(uid)
+                onUsers: arrayRemove({ uid })
               }).catch(error => console.log(error))
               console.log('after second update in remove', uid, 'personid', personId )
             

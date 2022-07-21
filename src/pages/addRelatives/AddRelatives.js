@@ -144,32 +144,32 @@ function AddRelatives() {
     console.log('remove sib,', relId, relName)
     let tempRelatives = [...siblings]
     // remove sibling to this person in db, then remove this person from sibs as a sib
-    updateARelative(personId, relId, relName, 'siblings', 'remove')
-    updateARelative(relId, personId, name, 'siblings', 'remove')
+    updateARelative(personId, relId, relName, relName,'siblings', 'remove')
+    updateARelative(relId, personId, name, name, 'siblings', 'remove')
     const keepRelatives = tempRelatives.filter((r) => r.id !== relId)
     setSiblings(keepRelatives)
   }
   const removeParents = (relId, relName) => {
     let tempRelatives = [...parents]
     // remove parent to this person in db, then remove this person from parent as a child
-    updateARelative(personId, relId, relName, 'parents', 'remove')
-    updateARelative(relId, personId, name, 'children', 'remove')
+    updateARelative(personId, relId, relName, relName,'parents', 'remove')
+    updateARelative(relId, personId, name, name,'children', 'remove')
     const keepRelatives = tempRelatives.filter((r) => r.id !== relId)
     setParents(keepRelatives)
   }
   const removeChildren = (relId, relName) => {
     let tempRelatives = [...children]
     // remove child of this person in db, then remove this person as a parent to the child
-    updateARelative(personId, relId, relName, 'children', 'remove')
-    updateARelative(relId, personId, name, 'parents', 'remove')
+    updateARelative(personId, relId, relName, relName,'children', 'remove')
+    updateARelative(relId, personId, name, name,'parents', 'remove')
     const keepRelatives = tempRelatives.filter((r) => r.id !== relId)
     setChildren(keepRelatives)
   }
   const removeSpouses = (relId, relName) => {
     let tempRelatives = [...spouses]
     // remove spouse to this person in db, then remove this person from the spouse as a spouse
-    updateARelative(personId, relId, relName, 'spouses', 'remove')
-    updateARelative(relId, personId, name, 'spouses', 'remove')
+    updateARelative(personId, relId, relName, relName,'spouses', 'remove')
+    updateARelative(relId, personId, name, name,'spouses', 'remove')
     const keepRelatives = tempRelatives.filter((r) => r.id !== relId)
     setSpouses(keepRelatives)
   }
@@ -229,26 +229,26 @@ function AddRelatives() {
       // add sibs to this person in db, then add this person to sibs as a sib
       for (let i = 0; i < siblings.length; i++) {
         console.log('in loop', siblings[i])
-        updateARelative(personId, siblings[i].id, siblings[i].name, 'siblings', 'add')
-        updateARelative(siblings[i].id, personId, name, 'siblings', 'add')
+        updateARelative(personId, siblings[i].id, siblings[i].name, siblings[i].name,'siblings', 'add')
+        updateARelative(siblings[i].id, personId, name, name,'siblings', 'add')
       }
       
       // update parents of this person, then add this person as a child to them
       for (let i = 0; i < parents.length; i++) {
-        updateARelative(personId, parents[i].id, parents[i].name, 'parents', 'add')
-        updateARelative(parents[i].id, personId, name, 'children', 'add')
+        updateARelative(personId, parents[i].id, parents[i].name, parents[i].name,'parents', 'add')
+        updateARelative(parents[i].id, personId, name, name,'children', 'add')
       }
 
       // update children of this person, then add this person as parent to them
       for (let i = 0; i < children.length; i++) {
-        updateARelative(personId, children[i].id, children[i].name, 'children', 'add')
-        updateARelative(children[i].id, personId, name, 'parents', 'add')
+        updateARelative(personId, children[i].id, children[i].name, children[i].name,'children', 'add')
+        updateARelative(children[i].id, personId, name, name,'parents', 'add')
       }
 
       // update any spouse(s)
      for (let i = 0; i < spouses.length; i++) {
-       updateARelative(personId, spouses[i].id, spouses[i].name, 'spouses', 'add')
-       updateARelative(spouses[i].id, personId, name, 'spouses', 'add')
+       updateARelative(personId, spouses[i].id, spouses[i].name, spouses[i].name,'spouses', 'add')
+       updateARelative(spouses[i].id, personId, name, name,'spouses', 'add')
      }
 
       // navigate home

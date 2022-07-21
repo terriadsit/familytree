@@ -39,6 +39,9 @@ export default function Faq() {
                 share a memory or a photo.
               </li>
               <li>
+                Chrome or Firefox are the recommended browsers.
+              </li>
+              <li>
                   This is a family friendly site. Please contact us
                   if you see inappropriate content.
               </li>
@@ -52,10 +55,12 @@ export default function Faq() {
                 ask a sibling before adding them in case they prefer to add themselves.
             </p>
             <br></br>
-            <b>PDF size limitations</b>
+            <b>PDF and image size limitations</b>
             <ul>
               <li>The size limitations on file uploads are in place because
                 Google only provides a certain amount of free file storage. 
+                Family Tree provides some compression of images prior to uploading. 
+                After this compression, images must be less than 100 kb.
               </li>
               <li>
                   Single page PDF files may often be saved as images which

@@ -6,6 +6,7 @@ import { useFirestore } from '../../hooks/useFirestore'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { serverTimestamp, doc, getDoc } from 'firebase/firestore'
 import { dbFirestore } from '../../firebase/config'
+import ifNameChange from "../../manageFileStorage/ifNameChange"
 import checkFile from "../../manageFileStorage/checkFile"
 import compressImage from '../../manageFileStorage/compressImage'
 import deleteStoredImage from '../../manageFileStorage/deleteStoredImage'
@@ -40,6 +41,7 @@ export default function AddPerson() {
   const [siblings, setSiblings] = useState([])
   const [parents, setParents] = useState([])
   const [children, setChildren] = useState([])
+  const [originalName, setOriginalName] = useState('')
 
   // need persons creator to allow updates, keep seperate from createdBy for adding persons
   const [personCreator, setPersonCreator] = useState([])
@@ -48,8 +50,10 @@ export default function AddPerson() {
   const { enqueueSnackbar } = useSnackbar();
   const { addDocument, updateDocument } = useFirestore('people')
   const { user } = useAuthContext()
+  
   let navigate = useNavigate()
   let error = ''
+  
 
   // message at top of page is Add or Update
   const [message, setMessage] = useState('Add')
@@ -82,6 +86,7 @@ export default function AddPerson() {
       setPersonCreator(person.createdBy.uid)
       setLoading(false)
       setMessage('Update')
+      setOriginalName(person.name)
        
       error = user.uid !== personCreator ? `only the creator of this entry for ${person.name} may edit` : ''
     } catch(err) {
@@ -185,6 +190,12 @@ export default function AddPerson() {
       }
     } else {
       // update this person instead of add
+
+      // names must be changed in relatives if name is changed
+      if (originalName !== name ) {
+        await ifNameChange(personId, originalName, name)
+      }
+
       const updatedPerson =  {
         name,
         otherName,

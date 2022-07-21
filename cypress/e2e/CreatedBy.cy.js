@@ -5,7 +5,7 @@ describe('Created By displays creators display name', () => {
   before(() => {
     cy.login()
     cy.visit('http://localhost:3000/person/w24t8yLaxdS4Qw6V2VTo')
-   
+    cy.wait(5000)
   })
 
   it('displays creators name in a persons details', () => {

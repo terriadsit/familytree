@@ -62,19 +62,19 @@ export default function PersonSummary({...tempPerson }) {
           // remove this person from any relatives
           // update any siblings
           for (let i = 0; i < person.siblings.length; i++) {
-            await updateARelative(person.siblings[i].id, person.id, person.name, 'siblings', 'remove')
+            await updateARelative(person.siblings[i].id, person.id, person.name, person.name,'siblings', 'remove')
           }
           // update any spouses
           for (let i = 0; i < person.spouses.length; i++) {
-            await updateARelative(person.spouses[i].id, person.id, person.name, 'spouses', 'remove')
+            await updateARelative(person.spouses[i].id, person.id, person.name, person.name, 'spouses', 'remove')
           } 
           // update any parents by removing this person from children list
           for (let i = 0; i < person.parents.length; i++) {
-            await updateARelative(person.parents[i].id, person.id, person.name, 'children', 'remove')
+            await updateARelative(person.parents[i].id, person.id, person.name, person.name, 'children', 'remove')
           } 
           // update any children by removing this person from the parents list
           for (let i = 0; i < person.children.length; i++) {
-            await updateARelative(person.children[i].id, person.id, person.name, 'parents', 'remove')
+            await updateARelative(person.children[i].id, person.id, person.name, person.name, 'parents', 'remove')
           }
 
           // last, delete person

@@ -25,3 +25,5 @@ yarn-error.log*
 serviceAccount.json
 cypress.config.js
 /cypress/fixtures/*
+/cypress/videos/*
+/cypress/screenshots/*

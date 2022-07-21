@@ -22,6 +22,7 @@ describe('Lists all of the persons in the people db', () => {
   beforeEach(() => {
     cy.login()
     cy.visit('/')
+    cy.wait(5000)
   })
   it('list all of the people', () => {
     cy.get('.person-in-list').then(res => console.log(res))
