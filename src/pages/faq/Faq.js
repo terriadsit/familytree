@@ -1,6 +1,7 @@
 // FAQ are available to all. Only signed in users may use the <Contact />
 // form. Other viewers may see a contact email address as a tooltip
 
+import TermsAndConditions from '../termsAndConditions/TermsAndConditions'
 import Contact from '../../components/Contact'
 import { useState } from 'react'
 import { useAuthContext } from '../../hooks/useAuthContext'
@@ -75,6 +76,7 @@ export default function Faq() {
                   larger photos, please contact us. 
               </li>
             </ul>
+            <TermsAndConditions />
         </div>
         <br></br>
         <div >

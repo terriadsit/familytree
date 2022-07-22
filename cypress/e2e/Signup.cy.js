@@ -6,6 +6,7 @@ describe('Signup component should appear and operate correctly', () => {
     cy.findByPlaceholderText('password').clear().type(password1)
     cy.findByPlaceholderText('check password').clear().type(password2)
     cy.findByPlaceholderText('display name').clear().type(displayName)
+    cy.get('[cy-test-id=terms]').check()
   }
   
   beforeEach(() => {
@@ -69,7 +70,7 @@ describe('Signup component should appear and operate correctly', () => {
     cy.findByPlaceholderText('check password').should('have.attr','type', 'password') 
   })
 
- it('invalid email or password according to firebase auth or mismatch result in error', () => {
+ it.only('invalid email or password according to firebase auth or mismatch result in error', () => {
      // no '@' caught by form
     fillInForm('tempemail gmailcom','testing123', 'testing123', 'test person' )
     cy.findByPlaceholderText('email').invoke('prop','validity')

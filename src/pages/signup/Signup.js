@@ -16,7 +16,7 @@ import { updateEmail,
          updateProfile,
          sendEmailVerification} 
          from "firebase/auth";
-
+import TermsAndConditions from '../termsAndConditions/TermsAndConditions'
 // styles
 import './Signup.css'
 
@@ -47,7 +47,8 @@ export default function Signup({...props}) {
   const [prevPassword, setPrevPassword] = useState('')
   const [prevEmail, setPrevEmail] = useState('')
   const [passwordError, setPasswordError] = useState('')
-
+  const [terms, setTerms] = useState(false)
+  
   const { enqueueSnackbar } = useSnackbar()
   const { signup, isPending, error } = useSignup()
   const { logout } = useLogout()
@@ -88,6 +89,12 @@ export default function Signup({...props}) {
   const handleChange = () => {
     setChecked(!checked);
   };
+  
+  // handle checking of Terms and Conditions
+  const handleTerms = (e) => {
+    console.log('in handle terms')
+    setTerms(prev => !prev)
+  }
 
   // toggle showing or hiding both passwords
   const handleTriggerClick = () => {
@@ -144,6 +151,15 @@ function getVerified(user) {
     updateDisplayName(displayName)
     // if a new user
     if (action === 'create') {
+      // must agree to terms
+      if (!terms) {
+        enqueueSnackbar(`Users must agree to read and abide by the Terms and Conditions.`, 
+            { 
+              autoHideDuration: 7000,
+              variant: 'info',
+            }
+        )
+      } else {
         // passwords must match and may not be blank when signing up
         if(checkForMatch(checkPassword)) {
           setPasswordError('')
@@ -158,7 +174,7 @@ function getVerified(user) {
                   { 
                     autoHideDuration: 7000,
                     variant: 'error',
-                  })
+                })
               })
           } else {
             enqueueSnackbar('a password is required', { 
@@ -166,6 +182,7 @@ function getVerified(user) {
             })
           }
         }
+      }
     } else {
         // update current user
         // need new user credential for updates
@@ -317,6 +334,18 @@ function getVerified(user) {
             checked={checked}
           />check to allow other users to view your email address
        </label>
+      </div>
+      <div >
+        <label className="get-inline">
+          <input
+            cy-test-id='terms' 
+            className='checkbox'
+            type="checkbox"
+            onChange={handleTerms}
+            checked={terms}
+          />I have read and agree with the Terms and Conditions to use this site.
+       </label>
+       <TermsAndConditions />
       </div>
               
         {!isPending && <button cy-test-id="submit-form" className="btn">{pageAction}</button>}

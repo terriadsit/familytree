@@ -1,6 +1,6 @@
 // add or update a new person to the db depending on "action"
 // then navigate to <AddRelatives> to add or update relatives
-
+// begin test w/o person: test AddPerson Cypress Test in existence
 /// <reference types="cypress" />
 
 describe('Add Person works and dislays correctly, including error messsages', () => {
@@ -20,6 +20,7 @@ describe('Add Person works and dislays correctly, including error messsages', ()
       cy.wait(5000)
     }
     cy.get(button).click()
+    cy.wait(5000)
     cy.url().should('include', url)
     cy.wait(1000)
   }
