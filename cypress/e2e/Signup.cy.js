@@ -7,18 +7,21 @@ describe('Signup component should appear and operate correctly', () => {
     cy.findByPlaceholderText('check password').clear().type(password2)
     cy.findByPlaceholderText('display name').clear().type(displayName)
     cy.get('[cy-test-id=terms]').check()
+    cy.wait(5000)
   }
   
   beforeEach(() => {
     cy.visit ('/signup?action=create')
-    cy.wait(5000)
+    cy.wait(7000)
   })
 
   it('Signup component loads and contains required fields, links and text', () => {
     fillInForm('1', '2', '3', '4')
     cy.findByLabelText('check to allow other users to view your email address')
-    cy.get("input[type='checkbox']").should('not.be.checked')
+    cy.get("[cy-test-id=share-email]").should('not.be.checked')
     cy.get('.btn').contains('Signup')
+    cy.get('[cy-test-id=terms]').should('be.visible')
+    cy.get('[cy-test-id=terms-trigger]').should('be.visible')
   })
 
   it('outputs an error when passwords do not match or are blank', () => {
@@ -70,7 +73,7 @@ describe('Signup component should appear and operate correctly', () => {
     cy.findByPlaceholderText('check password').should('have.attr','type', 'password') 
   })
 
- it.only('invalid email or password according to firebase auth or mismatch result in error', () => {
+ it('invalid email or password according to firebase auth or mismatch result in error', () => {
      // no '@' caught by form
     fillInForm('tempemail gmailcom','testing123', 'testing123', 'test person' )
     cy.findByPlaceholderText('email').invoke('prop','validity')
@@ -94,5 +97,13 @@ describe('Signup component should appear and operate correctly', () => {
     cy.get('.error').should('be.visible')
 
   }) 
+
+  it('requires terms and conditions be checked to signup, else error', () => {
+    fillInForm('notAUser@dispostable.com','test123', 'test123', 'test person' )
+    cy.get('[cy-test-id=terms]').uncheck()
+    cy.get('.btn').contains('Signup').click()
+    cy.findByText(/Users must agree to read/, { timeout: 3000 }).should('be.visible')
+    cy.url().should('include','/signup')
+  })
   
 })

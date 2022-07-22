@@ -17,9 +17,9 @@ export default function TermsAndConditions() {
   }
   return (
     <div className='dropdown'>
-        <h4 className='trigger' onClick={handleClick}>Click to view or hide Terms and Conditions</h4>
+        <h4 className='trigger' cy-test-id="terms-trigger" onClick={handleClick}>Click to view or hide Terms and Conditions</h4>
         {show && 
-          <ul className='content'>
+          <ul className='content' cy-test-id="terms-content">
             <li>
                 We don't sell your personal information.
             </li>

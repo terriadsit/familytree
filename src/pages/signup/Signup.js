@@ -187,7 +187,7 @@ function getVerified(user) {
         // update current user
         // need new user credential for updates
         // else error occurs if it has been a while since user signed in
-        //try {
+        
           getNewAuth(user, user.email, prevPassword, authError).then(() => {
             // update password if it is changed
             if (password) {
@@ -328,6 +328,7 @@ function getVerified(user) {
       <div >
         <label className="get-inline">
           <input 
+            cy-test-id='share-email'
             className='checkbox'
             type="checkbox"
             onChange={handleChange}

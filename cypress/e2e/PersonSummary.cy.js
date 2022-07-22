@@ -14,9 +14,7 @@ describe('PersonSummary displays PersonDetails, Edit and Delete', () => {
 
   const $password = Cypress.env('PASSWORD')
   
-  beforeEach(() => {
-    
-  })
+  
   it('displays all of a persons details by calling person details', () => {
     cy.visit('/person/w24t8yLaxdS4Qw6V2VTo')
     cy.get('[cy-test-id=person-name').should('contain.text','test 100s creation')
@@ -95,15 +93,13 @@ describe('PersonSummary displays PersonDetails, Edit and Delete', () => {
       cy.get('.person-in-list').each(($el, index, $list) => {
         cy.wrap($el).should('not.contain', 'test 100s temporary person')
     })
-        
-      
-    
+     
   })
 
   it('correctly allows creator to reach edit page', () => {
     cy.visit('/person/w24t8yLaxdS4Qw6V2VTo')
     cy.get('[cy-test-id=edit-button').click()
-
+    cy.wait(5000)
     //just reach update page, can check updates on updatePerson test
     cy.url().should('include','updateperson/w24t8yLaxdS4Qw6V2VTo')
   })

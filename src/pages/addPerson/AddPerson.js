@@ -52,9 +52,7 @@ export default function AddPerson() {
   const { user } = useAuthContext()
   
   let navigate = useNavigate()
-  let error = '' // requires this to compile
   
-
   // message at top of page is Add or Update
   const [message, setMessage] = useState('Add')
  
@@ -89,8 +87,6 @@ export default function AddPerson() {
       setLoading(false)
       setMessage('Update')
       setOriginalName(person.name)
-       
-      error = user.uid !== personCreator ? `only the creator of this entry for ${person.name} may edit` : ''
     } catch(err) {
        console.log('error', err)
     }

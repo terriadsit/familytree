@@ -6,6 +6,7 @@ describe('FAQ page looks correct and allows contact for those logged in or not l
   function appearsCorrect() {
     cy.get('.heading').should('contain.text', 'Frequently Asked Questions')
     cy.get('.contact > b').should('contain.text', 'Contact Us:')
+    cy.get('[cy-test-id=terms-trigger').should('be.visible')
   }
 
   it('appears correct to logged in users', () => {
