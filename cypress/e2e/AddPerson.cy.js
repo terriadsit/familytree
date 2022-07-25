@@ -33,7 +33,7 @@ describe('Add Person works and dislays correctly, including error messsages', ()
     cy.get('[cy-test-id=person-name]').should('include.text', name)
     cy.wait(5000)
     cy.get('[cy-test-id=delete-button]').click()
-    cy.wait(5000)
+    cy.wait(7000)
   }
 
   before(() => {

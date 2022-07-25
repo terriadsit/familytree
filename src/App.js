@@ -40,8 +40,7 @@ function App() {
 
    useEffect(() => {
      updateDisplayName(tempDisplayName)
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user])
+   }, [user])
 
   return (
     <div className="App">

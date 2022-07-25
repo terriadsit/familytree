@@ -37,11 +37,15 @@ function Home() {
 
   useEffect(() => {
     fetchPeople()
-    getPeopleFromIds(peopleIds).then((res) => {setTempPeople(res)}).catch(error => console.log(error))
+    if (peopleIds) {
+      getPeopleFromIds(peopleIds).then((res) => {setTempPeople(res)}).catch(error => console.log(error))
+    }
   },[fetchPeople,peopleIds])
 
   // sort people by their birthdate
-  let people = tempPeople
+  let people = []
+  let id = 0
+  people = tempPeople
   people = sortPeopleByBD(people)
     
   if (error) {
@@ -51,9 +55,10 @@ function Home() {
 
   return (
     <div className='person-list'>
-      {people && people.map((p) => {
-          return <PersonSnippet key={p.id} personInfo={p} />
-        })
+      {tempPeople && people.length > 0 && people.map((p) => {
+            id++;
+            return <PersonSnippet key={id} personInfo={p} />
+          })
       }
             
       {error && <p className="error">${error}</p>}

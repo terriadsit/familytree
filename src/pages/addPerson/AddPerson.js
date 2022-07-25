@@ -1,7 +1,7 @@
 // add or update a new person to the db depending on "action"
 // then navigate to <AddRelatives> to add or update relatives
 import { useNavigate, useLocation, useParams } from "react-router-dom"
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useFirestore } from '../../hooks/useFirestore'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { serverTimestamp, doc, getDoc } from 'firebase/firestore'
@@ -55,47 +55,46 @@ export default function AddPerson() {
   
   // message at top of page is Add or Update
   const [message, setMessage] = useState('Add')
- 
+  
   // if updating, need persons details
-  async function getPersonDetails() {
-    let person = {}
-    try {
-      const ref = doc(dbFirestore, 'people', personId)
+  const getPersonDetails = useCallback(async () => {
+      let person = {}
+      try {
+        const ref = doc(dbFirestore, 'people', personId)
  
-      const docSnap = await getDoc(ref)
+        const docSnap = await getDoc(ref)
          
-       if (docSnap.exists()) {
-         person = { ...docSnap.data() }
-      } else {
-        navigate('/')
+         if (docSnap.exists()) {
+           person = { ...docSnap.data() }
+        } else {
+          navigate('/')
+        }
+        setName(person.name)
+        setOtherName(person.otherName)
+        setBirthDate(person.birthDate)
+        setDeathDate(person.deathDate)
+        setBirthCity(person.birthCity)
+        setImage(null)
+        setImageUrl(person.imageUrl)
+        setFileError(null)
+        setComments(person.comments)
+        setSpouses(person.spouses)
+        setMarriageComments(person.marriageComments)
+        setSiblings(person.siblings)
+        setParents(person.parents)
+        setChildren(person.children)
+        setPersonCreator(person.createdBy.uid)
+        setLoading(false)
+        setMessage('Update')
+        setOriginalName(person.name)
+      } catch(err) {
+         console.log('error', err)
       }
-      setName(person.name)
-      setOtherName(person.otherName)
-      setBirthDate(person.birthDate)
-      setDeathDate(person.deathDate)
-      setBirthCity(person.birthCity)
-      setImage(null)
-      setImageUrl(person.imageUrl)
-      setFileError(null)
-      setComments(person.comments)
-      setSpouses(person.spouses)
-      setMarriageComments(person.marriageComments)
-      setSiblings(person.siblings)
-      setParents(person.parents)
-      setChildren(person.children)
-      setPersonCreator(person.createdBy.uid)
-      setLoading(false)
-      setMessage('Update')
-      setOriginalName(person.name)
-    } catch(err) {
-       console.log('error', err)
-    }
-  }
-
+  }, [navigate, personId])
+  
   useEffect(() => {
     if(!action){
       getPersonDetails()
-      
     } else {
       setLoading(false)
       setName('')
@@ -113,7 +112,7 @@ export default function AddPerson() {
       setParents([])
       setChildren([])
     }
-  },[action, personId])
+  },[action, personId, getPersonDetails])
 
   function tooLargeError()  {
     setFileError('the image is too large, see FAQ for more information')
