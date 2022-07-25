@@ -4,6 +4,7 @@
 
 import { dbFirestore } from "../firebase/config"
 import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'
+import myLogger from '../sharedFunctions/myLogger'
 
 async function updateARelative(personToUpdateId, relativeId, relativeName, newName, whRelative, whChange) {
     const userRef = doc(dbFirestore, 'people', personToUpdateId)
@@ -15,33 +16,30 @@ async function updateARelative(personToUpdateId, relativeId, relativeName, newNa
         id: relativeId,
         name: newName
     }
-    console.log('in update a rel', personToUpdateId, relativeId, relativeName, newName, whRelative, whChange )
     switch(whChange) {
        case "add": {
            await updateDoc(userRef, {
                 [whRelative]: arrayUnion(originalPersonInfo)
-           }).catch(err => console.log('error 1 updating relative', err))
+           }).catch(err => myLogger(`error 1 updating relative, ${err}`))
         break
        }
        case "remove": {
            await updateDoc(userRef, {
                [whRelative]: arrayRemove(originalPersonInfo)
-           }).catch(err => console.log('error 2 updating relative', err))
+           }).catch(err => myLogger(`error 2 updating relative, ${err}`))
         break
        }
        case "changeName": {
-        console.log('in case changeName')
         await updateDoc(userRef, {
             [whRelative]: arrayRemove(originalPersonInfo)
-        }).catch(err => console.log('error 3 updating relative', err))
-        console.log('before remove', newPersonInfo)
+        }).catch(err => myLogger(`error 3 updating relative, ${err}`))
         await updateDoc(userRef, {
             [whRelative]: arrayUnion(newPersonInfo)
-        }).catch(err => console.log('error 4 updating relative', err))
+        }).catch(err => myLogger(`error 4 updating relative, ${err}`))
        break
        }
        default: {
-           console.log('must add, remove or changeName')
+           myLogger('must add, remove or changeName')
        }
    }
    

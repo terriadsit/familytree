@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useState } from 'react'
 import { dbFirestore } from '../../firebase/config'
 import { doc, getDoc } from 'firebase/firestore'
+import myLogger from '../../sharedFunctions/myLogger'
 
 // styles 
 import './UpdatePerson.css'
@@ -31,7 +32,7 @@ export default function UpdatePerson() {
 
     } catch(err) {
       setError(err)
-      console.log('error', err)
+      myLogger(err)
     }
   }
 

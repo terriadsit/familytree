@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react"
 import { dbFirestore } from "../firebase/config"
 import { doc, onSnapshot } from "firebase/firestore"
+import myLogger from "../sharedFunctions/myLogger"
 
 export const useDocument = (collection, id) => {
   const [data, setData] = useState(null)
@@ -23,7 +24,7 @@ export const useDocument = (collection, id) => {
         setError('No such document exists')
       }
     }, err => {
-      console.log(err.message)
+      myLogger(err.message)
       setError('failed to get document')
     })
 

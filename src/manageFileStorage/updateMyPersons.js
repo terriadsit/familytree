@@ -5,6 +5,7 @@
 
 import { dbFirestore } from "../firebase/config"
 import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'
+import myLogger from '../sharedFunctions/myLogger'
 
 async function updateMyPersons(uid, personId, whChange) {
     const userRef = doc(dbFirestore, 'users', uid)
@@ -19,34 +20,28 @@ async function updateMyPersons(uid, personId, whChange) {
        case "add": {
            await updateDoc(userRef, {
                 myPersons: arrayUnion(personInfo)
-           }).catch(error => console.log(error))
+           }).catch(error => myLogger(error))
            await updateDoc(personRef, {
                onUsers: arrayUnion(uid)
-           }).catch(error => console.log(error))
+           }).catch(error => myLogger(error))
         break
        }
        case "remove": {
-            
-              await updateDoc(userRef, {
-                myPersons: arrayRemove(personInfo)
-              }).catch(error => console.log(error))
-              console.log('after first update in remove', uid, 'personid', personId )
-           
-           
-              await updateDoc(personRef, {
+          await updateDoc(userRef, {
+            myPersons: arrayRemove(personInfo)
+          }).catch(error => myLogger(error))
+             
+          await updateDoc(personRef, {
                 onUsers: arrayRemove({ uid })
-              }).catch(error => console.log(error))
-              console.log('after second update in remove', uid, 'personid', personId )
-            
-        break
+          }).catch(error => myLogger(error))
+       break
        }
        default: {
-           console.log('must add or remove')
+           myLogger('must add or remove')
        }
    }
    
-
-    return 
+   return 
     
 }
 export { updateMyPersons as default }

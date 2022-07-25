@@ -4,6 +4,7 @@
 // NOTE!! if selected db has no name field, an error will occur if 
 // no order is submitted on call
 import { useEffect, useState, useRef } from "react"
+import myLogger from "../sharedFunctions/myLogger"
 
 // firebase imports 
 import { dbFirestore } from "../firebase/config"
@@ -40,7 +41,7 @@ export const useCollection = (whCollection, _query, _orderBy) => {
       setDocuments(results)
       setError(null)
     }, error => {
-      console.log(error)
+      myLogger(error)
       setError('could not fetch the data')
     })
 

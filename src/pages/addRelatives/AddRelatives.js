@@ -8,6 +8,7 @@ import { useState, useEffect } from "react"
 import { useCollection } from "../../hooks/useCollection"
 import { useDocument } from "../../hooks/useDocument"
 import updateARelative from "../../manageFileStorage/updateARelative"
+import myLogger from '../../sharedFunctions/myLogger'
 import PersonDetails from "../../components/PersonDetails"
 import ChooseRelatives from './ChooseRelatives'
 import RemoveRelatives from './RemoveRelatives'
@@ -85,7 +86,7 @@ function AddRelatives() {
         setChildren(tempRelatives)
         break;
       default:
-        console.log('no such relative')
+        myLogger('no such relative')
     }
   }
   
@@ -141,7 +142,6 @@ function AddRelatives() {
   // remove relative from state to keep ui in sync
   // updateARelative firestore db call does not cause an error if record is not found to remove via arrayRemove
   const removeSibling = (relId, relName) => {
-    console.log('remove sib,', relId, relName)
     let tempRelatives = [...siblings]
     // remove sibling to this person in db, then remove this person from sibs as a sib
     updateARelative(personId, relId, relName, relName,'siblings', 'remove')
@@ -222,13 +222,11 @@ function AddRelatives() {
     
   const handleSubmit = (e) => {
       e.preventDefault()
-      console.log('submit', siblings)
       // note: updateARelative parameters are:
       // (personToUpdateId, relativeId, relativeName, whRelative, whChange)
       
       // add sibs to this person in db, then add this person to sibs as a sib
       for (let i = 0; i < siblings.length; i++) {
-        console.log('in loop', siblings[i])
         updateARelative(personId, siblings[i].id, siblings[i].name, siblings[i].name,'siblings', 'add')
         updateARelative(siblings[i].id, personId, name, name,'siblings', 'add')
       }

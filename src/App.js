@@ -25,14 +25,7 @@ function App() {
   
   let tempDisplayName = user ? user.displayName : ''
   const [sbDisplayName, setSbDisplayName] = useState('')
-  console.log('in app after setDn', sbDisplayName,'tempname', tempDisplayName )
- 
-  // const updateDisplayName = (newName) => {
-  //   console.log('in updateDisplay Name', 'dn',sbDisplayName, 'nn', newName)
-  //   setSbDisplayName(newName)
-  //   console.log('after updateDisplay Name', sbDisplayName, 'nn', newName)
-  // }
-
+  
   const displayNameProps = {
     sbDisplayName,
     updateDisplayName: (newName) => updateDisplayName(newName)

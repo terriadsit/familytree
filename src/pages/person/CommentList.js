@@ -12,6 +12,7 @@ import { useState } from "react"
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import deleteComment from "./deleteComment"
 import CreatedBy from "../../components/createdBy/CreatedBy"
+import myLogger from "../../sharedFunctions/myLogger"
 
 export default function  CommentList({ person }) {
   const [deleteError, setDeleteError] = useState('')
@@ -27,7 +28,7 @@ export default function  CommentList({ person }) {
   // delete a comment if user is the creator of this person or creator of the comment
   const handleClick = (comment) => {
     const error = deleteComment(comment, user, person)
-    console.log(error)
+    myLogger(error)
   }
 
   return (

@@ -12,6 +12,7 @@ import { useFirestore } from "../../hooks/useFirestore"
 import deleteStoredImage from "../../manageFileStorage/deleteStoredImage"
 import updateMyPersons from "../../manageFileStorage/updateMyPersons"
 import updateARelative from "../../manageFileStorage/updateARelative"
+import myLogger from "../../sharedFunctions/myLogger"
 import PersonDetails from "../../components/PersonDetails"
 
 export default function PersonSummary({...tempPerson }) {
@@ -40,7 +41,7 @@ export default function PersonSummary({...tempPerson }) {
           if (person.imageUrl) {
             const anError = deleteStoredImage(person.imageUrl)
             setError(anError)
-            console.log('error', anError)
+            myLogger(`error, ${anError}`)
           }
           
           // fetch ids of comments to be deleted

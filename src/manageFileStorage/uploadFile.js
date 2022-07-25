@@ -5,6 +5,7 @@ import { storage } from "../firebase/config"
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { dbFirestore } from "../firebase/config"
 import { updateDoc, doc } from "firebase/firestore"
+import myLogger from "../sharedFunctions/myLogger"
 
 export async function uploadFile(type, file, personId, commentId) {
     let fileUrl = ''
@@ -30,11 +31,10 @@ export async function uploadFile(type, file, personId, commentId) {
             updateDoc(commentRef, { imageUrl: fileUrl })
           } else {
             updateDoc(commentRef, { pdfUrl: fileUrl })
-            console.log('file url', fileUrl)
           }        
         }   
       } catch(err) { 
-            console.log('could not upload image', err)
+            myLogger(`could not upload image, ${err}`)
       }
     }    
     return fileUrl

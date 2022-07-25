@@ -6,6 +6,7 @@ import { getAuth, sendPasswordResetEmail, sendEmailVerification } from "firebase
 import { useLogout } from '../../hooks/useLogout'
 import { useNavigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
+import myLogger from '../../sharedFunctions/myLogger';
 
 // styles
 import './Login.css' 
@@ -63,7 +64,7 @@ export default function Login() {
        });
      })
     .catch((error) => {
-      console.log('error seding password', error)
+      myLogger(`error seding password, ${error}`)
       enqueueSnackbar(`an error occurred, please enter your email address, ${error} ${error.code}`, { 
         variant: 'error',
       })

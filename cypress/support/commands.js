@@ -104,6 +104,28 @@ Cypress.Commands.add('choose', (number, relationship) => {
       .type(`${person}{enter}`)
     cy.get(testId).should('include.text', person)
 })
+
+// called by AddPerson.cy.js also AaaSeedDB.cy.js
+// adds a person using the UI
+// must be already logged in 
+// then navigates asserts url
+Cypress.Commands.add('addAPersonNavigate', (name, button, image, url, allFields) => {
+  cy.get('[cy-test-id=name]').type(name)
+  if (allFields) {
+    cy.get('[cy-test-id=other-name]').type('another name')
+    cy.get('[cy-test-id=birth-date]').invoke('removeAttr','type').type('2001-01-01{enter}')
+    cy.get('[cy-test-id=death-date]').invoke('removeAttr','type').type('2022-02-02{enter}')
+    cy.get('[cy-test-id=birth-place]').type('birth place')
+    cy.get('[cy-test-id=marriage-comments]').type('a marriage comment')
+    cy.get('[cy-test-id=comments]').type('a comment')
+    cy.get('[cy-test-id=image]').attachFile(`../fixtures/${image}`)
+    cy.wait(5000)
+  }
+  cy.get(button).click()
+  cy.wait(5000)
+  cy.url().should('include', url)
+  cy.wait(1000)
+})
 //
 // -- This is a child command --
 // Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })

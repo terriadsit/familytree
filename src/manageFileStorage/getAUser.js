@@ -1,5 +1,6 @@
 import { doc, getDoc } from 'firebase/firestore'
 import { dbFirestore } from '../firebase/config'
+import myLogger from '../sharedFunctions/myLogger'
 
 async function getAUser (uid) {
      
@@ -14,9 +15,9 @@ async function getAUser (uid) {
     }
 
     return userDetails
+
   } catch (err) {
-    
-    console.log('error', err)
+    myLogger(err)
   }
 }
 

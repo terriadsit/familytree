@@ -8,7 +8,7 @@ import AddIcon from '../../assets/add_icon.svg'
 
 export default function Sidebar({...props}) {
   let displayName = props.sbDisplayName
-  console.log('in sidebar', displayName)
+  
   return (
     <div className="sidebar">
         <div className="sidebar-content">
