@@ -2,13 +2,13 @@
 // callback function manages state to update current relatives UI
 // props are two call back functions, relationship and a person
 
-import { useEffect } from "react"
+import { useEffect, useCallback } from "react"
 
 // styles
 import './AddRelatives.css'
 
 export default function RemoveRelatives({...props}) {
-  const addPrevRelatives = props.addPrevRelatives
+  //const addPrevRelatives = props.addPrevRelatives
   const relatives = props.person[props.relationship]
   const relationship = props.relationship
   
@@ -20,9 +20,14 @@ export default function RemoveRelatives({...props}) {
     removeRef.innerHTML = ''
   }
 
+  const addPrevRelatives = useCallback( () => {
+    return props.addPrevRelatives
+  },[props.addPrevRelatives])
+
+
   useEffect(() => {
     addPrevRelatives(relatives, relationship)
-  },[relatives, relationship])
+  },[relatives, relationship, addPrevRelatives])
     
   return (
     <div className="relative-container">

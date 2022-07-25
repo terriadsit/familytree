@@ -56,6 +56,7 @@ describe('Signup component should appear and operate correctly', () => {
     cy.checkSignupBtn('signUp')
     cy.deleteThisUser(email, $password)
     cy.logout()
+    cy.wait(5000)
   })
 
   it('displays or hides password when clicked', () => {
