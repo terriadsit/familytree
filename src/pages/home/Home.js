@@ -1,7 +1,7 @@
 // a user's home page displays a snippet of each person they have chosen
 // to display on their home page. The ids are in the 'users' db as 'myPersons'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback, useMemo } from 'react'
 import PersonSnippet from './PersonSnippet'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { useDocument } from '../../hooks/useDocument'
@@ -17,21 +17,28 @@ function Home() {
   const uid = user.uid
   const error = ''
   const [tempPeople, setTempPeople] = useState([]) 
+  const [peopleIds, setPeopleIds] = useState([])
   const { data } = useDocument('users', uid)
-  let peopleIds = []  // people's ids
-  
-  useEffect(() => {
-    // get people ids which user would like displayed
+
+  const memoPeopleIds = useMemo(() => {
+    let thesePeople = []
     if(data){
-       data.myPersons.map((p) => {
-        let id = p.personId
-        return peopleIds.push(id)
-       })
- 
-       // get entire persons details
-       getPeopleFromIds(peopleIds).then((res) => {setTempPeople(res)}).catch(error => console.log(error))
-    }  
-  },[data])
+       thesePeople = data.myPersons.map((p) => {
+       let id = p.personId
+        return id
+      })
+    }
+     return thesePeople
+  }, [data]);
+  
+  const fetchPeople = useCallback(() => { 
+    setPeopleIds(memoPeopleIds)
+  }, [memoPeopleIds])
+
+  useEffect(() => {
+    fetchPeople()
+    getPeopleFromIds(peopleIds).then((res) => {setTempPeople(res)}).catch(error => console.log(error))
+  },[fetchPeople,peopleIds])
 
   // sort people by their birthdate
   let people = tempPeople
