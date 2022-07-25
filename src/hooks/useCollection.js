@@ -47,7 +47,7 @@ export const useCollection = (whCollection, _query, _orderBy) => {
     // unsubscribe on unmount
     return () => unsubscribe()
 
-  }, [whCollection])
+  }, [whCollection, order, queryArray])
 
   return { documents, error }
 }

@@ -1,7 +1,7 @@
 // manages state for displayName which is sent as props to <Signup />
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useAuthContext } from './hooks/useAuthContext'
 
 // pages and components
@@ -27,20 +27,24 @@ function App() {
   const [sbDisplayName, setSbDisplayName] = useState('')
   console.log('in app after setDn', sbDisplayName,'tempname', tempDisplayName )
  
-  const updateDisplayName = (newName) => {
-    console.log('in updateDisplay Name', 'dn',sbDisplayName, 'nn', newName)
-    setSbDisplayName(newName)
-    console.log('after updateDisplay Name', sbDisplayName, 'nn', newName)
-  }
+  // const updateDisplayName = (newName) => {
+  //   console.log('in updateDisplay Name', 'dn',sbDisplayName, 'nn', newName)
+  //   setSbDisplayName(newName)
+  //   console.log('after updateDisplay Name', sbDisplayName, 'nn', newName)
+  // }
 
   const displayNameProps = {
     sbDisplayName,
     updateDisplayName: (newName) => updateDisplayName(newName)
   }
 
+  const updateDisplayName = useCallback((someName) => {
+    setSbDisplayName(someName)
+  },[])
+
    useEffect(() => {
      updateDisplayName(tempDisplayName)
-   }, [user])
+   }, [user, updateDisplayName, tempDisplayName])
 
   return (
     <div className="App">
