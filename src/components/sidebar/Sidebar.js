@@ -1,6 +1,6 @@
 
 import { NavLink } from 'react-router-dom'
-import ListAll from './ListAll'
+import MemoizedListAll from './ListAll'
 
 // styles and images
 import './Sidebar.css'
@@ -30,7 +30,7 @@ export default function Sidebar({...props}) {
                     <span>Search</span>
                   </NavLink>
                 </li>
-                <li><ListAll /></li>
+                <li><MemoizedListAll /></li>
               </ul>
             </nav>
         </div>
