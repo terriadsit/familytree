@@ -55,6 +55,7 @@ describe('Signup component should appear and operate correctly', () => {
     cy.get("input[type='checkbox']").check()
     cy.checkSignupBtn('signUp')
     cy.deleteThisUser(email, $password)
+    cy.logout()
   })
 
   it('displays or hides password when clicked', () => {

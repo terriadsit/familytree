@@ -7,7 +7,7 @@ import getNewAuth from '../../sharedFunctions/getNewAuth'
 import { useSnackbar } from 'notistack'
 import { useSignup } from '../../hooks/useSignup'
 import { useFirestore } from '../../hooks/useFirestore'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useLogout } from '../../hooks/useLogout'
 import { useAuthContext } from '../../hooks/useAuthContext'
@@ -59,19 +59,29 @@ export default function Signup({...props}) {
   
 
   // if updating, need users details
-  function getUsersDetails() {
+  //function getUsersDetails() {
+    // getAUser(user.uid)
+    //   .then((userDetails) => {
+    //     setDisplayName(userDetails.displayName)
+    //     setChecked(userDetails.shareEmail)
+    //     setEmail(user.email)
+    //     setPrevEmail(user.email)
+    //     console.log('in getuserdetails prevemail, ', 'us dn',userDetails.displayName, 'display Name', displayName)
+    //  })
+   //}
+  
+  // load form fields if updating 
+  const getUsersDetails = useCallback(() => {
     getAUser(user.uid)
       .then((userDetails) => {
         setDisplayName(userDetails.displayName)
         setChecked(userDetails.shareEmail)
         setEmail(user.email)
         setPrevEmail(user.email)
-        console.log('in getuserdetails prevemail, ', 'us dn',userDetails.displayName, 'display Name', displayName)
-     })
-   }
-  
-  // load form fields if updating 
-  
+        //console.log('in getuserdetails prevemail, ', 'us dn',userDetails.displayName, 'display Name', displayName)
+    })
+  },[user])
+
   useEffect(() => {
     if(!action){
       getUsersDetails()
@@ -81,7 +91,7 @@ export default function Signup({...props}) {
       setEmail('')
       setChecked(false)
     }
-  },[action])
+  },[action, getUsersDetails])
 
   
 
