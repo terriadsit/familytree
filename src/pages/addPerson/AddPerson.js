@@ -50,6 +50,7 @@ export default function AddPerson() {
   const { enqueueSnackbar } = useSnackbar();
   const { addDocument, updateDocument } = useFirestore('people')
   const { user } = useAuthContext()
+  console.log('in AddPerson')
   
   let navigate = useNavigate()
   

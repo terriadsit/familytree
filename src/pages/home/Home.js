@@ -19,6 +19,7 @@ function Home() {
   const [tempPeople, setTempPeople] = useState([]) 
   const [peopleIds, setPeopleIds] = useState([])
   const { data } = useDocument('users', uid)
+  console.log('in Home')
 
   const memoPeopleIds = useMemo(() => {
     let thesePeople = []

@@ -19,28 +19,35 @@ describe('allows users to choose relatives', () => {
 
   before(() => {
     cy.login()
+   
+  })
+
+  beforeEach(() => {
     cy.visit('/addrelatives/w24t8yLaxdS4Qw6V2VTo')
+    cy.wait(5000)
   })
 
   it('choice of each realtive may be made then removal from select box, keep state correct', () => {
+    
     chooseAndRemove(0, 'siblings')
     chooseAndRemove(1, 'parents')
     chooseAndRemove(2, 'children')
     chooseAndRemove(3, 'spouse')
   })
 
-  it('allows the choice of each realtive to be made and saved', () => {
+  it('allows the choice of each relative to be made and saved', () => {
     // add relatives
+    cy.wait(5000)
     cy.choose(0, 'siblings')
     cy.choose(1, 'parents')
     cy.choose(2, 'children')
     cy.choose(3, 'spouse')
-    cy.wait(5000)
+    cy.wait(15000)
     // save relatives
     cy.get('[cy-test-id=add-relatives-btn]').click()
     cy.wait(5000)
     cy.visit('/person/w24t8yLaxdS4Qw6V2VTo')
-    cy.wait(10000)
+    cy.wait(15000)
     cy.get('[cy-test-id=siblings]').should(
       'include.text',
       'second siblings test 100'
@@ -59,7 +66,7 @@ describe('allows users to choose relatives', () => {
     )
     // remove these added relatives
     cy.visit('/addrelatives/w24t8yLaxdS4Qw6V2VTo')
-    cy.wait(5000)
+    cy.wait(15000)
     cy.get('[cy-test-id=relative-form]')
       .find("[value='8nDk5GhtsY1o0MgoX0LJ']")
       .click()
@@ -74,9 +81,9 @@ describe('allows users to choose relatives', () => {
       .click()
     cy.wait(5000)
     cy.get('[cy-test-id=add-relatives-btn]').click()
-    cy.wait(5000)
+    cy.wait(15000)
     cy.visit('/person/w24t8yLaxdS4Qw6V2VTo')
-    cy.wait(5000)
+    cy.wait(15000)
     cy.get('[cy-test-id=siblings]').should(
       'not.include.text',
       'second siblings test 100'

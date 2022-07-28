@@ -50,7 +50,7 @@ function AddRelatives() {
   const [siblings, setSiblings] = useState([])
   const [parents, setParents] = useState([])
   const [children, setChildren] = useState([])
-  
+  console.log('in add relatives')
   
   // check for prevRel relatives matching Proposed relatives
   // used to add from react select on updates
@@ -288,7 +288,7 @@ function AddRelatives() {
           <ChooseRelatives {...chooseChildrenProps} /> 
           {person.spouses.length > 0 && <RemoveRelatives {...removeSpouseProps} />}
           <ChooseRelatives {...chooseSpousesProps} /> 
-          <button cy-test-id="add-relatives-btn" className="btn">Add Relatives</button>
+          <button cy-test-id="add-relatives-btn" className="btn">Save Changes</button>
         </form>
     </div>
   )

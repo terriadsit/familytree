@@ -55,7 +55,7 @@ export default function Signup({...props}) {
   const { updateDocument } = useFirestore('users')
   const { user } = useAuthContext()
   const navigate = useNavigate()
-  
+  console.log('in Signup')
   
 
   // if updating, need users details
