@@ -2,11 +2,7 @@
 // callback function manages state to update current relatives UI
 // props are two call back functions, relationship and a person
 
-<<<<<<< HEAD
 import { useEffect, useMemo, useCallback } from "react"
-=======
-import { useEffect, useCallback } from "react"
->>>>>>> cd59788f8bebc44d2d9e3bf8edb99f3b8ecac495
 
 // styles
 import './AddRelatives.css'
@@ -25,7 +21,6 @@ export default function RemoveRelatives({...props}) {
     const removeRef = document.getElementById(id)
     removeRef.innerHTML = ''
   }
-<<<<<<< HEAD
   const memoizedRelatives = useMemo(() => tempRelatives, [tempRelatives]);
   const memoizedRelationship = useMemo(() => tempRelationship, [tempRelationship]);
   
@@ -35,14 +30,6 @@ export default function RemoveRelatives({...props}) {
     },
     [memoizedRelatives, memoizedRelationship],
   )
-=======
-
-  // const addPrevRelatives = useCallback( () => {
-  //   return props.addPrevRelatives
-  // },[props.addPrevRelatives])
-
-
->>>>>>> cd59788f8bebc44d2d9e3bf8edb99f3b8ecac495
   useEffect(() => {
     addPrevRelatives(memoizedRelatives, memoizedRelationship)
   },[])

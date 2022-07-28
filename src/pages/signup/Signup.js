@@ -57,7 +57,6 @@ export default function Signup({...props}) {
   const { updateDocument } = useFirestore('users')
   const { user } = useAuthContext()
   const navigate = useNavigate()
-<<<<<<< HEAD
   console.log('in Signup')
   
 
@@ -73,9 +72,6 @@ export default function Signup({...props}) {
     //  })
    //}
   
-=======
-   
->>>>>>> cd59788f8bebc44d2d9e3bf8edb99f3b8ecac495
   // load form fields if updating 
   const getUsersDetails = useCallback(() => {
     getAUser(user.uid)
