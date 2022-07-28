@@ -4,6 +4,7 @@
 
 import { dbFirestore } from "../firebase/config"
 import { query, collection, where, getDocs } from 'firebase/firestore'
+import myLogger from '../sharedFunctions/myLogger'
 
 async function fetchComments(personId) {
     let commentsFound = []
@@ -16,7 +17,7 @@ async function fetchComments(personId) {
         })
         return commentsFound
     } catch(err){
-        console.log('error fetching comments', err)
+        myLogger(`error fetching comments, ${err}`)
         return err
     }
    

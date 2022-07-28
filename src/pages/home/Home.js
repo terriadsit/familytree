@@ -7,6 +7,7 @@ import { useAuthContext } from '../../hooks/useAuthContext'
 import { useDocument } from '../../hooks/useDocument'
 import getPeopleFromIds from '../../manageFileStorage/getPeopleFromIds'
 import sortPeopleByBD from '../../sharedFunctions/sortPeopleByBD'
+import myLogger from '../../sharedFunctions/myLogger'
 
 // styles
 import './Home.css'
@@ -39,7 +40,7 @@ function Home() {
   useEffect(() => {
     fetchPeople()
     if (peopleIds) {
-      getPeopleFromIds(peopleIds).then((res) => {setTempPeople(res)}).catch(error => console.log(error))
+      getPeopleFromIds(peopleIds).then((res) => {setTempPeople(res)}).catch(error => myLogger(error))
     }
   },[fetchPeople,peopleIds])
 
@@ -50,7 +51,7 @@ function Home() {
   people = sortPeopleByBD(people)
     
   if (error) {
-    console.log('in if error', error)
+    myLogger(`in if error ${error}`)
     return <p className="error">${error}</p>
   }
 

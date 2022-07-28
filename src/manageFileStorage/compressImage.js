@@ -1,6 +1,7 @@
 // receive an image and return a compressed image
 
 import { uploadFile } from "./uploadFile"
+import myLogger from "../sharedFunctions/myLogger"
 
 function compressImage (file, personId, commentId, tooLargeError) {
   
@@ -15,8 +16,7 @@ function compressImage (file, personId, commentId, tooLargeError) {
   img.onerror = function () {
     URL.revokeObjectURL(this.src)
     // Handle the failure properly
-    console.log('Cannot load image')
-    
+    myLogger('Cannot load image')
   }
   img.onload = function () {
     URL.revokeObjectURL(this.src)
@@ -35,11 +35,11 @@ function compressImage (file, personId, commentId, tooLargeError) {
           } else {
             tooLargeError()
             const error = `image is too big, ${blob.size}`
-            console.log('image too big', error, 'blob',blob.size)
+            myLogger(error)
             return error
           }
-          displayInfo('Original file', file)
-          displayInfo('Compressed file', blob)
+          //displayInfo('Original file', file)
+          //displayInfo('Compressed file', blob)
         
           },
           MIME_TYPE,
@@ -70,18 +70,17 @@ function compressImage (file, personId, commentId, tooLargeError) {
 
   // Utility functions for demo purpose
 
-  function displayInfo (label, file) {
+  //function displayInfo (label, file) {
     
-    const fileSize = `${label} - ${readableBytes(file.size)}`
-    console.log(fileSize)
-  }
+    //const fileSize = `${label} - ${readableBytes(file.size)}`
+  //}
 
-  function readableBytes (bytes) {
-    const i = Math.floor(Math.log(bytes) / Math.log(1024)),
-      sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+  // function readableBytes (bytes) {
+  //   const i = Math.floor(Math.log(bytes) / Math.log(1024)),
+  //     sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
 
-    return (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i]
-  }
+  //   return (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i]
+  // }
 }
 
 export { compressImage as default }

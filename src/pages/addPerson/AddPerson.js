@@ -11,6 +11,7 @@ import checkFile from "../../manageFileStorage/checkFile"
 import compressImage from '../../manageFileStorage/compressImage'
 import deleteStoredImage from '../../manageFileStorage/deleteStoredImage'
 import updateMyPersons from '../../manageFileStorage/updateMyPersons'
+import myLogger from "../../sharedFunctions/myLogger"
 import { useSnackbar } from 'notistack'
 
 // styles
@@ -89,7 +90,7 @@ export default function AddPerson() {
         setMessage('Update')
         setOriginalName(person.name)
       } catch(err) {
-         console.log('error', err)
+         myLogger(err)
       }
   }, [navigate, personId])
   
@@ -144,7 +145,6 @@ export default function AddPerson() {
   
  const handleSubmit = async (e) => {
     e.preventDefault() 
-    console.log('submit',e.target.value)
     if (action) {
       // add a new person to db
       const uid = user.uid

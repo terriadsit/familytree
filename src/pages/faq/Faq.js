@@ -2,6 +2,7 @@
 // form. Other viewers may see a contact email address as a tooltip
 
 import TermsAndConditions from '../termsAndConditions/TermsAndConditions'
+//import TermsAndConditions from '../termsAndConditions/TermsAndConditions'
 import Contact from '../../components/Contact'
 import { useState } from 'react'
 import { useAuthContext } from '../../hooks/useAuthContext'

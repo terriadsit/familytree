@@ -17,6 +17,8 @@ import { updateEmail,
          sendEmailVerification} 
          from "firebase/auth";
 import TermsAndConditions from '../termsAndConditions/TermsAndConditions'
+import myLogger from '../../sharedFunctions/myLogger'
+
 // styles
 import './Signup.css'
 
@@ -55,6 +57,7 @@ export default function Signup({...props}) {
   const { updateDocument } = useFirestore('users')
   const { user } = useAuthContext()
   const navigate = useNavigate()
+<<<<<<< HEAD
   console.log('in Signup')
   
 
@@ -70,6 +73,9 @@ export default function Signup({...props}) {
     //  })
    //}
   
+=======
+   
+>>>>>>> cd59788f8bebc44d2d9e3bf8edb99f3b8ecac495
   // load form fields if updating 
   const getUsersDetails = useCallback(() => {
     getAUser(user.uid)
@@ -78,8 +84,7 @@ export default function Signup({...props}) {
         setChecked(userDetails.shareEmail)
         setEmail(user.email)
         setPrevEmail(user.email)
-        //console.log('in getuserdetails prevemail, ', 'us dn',userDetails.displayName, 'display Name', displayName)
-    })
+      })
   },[user])
 
   useEffect(() => {
@@ -93,8 +98,6 @@ export default function Signup({...props}) {
     }
   },[action, getUsersDetails])
 
-  
-
   // toggle checking box to allow or hide email from other users
   const handleChange = () => {
     setChecked(!checked);
@@ -102,13 +105,11 @@ export default function Signup({...props}) {
   
   // handle checking of Terms and Conditions
   const handleTerms = (e) => {
-    console.log('in handle terms')
     setTerms(prev => !prev)
   }
 
   // toggle showing or hiding both passwords
   const handleTriggerClick = () => {
-    console.log('trigger click', email, 'prevemail', prevEmail)
     const ref1 = document.getElementById('password1')
     const ref2 = document.getElementById('password2')
     if(ref1.getAttribute('type') === 'password'){
@@ -203,8 +204,7 @@ function getVerified(user) {
             if (password) {
               if (checkForMatch(checkPassword)) {
                 updatePassword(user, password).then(() => {
-                  console.log('in update password then')
-                  // Update successful.
+                 // U pdate successful.
                   getNewAuth(user, user.email, password, authError)
                   // prevPassword used to update email if email is updated below
                   
@@ -220,10 +220,7 @@ function getVerified(user) {
         
             // update email if it has been changed 
             // update in firebase auth and in firestore user db while updating entire user 
-            console.log('before prevemail, ', prevEmail,'email',email)
-          
             if (prevEmail !== email) {
-              console.log('prevemail, ', prevEmail,'email',email)
               updateEmail(user, email)
               .then(() => {
                 //getNewAuth(user, email, passwordToUse)
@@ -239,15 +236,13 @@ function getVerified(user) {
             // update display name in firebase auth
             // not sure why this works temporarily then AuthContext user 
             // display name appears to override
-            console.log('before update profile', displayName)
             updateProfile(user, {
               displayName: displayName
             }).then(() => {
-            // Profile updated!
-              console.log('updated user', user)
+            // Profile updated! future code here
             }).catch((error) => {
-            // An error occurred
-              console.log('error occurred updating user', error)
+            // An error occurred{
+              myLogger(`error occurred updating user, ${error}`)
             });
             // update entire user in user db
             const updates = {

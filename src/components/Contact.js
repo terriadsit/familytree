@@ -2,7 +2,7 @@
 import  { useRef } from 'react';
 import { useSnackbar } from 'notistack'
 import emailjs from 'emailjs-com';
-
+import myLogger from '../sharedFunctions/myLogger';
 
 // styles 
 import './Contact.css'
@@ -16,9 +16,9 @@ export default function Contact() {
 
     emailjs.sendForm('gmail', 'template_zko4opp', e.target, 'NS-1W3jYfqefnM0yg')
       .then((result) => {
-          console.log(result.text);
+        myLogger(result.text)
       }, (error) => {
-          console.log(error.text);
+        myLogger(error.text);
       });
     e.target.reset()
     enqueueSnackbar('Thank you for your message!', { 

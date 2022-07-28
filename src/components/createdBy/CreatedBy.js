@@ -3,6 +3,7 @@
 // called by <PersonDetails /> and <CommentList >
 import { useState } from 'react'
 import { useDocument } from '../../hooks/useDocument'
+import myLogger from '../../sharedFunctions/myLogger'
 
 // styles
 import './CreatedBy.css'
@@ -21,7 +22,7 @@ export default function CreatedBy({...props}) {
   const emailMessage = creator.shareEmail ? creator.email : 'This user has a private email'
  
   if (error) {
-      console.log('error fetching creator', error)
+      myLogger(`error fetching creator, ${error}`)
       return null
   }
   return (

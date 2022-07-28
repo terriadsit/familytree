@@ -7,24 +7,6 @@ describe('Add Person works and dislays correctly, including error messsages', ()
   
   const random = Math.random().toString(36).substring(2) 
  
-  function addAPersonNavigate(name, button, image, url, allFields) {
-    cy.get('[cy-test-id=name]').type(name)
-    if (allFields) {
-      cy.get('[cy-test-id=other-name]').type('another name')
-      cy.get('[cy-test-id=birth-date]').invoke('removeAttr','type').type('2001-01-01{enter}')
-      cy.get('[cy-test-id=death-date]').invoke('removeAttr','type').type('2022-02-02{enter}')
-      cy.get('[cy-test-id=birth-place]').type('birth place')
-      cy.get('[cy-test-id=marriage-comments]').type('a marriage comment')
-      cy.get('[cy-test-id=comments]').type('a comment')
-      cy.get('[cy-test-id=image]').attachFile(`../fixtures/${image}`)
-      cy.wait(5000)
-    }
-    cy.get(button).click()
-    cy.wait(5000)
-    cy.url().should('include', url)
-    cy.wait(1000)
-  }
-
   function removeAPerson(name) {
     cy.visit('/')
     cy.wait(15000)
@@ -68,7 +50,7 @@ describe('Add Person works and dislays correctly, including error messsages', ()
     let image = 'me.jpg'
     
     cy.log('in body', name, 'button',button,'url', url)
-    addAPersonNavigate(name, button, image, url, false)
+    cy.addAPersonNavigate(name, button, image, url, false)
     removeAPerson(name)
   })
 
@@ -90,7 +72,7 @@ describe('Add Person works and dislays correctly, including error messsages', ()
     const button = '[cy-test-id=submit-form]'
     let image = 'me.jpg'
 
-    addAPersonNavigate(name, button, image, url, false)
+    cy.addAPersonNavigate(name, button, image, url, false)
     cy.get('.container').should('include.text', name)
     removeAPerson(name)
   })
@@ -134,7 +116,7 @@ describe('Add Person works and dislays correctly, including error messsages', ()
     const button = '[cy-test-id=submit-form]'
     let image = 'TooLarge.jpg'
 
-    addAPersonNavigate(name, button, image, url, true)
+    cy.addAPersonNavigate(name, button, image, url, true)
     cy.findByText(/the image is too large/,{ timeout: 3000 }).should('be.visible')
     cy.wait(5000)
     removeAPerson(name)

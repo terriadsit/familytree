@@ -29,7 +29,6 @@ export default function Search() {
 
   const handleOption = (option) => {
     setPerson(option.value)
-    console.log('ssearch', option)
   }
 
   const handleSubmit = (e) => {

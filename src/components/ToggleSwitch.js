@@ -18,7 +18,6 @@ const ToggleSwitch = ({...props }) => {
   // calling component manages event
   const handleClick = (e) => {
     props.handleToggle(e.target.checked)
-    console.log('handleClick', e.target.checked)
   }
 
   return (
