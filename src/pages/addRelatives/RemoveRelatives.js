@@ -8,7 +8,7 @@ import { useEffect, useCallback } from "react"
 import './AddRelatives.css'
 
 export default function RemoveRelatives({...props}) {
-  //const addPrevRelatives = props.addPrevRelatives
+  const addPrevRelatives = props.addPrevRelatives
   const relatives = props.person[props.relationship]
   const relationship = props.relationship
   
@@ -20,14 +20,14 @@ export default function RemoveRelatives({...props}) {
     removeRef.innerHTML = ''
   }
 
-  const addPrevRelatives = useCallback( () => {
-    return props.addPrevRelatives
-  },[props.addPrevRelatives])
+  // const addPrevRelatives = useCallback( () => {
+  //   return props.addPrevRelatives
+  // },[props.addPrevRelatives])
 
 
   useEffect(() => {
     addPrevRelatives(relatives, relationship)
-  },[relatives, relationship, addPrevRelatives])
+  },[relatives, relationship])
     
   return (
     <div className="relative-container">
