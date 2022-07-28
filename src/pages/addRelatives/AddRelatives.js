@@ -51,7 +51,7 @@ function AddRelatives() {
   const [siblings, setSiblings] = useState([])
   const [parents, setParents] = useState([])
   const [children, setChildren] = useState([])
-  
+  console.log('in AddRelatives')
   
   // check for prevRel relatives matching Proposed relatives
   // used to add from react select on updates
