@@ -8,14 +8,10 @@ import { useState, useEffect } from "react"
 import { useCollection } from "../../hooks/useCollection"
 import { useDocument } from "../../hooks/useDocument"
 import updateARelative from "../../manageFileStorage/updateARelative"
-import myLogger from '../../sharedFunctions/myLogger'
 import PersonDetails from "../../components/PersonDetails"
 import ChooseRelatives from './ChooseRelatives'
 import RemoveRelatives from './RemoveRelatives'
 import { useAuthContext } from '../../hooks/useAuthContext'
-
-// styles
-//import './AddRelatives.css'
 
 function AddRelatives() {
   
@@ -35,8 +31,6 @@ function AddRelatives() {
     }
   },[documents])
  
-      
-
   // person who is getting relatives added
   let params = useParams()
   const personId = params.id
@@ -67,53 +61,27 @@ function AddRelatives() {
     return prevRel
   }
   
-  // on update of person, add previous relatives to state
-  // passed as props to RemoveRelative component
-  const addPrevRelatives =  (rel, relationship) => {
-    let tempRelatives = []
-    rel.map((r) => tempRelatives.push({id: r.id, name: r.name}))
-    switch (relationship) {
-      case 'siblings':
-        setSiblings(tempRelatives)
-        break;
-      case 'parents':
-        setParents(tempRelatives)
-        break;
-      case 'spouses':
-        setSpouses(tempRelatives)
-        break;
-      case 'children':
-        setChildren(tempRelatives)
-        break;
-      default:
-        myLogger('no such relative')
-    }
-  }
   
   // set up props for components, first removing then adding
   let removeSiblingProps = {
     relationship: 'siblings',
     person,
-    addPrevRelatives: (rel, relationship) => addPrevRelatives(rel, relationship),
     removePrevRelative: (id, name) => removeSibling(id, name)
   }
   let removeParentProps = {
     relationship: 'parents',
     person,
-    addPrevRelatives: (rel, relationship) => addPrevRelatives(rel, relationship),
     removePrevRelative: (id, name) => removeParents(id, name)
   }
   let removeSpouseProps = {
     relationship: 'spouses',
     person,
-    addPrevRelatives: (rel, relationship) => addPrevRelatives(rel, relationship),
     removePrevRelative: (id, name) => removeSpouses(id, name)
   }
   let removeChildrenProps = {
     relationship: 'children',
     person,
-    addPrevRelatives: (rel, relationship) => addPrevRelatives(rel, relationship),
-    removePrevRelative: (id, name) => removeChildren(id, name)
+     removePrevRelative: (id, name) => removeChildren(id, name)
   }
   let chooseSiblingProps = {
     relationship: 'sibling',
@@ -135,6 +103,7 @@ function AddRelatives() {
     people: [...people],
     handleRelativeOption: (rel, action) => handleSpousesOption(rel, action)
   }
+  //let personDetailsProps = {...person}
   let personDetailsProps = {...person, siblings, parents, children, spouses}
   
   // formfield onClick delete functions passed to <RemoveRelatives>
@@ -174,7 +143,7 @@ function AddRelatives() {
     setSpouses(keepRelatives)
   }
 
-  // formfield onChange functions, passed to <ChooseRelative>
+  // formfield onChange functions, passed to <ChooseRelative />
   // add unique chosen relatives from select field to state
   // or if user x out, 'remove-value', remove the previous addition
   // via removeRelative

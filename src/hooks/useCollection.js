@@ -13,21 +13,22 @@ import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestor
 export const useCollection = (whCollection, _query, _orderBy) => {
   const [documents, setDocuments] = useState(null)
   const [error, setError] = useState(null)
-
+  console.log('in useCollection')
   // if we don't use a ref --> infinite loop in useEffect
   // _query is an array and is "different" on every function call
   // _query contains: field name, comparison, value to be == or !=
+  let order = _orderBy
   let queryArray = useRef(_query).current
-  let order = useRef(_orderBy).current
-
+  
+  
   // default order
-  order = order ? order : ['name'] 
+  order = order ? order : 'name'
   
   useEffect(() => {
     let ref = collection(dbFirestore, whCollection)
     let q = (queryArray) ? 
-      query(ref, where(...queryArray), orderBy(...order)) : 
-      query(ref, orderBy(...order) )
+      query(ref, where(...queryArray), orderBy(order)) : 
+      query(ref, orderBy(order) )
     
     const unsubscribe = onSnapshot(q, snapshot => {
       let results = []
@@ -48,7 +49,7 @@ export const useCollection = (whCollection, _query, _orderBy) => {
     // unsubscribe on unmount
     return () => unsubscribe()
 
-  }, [whCollection, order, queryArray])
+  }, [whCollection, queryArray, order])
 
   return { documents, error }
 }

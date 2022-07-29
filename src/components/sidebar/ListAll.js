@@ -6,7 +6,7 @@ import { memo } from 'react';
 import './ListAll.css'
 
 export default function ListAll() {
-  const order = ['name']
+  const order = 'name'
   const { documents, error } = useCollection('people', null, order)
    
   return (

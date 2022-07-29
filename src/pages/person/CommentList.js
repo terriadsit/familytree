@@ -18,7 +18,7 @@ export default function  CommentList({ person }) {
   const [deleteError, setDeleteError] = useState('')
   const { user } = useAuthContext()
   const query = ['personId', '==', person.id]
-  const { documents, error } = useCollection('comments', query, ['createdAt'])
+  const { documents, error } = useCollection('comments', query, 'createdAt')
     
   if (error) {
       setDeleteError(error)

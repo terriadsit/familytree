@@ -2,7 +2,7 @@
 // called by <PersonSummary /> and <AddRelatives />
 // receives a person with all their details as props
 // will allow person to be added to home page of user
-// do not display person.comments if on /addrelatives pages
+// do not display person.comments or relatives if on /addrelatives pages
 
 import { useDocument } from '../hooks/useDocument'
 import { useAuthContext } from '../hooks/useAuthContext'
@@ -19,7 +19,7 @@ export default function PersonDetails({...person}) {
   const { user } = useAuthContext()
   const { data } = useDocument('users', user.uid)
   const location = useLocation()
-  
+  console.log('in personDetails')
   // don't display person.comments on /addrelatives
   const onAdd = location.pathname.includes('add')
     
@@ -81,13 +81,13 @@ export default function PersonDetails({...person}) {
                              
         <p cy-test-id="born"><b>born: </b>{person.birthDate ? person.birthDate : 'unknown'} to {person.deathDate ? person.deathDate : 'unknown'}</p>
         <p cy-test-id="birth-city"><b>at: </b>{person.birthCity ? person.birthCity : 'unknown'}</p>
-        <p cy-test-id="parents"><b>parents: </b>{parents}</p>
-        <p cy-test-id="siblings"><b>sibling(s): </b>{siblings}</p>
-        <p cy-test-id="spouse"><b>married to: </b>{spouses}{person.marriageComments && spouses ? 
+        {!onAdd && <p cy-test-id="parents"><b>parents: </b>{parents}</p>}
+        {!onAdd && <p cy-test-id="siblings"><b>sibling(s): </b>{siblings}</p>}
+        {!onAdd && <p cy-test-id="spouse"><b>married to: </b>{spouses}{person.marriageComments && spouses ? 
           `, ${person.marriageComments}` :
           person.marriageComments }
-        </p>
-        <p cy-test-id="children"><b>children: </b>{children}</p>
+        </p>}
+        {!onAdd && <p cy-test-id="children"><b>children: </b>{children}</p>}
         {(!onAdd && person.comments) && <p cy-test-id="comments"><b>comments: </b>{person.comments}</p>}
         <CreatedBy props={person.createdBy.uid} /> 
         <span className="toggle"><ToggleSwitch {...toggleProps} /></span>

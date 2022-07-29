@@ -95,14 +95,14 @@ Cypress.Commands.add('deleteThisUser', (email, password) => {
 // choose a relative on addrelatives component
 // parameter number is number of select box on add relative page
 Cypress.Commands.add('choose', (number, relationship) => {
-  const testId = `[cy-test-id=${relationship}]`
+  
     const person = `second ${relationship} test 100`
 
     cy.get('.css-6j8wv5-Input')
       .eq(number)
       .click()
       .type(`${person}{enter}`)
-    cy.get(testId).should('include.text', person)
+    
 })
 
 // called by AddPerson.cy.js also AaaSeedDB.cy.js

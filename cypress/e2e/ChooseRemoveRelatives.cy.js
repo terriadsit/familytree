@@ -1,5 +1,5 @@
 // a React Select Dropdown, state is managed by calling Component,
-// Add Relatives manages state and changing values in the Select
+// Add Relatives manages changing values in the Select
 ///<reference types="cypress" />
 
 describe('allows users to choose relatives', () => {
@@ -14,7 +14,7 @@ describe('allows users to choose relatives', () => {
       .eq(0)
       .find('svg')
       .click()
-    cy.get(testId).should('not.include.text', person)
+    
   }
 
   before(() => {
@@ -27,7 +27,7 @@ describe('allows users to choose relatives', () => {
     cy.wait(5000)
   })
 
-  it('choice of each realtive may be made then removal from select box, keep state correct', () => {
+  it('choice of each realtive may be made then removal from select box', () => {
     
     chooseAndRemove(0, 'siblings')
     chooseAndRemove(1, 'parents')
