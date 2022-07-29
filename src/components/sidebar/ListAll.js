@@ -1,11 +1,11 @@
 // List all the people in the DB in the sidebar as links
 import { useCollection } from '../../hooks/useCollection'
-import { memo } from 'react';
+//import { memo } from 'react';
 
 // styles
 import './ListAll.css'
 
-export default function ListAll() {
+export function ListAll() {
   const order = 'name'
   const { documents, error } = useCollection('people', null, order)
    
@@ -28,4 +28,6 @@ export default function ListAll() {
   )
 }
 
-export const MemoizedListAll = memo(ListAll)
+export { ListAll as default }
+
+//export const MemoizedListAll = memo(ListAll)
