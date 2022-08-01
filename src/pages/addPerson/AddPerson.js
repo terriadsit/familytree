@@ -13,6 +13,7 @@ import deleteStoredImage from '../../manageFileStorage/deleteStoredImage'
 import updateMyPersons from '../../manageFileStorage/updateMyPersons'
 import myLogger from "../../sharedFunctions/myLogger"
 import { useSnackbar } from 'notistack'
+import CheckPerson from "./CheckPerson"
 
 // styles
 import './AddPerson.css'
@@ -43,6 +44,9 @@ export default function AddPerson() {
   const [parents, setParents] = useState([])
   const [children, setChildren] = useState([])
   const [originalName, setOriginalName] = useState('')
+
+  // checking for duplicates when user types a new name
+  const [nameChange, setNameChange] = useState(false)
 
   // need persons creator to allow updates, keep seperate from createdBy for adding persons
   const [personCreator, setPersonCreator] = useState([])
@@ -121,6 +125,11 @@ export default function AddPerson() {
     enqueueSnackbar(`the image is too large, see FAQ for more information`, { 
       variant: 'error',
     })
+  }
+
+  const handleNameChange = (e) => {
+    setName(e.target.value)
+    setNameChange(true)
   }
 
   const handleImageChange = (e) => {
@@ -236,16 +245,22 @@ export default function AddPerson() {
         <h2 className="page-title">{message } person details. Except for name, fields may be left blank.</h2>
         <p>Best practice is to let living persons add themselves. See FAQ for more information.</p>
         <form className="add-person-form" id="add-form" onSubmit={handleSubmit}>
-          <label>
-            <span>person's full birth name</span>
-            <input 
-              cy-test-id="name"
-              required
-              type="text"
-              onChange={e => setName(e.target.value)}
-              value={name}
-            />
-          </label>
+          <div className="name-check-container">
+            <label className="name new-name">
+              <span>person's full birth name</span>
+              <input 
+                cy-test-id="name"
+                required
+                type="text"
+                onChange={handleNameChange}
+                onPointerOut={() => setNameChange(false)} 
+                value={name}
+              />
+            </label>
+            <div className="name check-name">
+              {nameChange && <CheckPerson name={name}/>}
+            </div>
+          </div>
           <label>
             <span>other names: married, nickname, etc.</span>
             <input 

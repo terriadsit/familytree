@@ -1,3 +1,29 @@
+
+ .search {
+     color: var(--text-color);
+     line-height: 1.8em;
+     font-size: 0.9em;
+     padding: 16px;
+     max-width: 320px;
+    border: 1px solid #f2f2f2;
+    margin-top: 20px;
+    box-shadow: 3px 3px 5px rgba(0,0,0,0.05);
+    background: #fff;
+ }
+ .search .heading {
+     top: 0px;
+     left: 0px;
+    
+     margin: 0 auto;
+     color: var(--text-color);
+     font-size: 1.2em;
+    
+ }
+ .search h4 {
+     text-align: left;
+     display: inline;
+ }
+
 .search hover {
     display: flex;
     color: #555;

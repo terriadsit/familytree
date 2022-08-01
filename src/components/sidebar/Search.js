@@ -1,5 +1,7 @@
 // a single form field to choose from all people in db
 // then navigate to that persons page
+// navigated to using /search with props: type='search'
+// also used in <AddPerson /> to view possible duplicate with props type='duplicate'
 
 import { useCollection } from '../../hooks/useCollection'
 import { useState, useEffect } from 'react'
@@ -10,13 +12,14 @@ import Select from 'react-select'
 import './Search.css'
 
 export default function Search() {
+  
   const navigate = useNavigate()
   const [person, setPerson] = useState('')
 
   // 'people' to populate drop down selects
   const { documents } = useCollection('people', null, null)
   const [people, setPeople] = useState([])
-  
+  console.log('in Search')
   // populate people for select
   useEffect(() => {
     if(documents) {
@@ -31,6 +34,7 @@ export default function Search() {
     setPerson(option.value)
   }
 
+
   const handleSubmit = (e) => {
     e.preventDefault()
     navigate(`/person/${person}`)
@@ -38,10 +42,11 @@ export default function Search() {
   return (
     <form onSubmit={handleSubmit} className="search">
        <label>
-         <span>All the people who have already been added:</span>
+         <span className='heading'>All the people who have already been added:</span>
            <Select className="relative"
             onChange={(option) => {handleOption(option)}}
             options={people}
+            
           />
       </label>
       <button className='btn' onClick={handleSubmit}>View</button>

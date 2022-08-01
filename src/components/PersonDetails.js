@@ -20,7 +20,7 @@ export default function PersonDetails({...person}) {
   const { data } = useDocument('users', user.uid)
   const location = useLocation()
   console.log('in personDetails')
-  // don't display person.comments on /addrelatives
+  // don't display person.comments or relatives on /addrelatives
   const onAdd = location.pathname.includes('add')
     
   let onHome 
