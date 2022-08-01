@@ -1,7 +1,6 @@
 // called by <AddPerson /> to display possible duplicates to user
 
 import { useCollection } from "../../hooks/useCollection";
-import { useState, useEffect } from "react";
 
 export default function CheckPerson(props) {
   // props.name is input from user in AddPerson name input field
@@ -13,22 +12,20 @@ export default function CheckPerson(props) {
   })
   // possible matches to display to user
   let possibleMatches = []
-  // allNames in the firebease people db
-  let allNames = []
-
+ 
   const { documents, error } = useCollection('people', null, null)
 
   const findMatches = (names, documents) => {
-    let found = false
     let otherName = ''
     const allNames = documents.map(p => {
         otherName = p.otherName
         const nameToAdd = otherName ? `${p.name}, (${otherName})` : p.name
-        return nameToAdd
+        const nameAndId = { name: nameToAdd, id: p.id}
+        return nameAndId
     })
     for (let i=0; i < formattedNames.length; i++) {
         for (let j=0; j < allNames.length; j++) {
-            let lowerCase = allNames[j].toLowerCase()
+            let lowerCase = allNames[j].name.toLowerCase()
             let match = lowerCase.match(formattedNames[i])
             if (match) {
                 possibleMatches.push(allNames[j])
@@ -42,11 +39,11 @@ export default function CheckPerson(props) {
   }
 
   return (
-    <div>
-        {possibleMatches.length > 0 && <h4>Are any of the following duplicates? If so, please do not add again.</h4>}
+    <div cy-test-id="duplicate-names">
+        {possibleMatches.length > 0 && <h4 cy-test-id="duplicate-heading">Are any of the following duplicates? Please do not add duplicates.</h4>}
         <ul>
             {possibleMatches.map(n => {
-                return <li>{n}</li>
+                return <li key={n.id} cy-test-id="name">{n.name}</li>
             })}
         </ul>
     </div>
