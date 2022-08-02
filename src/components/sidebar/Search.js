@@ -42,11 +42,12 @@ export default function Search() {
     <form onSubmit={handleSubmit} className="search">
        <label>
          <span className='heading'>All the people who have already been added:</span>
-           <Select className="relative"
+           <Select 
+            className="relative"
+            id="search"
             onChange={(option) => {handleOption(option)}}
             options={people}
-            
-          />
+         />
       </label>
       <button className='btn' onClick={handleSubmit}>View</button>
     </form>

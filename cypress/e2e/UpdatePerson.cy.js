@@ -59,7 +59,7 @@ describe('updates a users details, relatives managed in AddRelatives, ChooseRemo
   })
 
   it('displays an error if anyone besides this persons creator attempts update', () => {
-    cy.visit('updateperson/MIsJDHy4lZJdNU0G7S1z')
+    cy.visit('updateperson/ivFMnMkBztZsALrTxliB')
     cy.get('.error').should('be.visible')
   })
 

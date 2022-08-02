@@ -41,7 +41,9 @@ export default function PersonSummary({...tempPerson }) {
           if (person.imageUrl) {
             const anError = deleteStoredImage(person.imageUrl)
             setError(anError)
-            myLogger(`PersonSummary error, ${anError}`)
+            if (anError) {
+              myLogger(`PersonSummary error, ${anError}`)
+            }
           }
           
           // fetch ids of comments to be deleted

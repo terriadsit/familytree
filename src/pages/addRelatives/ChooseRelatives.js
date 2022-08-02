@@ -16,6 +16,7 @@ export default function ChooseRelatives({...props}) {
       <label>
         <p className='heading' cy-test-id={testId}>choose {relationship} to add:</p>
           <Select className="relative"
+            id={testId}
             isMulti
             onChange={(option, action) => {props.handleRelativeOption(option, action)}}
             options={people}

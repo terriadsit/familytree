@@ -36,11 +36,15 @@ describe('comments in list are all displayed correctly', () => {
   })
 
   it('does not anyone else to delete it', () => {
-    cy.visit('/person/o7LOCcgEjCKbysLGKimU')
+    cy.logout()
+    cy.login('lmWQwNSCEMY9uIhVmbtTBtSm7aq1')
+    cy.visit('/person/w24t8yLaxdS4Qw6V2VTo')
     cy.wait(5000)
     cy.get('.comment-list-item').each(($el) => {
       expect($el).to.not.have.descendants('.deleteBtn')
     })
+    cy.logout()
+    cy.login()
   })
 
   it('displays all comments in list', () => {
