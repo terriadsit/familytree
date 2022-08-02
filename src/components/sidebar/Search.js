@@ -19,7 +19,6 @@ export default function Search() {
   // 'people' to populate drop down selects
   const { documents } = useCollection('people', null, null)
   const [people, setPeople] = useState([])
-  console.log('in Search')
   // populate people for select
   useEffect(() => {
     if(documents) {

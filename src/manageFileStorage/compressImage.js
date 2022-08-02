@@ -16,7 +16,7 @@ function compressImage (file, personId, commentId, tooLargeError) {
   img.onerror = function () {
     URL.revokeObjectURL(this.src)
     // Handle the failure properly
-    myLogger('Cannot load image')
+    myLogger('CompressImage: Cannot load image')
   }
   img.onload = function () {
     URL.revokeObjectURL(this.src)

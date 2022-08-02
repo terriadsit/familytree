@@ -19,11 +19,14 @@ describe('update user appears and operates correctly', () => {
     cy.get("[placeholder='check password']").type(thePassword)
     
   }
+
+  before(() => {
+    cy.login()
+  })
   
   beforeEach(() => {
-    
-    cy.login()
     cy.visit('/updateuser')
+    cy.wait(5000)
   })
   
   it('displays correct fields and buttons', () => {
@@ -139,6 +142,7 @@ describe('update user appears and operates correctly', () => {
      changeName(newName)
      // change it back
      cy.visit('/updateuser')
+     cy.wait(5000)
      changeName($displayName)
   })
 
@@ -151,37 +155,38 @@ describe('update user appears and operates correctly', () => {
     cy.findByText(/A verification email/, { timeout: 5000 }).should('be.visible')
   })
 
-  it('allows user to change display or hide email addres', () => {
+  it.only('allows user to change display or hide email addres', () => {
     function clickShareEmail(textExpected, check) {
       cy.get('input#prevPassword').type($password)
       if (check) {
-        cy.get('.checkbox').check()
+        cy.get('[cy-test-id=share-email]').check()
       } else {
-        cy.get('.checkbox').uncheck()
+        cy.get('[cy-test-id=share-email]').uncheck()
       }
       cy.get('.auth-form > .btn').click()
-      cy.wait(5000)
+      cy.wait(10000)
       cy.visit('/person/oIjeo62z08fpAi9F55yR')
+      cy.wait(5000)
       cy.get('.creator').trigger('mouseover')
       cy.get('.tip').contains(textExpected, { matchCase: false })
     }
 
     // should begin test with shared email
-    cy.wait(5000)
     clickShareEmail($email, true)
     cy.visit('/updateuser')
     cy.wait(5000)
-    cy.visit('/updateuser')
     clickShareEmail('This user has a private email', false)
     // put back to shared email
     cy.wait(5000)
     cy.visit('/updateuser')
+    cy.wait(5000)
     clickShareEmail($email, true)
   })
 
-  afterEach(() => {
+ 
+  after(() => {
     cy.logout()
-    cy.wait(5000)
+    
   })
 
 })

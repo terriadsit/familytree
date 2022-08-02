@@ -34,7 +34,7 @@ export async function uploadFile(type, file, personId, commentId) {
           }        
         }   
       } catch(err) { 
-            myLogger(`could not upload image, ${err}`)
+            myLogger(`uploadFile: could not upload image, ${err}`)
       }
     }    
     return fileUrl

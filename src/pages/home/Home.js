@@ -20,8 +20,7 @@ function Home() {
   const [tempPeople, setTempPeople] = useState([]) 
   const [peopleIds, setPeopleIds] = useState([])
   const { data } = useDocument('users', uid)
-  console.log('in Home')
-
+  
   const memoPeopleIds = useMemo(() => {
     let thesePeople = []
     if(data){
@@ -40,7 +39,7 @@ function Home() {
   useEffect(() => {
     fetchPeople()
     if (peopleIds) {
-      getPeopleFromIds(peopleIds).then((res) => {setTempPeople(res)}).catch(error => myLogger(error))
+      getPeopleFromIds(peopleIds).then((res) => {setTempPeople(res)}).catch(error => myLogger(`Home error:${error}`))
     }
   },[fetchPeople,peopleIds])
 
@@ -51,7 +50,7 @@ function Home() {
   people = sortPeopleByBD(people)
     
   if (error) {
-    myLogger(`in if error ${error}`)
+    myLogger(`Home: in if error ${error}`)
     return <p className="error">${error}</p>
   }
 

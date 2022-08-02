@@ -8,7 +8,7 @@ import updateARelative from './updateARelative'
 import myLogger from '../sharedFunctions/myLogger'
 
 async function ifNameChange(personId, originalName, newName) {
-    const person = await getAPersonById(personId).catch(err => myLogger(`error getting person, ${err}`))
+    const person = await getAPersonById(personId).catch(err => myLogger(`getAPersonById: error getting person, ${err}`))
     for (let i=0; i < person.siblings.length; i++) {
         await updateARelative(person.siblings[i].id, personId, originalName, newName, 'siblings', 'changeName')
     }

@@ -8,7 +8,6 @@ import './ListAll.css'
 export function ListAll() {
   const order = 'name'
   const { documents, error } = useCollection('people', null, order)
-  console.log('in ListAll') 
   return (
     <div className="people-list">
       {error && <div className='error'>{error}</div>}

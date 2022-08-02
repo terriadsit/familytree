@@ -17,7 +17,7 @@ async function getAUser (uid) {
     return userDetails
 
   } catch (err) {
-    myLogger(err)
+    myLogger(`getAUser error: ${err}`)
   }
 }
 

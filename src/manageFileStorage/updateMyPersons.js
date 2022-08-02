@@ -20,20 +20,20 @@ async function updateMyPersons(uid, personId, whChange) {
        case "add": {
            await updateDoc(userRef, {
                 myPersons: arrayUnion(personInfo)
-           }).catch(error => myLogger(error))
+           }).catch(error => myLogger(`updateMyPersons error on add, arrayUnion 1: ${error}`))
            await updateDoc(personRef, {
                onUsers: arrayUnion(uid)
-           }).catch(error => myLogger(error))
+           }).catch(error => myLogger(`updateMyPersons error on add, arrayUnion 2: ${error}`))
         break
        }
        case "remove": {
           await updateDoc(userRef, {
             myPersons: arrayRemove(personInfo)
-          }).catch(error => myLogger(error))
+          }).catch(error => myLogger(`updateMyPersons error on remove, arrayRemove 1: ${error}`))
              
           await updateDoc(personRef, {
                 onUsers: arrayRemove({ uid })
-          }).catch(error => myLogger(error))
+          }).catch(error => myLogger(`updateMyPersons error on remove, arrayRemove 2: ${error}`))
        break
        }
        default: {

@@ -28,7 +28,7 @@ export default function  CommentList({ person }) {
   // delete a comment if user is the creator of this person or creator of the comment
   const handleClick = (comment) => {
     const error = deleteComment(comment, user, person)
-    myLogger(error)
+    myLogger(`CommentList error: ${error}`)
   }
 
   return (

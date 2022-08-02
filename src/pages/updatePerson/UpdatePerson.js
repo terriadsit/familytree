@@ -32,7 +32,7 @@ export default function UpdatePerson() {
 
     } catch(err) {
       setError(err)
-      myLogger(err)
+      myLogger(`UpdatePerson error: ${err}`)
     }
   }
 

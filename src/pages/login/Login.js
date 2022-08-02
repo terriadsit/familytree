@@ -64,7 +64,7 @@ export default function Login() {
        });
      })
     .catch((error) => {
-      myLogger(`error seding password, ${error}`)
+      myLogger(`Login: error setting password, ${error}`)
       enqueueSnackbar(`an error occurred, please enter your email address, ${error} ${error.code}`, { 
         variant: 'error',
       })

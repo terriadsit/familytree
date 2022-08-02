@@ -57,21 +57,7 @@ export default function Signup({...props}) {
   const { updateDocument } = useFirestore('users')
   const { user } = useAuthContext()
   const navigate = useNavigate()
-  console.log('in Signup')
-  
-
-  // if updating, need users details
-  //function getUsersDetails() {
-    // getAUser(user.uid)
-    //   .then((userDetails) => {
-    //     setDisplayName(userDetails.displayName)
-    //     setChecked(userDetails.shareEmail)
-    //     setEmail(user.email)
-    //     setPrevEmail(user.email)
-    //     console.log('in getuserdetails prevemail, ', 'us dn',userDetails.displayName, 'display Name', displayName)
-    //  })
-   //}
-  
+ 
   // load form fields if updating 
   const getUsersDetails = useCallback(() => {
     getAUser(user.uid)
@@ -238,7 +224,7 @@ function getVerified(user) {
             // Profile updated! future code here
             }).catch((error) => {
             // An error occurred{
-              myLogger(`error occurred updating user, ${error}`)
+              myLogger(`Signup: error occurred updating user, ${error}`)
             });
             // update entire user in user db
             const updates = {

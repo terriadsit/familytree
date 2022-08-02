@@ -39,6 +39,6 @@ module.exports = defineConfig({
        return extendedConfig;
       // implement node event listeners here
     },
-    baseUrl: "http://localhost:3000"
+    baseUrl: "https://family-tree-434ad.web.app"
   },
 });

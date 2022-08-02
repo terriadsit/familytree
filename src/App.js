@@ -22,7 +22,6 @@ import './App.css'
 function App() {
   
   const { user, authIsReady } = useAuthContext()
-  console.log('in App.js')
   let tempDisplayName = user ? user.displayName : ''
   const [sbDisplayName, setSbDisplayName] = useState('')
   
