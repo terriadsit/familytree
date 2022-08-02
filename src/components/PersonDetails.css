@@ -18,6 +18,11 @@
     font-size: 1.2em;
     font-weight: bold;
 }
+.person-details h3 {
+    
+    text-align: left;
+    display: inline;
+}
 .person-details h4 {
     text-align: left;
     display: inline;

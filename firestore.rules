@@ -1,8 +1,31 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if true;
+    match /users/{user_id} {
+      allow read, create: if request.auth != null;
+      allow update: if request.auth.uid == user_id;
+    }
+    match /people/{person_id} {
+      allow read: if true;
+      allow create, update: if request.auth != null;
+      allow delete: if request.auth.uid == resource.data.createdBy.uid;
+    }
+    match /comments/{comment_id} {
+      allow create, update, read, delete: if request.auth != null;
     }
   }
 }
+
+// users: 
+// any authenticated user can read, create
+// only users who "own/create" a document can update (user id's match)
+// only admin can delete
+
+// people:
+// any authenticated user can create, read or update (some guarding done in src)
+// only users who "own/create" a document can delete
+
+// comments:
+// any authenticated user can create, read
+// any authenticated user can delete (some guarding done in src)
+// updating is not allowed

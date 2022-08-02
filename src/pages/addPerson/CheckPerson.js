@@ -28,7 +28,11 @@ export default function CheckPerson(props) {
             let lowerCase = allNames[j].name.toLowerCase()
             let match = lowerCase.match(formattedNames[i])
             if (match) {
+              // only add one time to new array
+              let found = possibleMatches.find(n => n.id === allNames[j].id)
+              if (!found) {
                 possibleMatches.push(allNames[j])
+              }
             }
         }
     }

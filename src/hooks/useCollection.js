@@ -29,7 +29,7 @@ export const useCollection = (whCollection, _query, _orderBy) => {
     let q = (queryArray) ? 
       query(ref, where(...queryArray), orderBy(order)) : 
       query(ref, orderBy(order) )
-    
+    console.log('in useCollection useEffect')
     const unsubscribe = onSnapshot(q, snapshot => {
       let results = []
       
@@ -43,7 +43,7 @@ export const useCollection = (whCollection, _query, _orderBy) => {
       setError(null)
     }, error => {
       myLogger(error)
-      setError('could not fetch the data')
+      //setError('could not fetch the data')
     })
 
     // unsubscribe on unmount

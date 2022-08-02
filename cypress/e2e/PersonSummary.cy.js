@@ -34,7 +34,8 @@ describe('PersonSummary displays PersonDetails, Edit and Delete', () => {
    
     cy.get('[cy-test-id=delete-button').should('not.exist')
     cy.get('[cy-test-id=edit-button').should('not.exist')
-    cy.logout()
+    cy.get('[cy-test-id=logoutBtn').click()
+    cy.wait(5000)
     cy.login()
   })
 
