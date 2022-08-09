@@ -2,6 +2,19 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+It is a web app availble for use at www.FamilyTreeAndArchive.com where you are able to record family stories, facts, geneology, photos and pdf files.
+
+This was a project to confirm my ability to use React, JavaScript and Firebase to build a useful, fun web app. 
+
+Creating a key based database in firebase was extremely rewarding. The file structure consists users, people, and comments databases. Users id's are used for indicating createdBy fields. Then as people are created, their ids are linked to comments as well as their id's being added to user's onMyHomePage field. 
+
+An intriguing challenge was keeping family relationships related to one another using PeopleId's and then removing these relationships if people are deleted from the database, lots of fun!
+
+Coding this app provided experience upgrading React and Firebase as they changed versions. I also was able to learn much of the Firebase Auth verification proccess to allow users to change their email address or password.
+
+Also, I got to try out some fun things like tool tips, dropdowns and exploring some of the React Pointer Events. 
+It was exciting to learn to import others work like NotiStack's EnQueue SnackbarProvider and Emailjs! I am grateful for the code published by Mirco Bellagamba that allowed image compression in his article regarding image compression.
+
 ## Available Scripts
 
 In the project directory, you can run:
