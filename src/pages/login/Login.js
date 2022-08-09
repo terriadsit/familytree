@@ -98,6 +98,8 @@ export default function Login() {
           
         {!isPending && <button cy-test-id='loginBtn' className="btn">Login</button>}
         <span>             </span>
+        
+        {isPending && <button className="btn" disabled>loading...</button>}
         <button
           cy-test-id="forgot-password"
           className='btn'
@@ -105,7 +107,6 @@ export default function Login() {
           onClick={handleGetPassword}
         > Forgot Password     
         </button>
-        {isPending && <button className="btn" disabled>loading...</button>}
         {error && <div className="error">{error}</div>}
       </form>
   
