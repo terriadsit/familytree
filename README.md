@@ -2,7 +2,7 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-It is a web app availble for use at www.FamilyTreeAndArchive.com where you are able to record family stories, facts, geneology, photos and pdf files.
+It is a web app availble for use at https://www.FamilyTreeAndArchive.com where you are able to record family stories, facts, geneology, photos and pdf files.
 
 This was a project to confirm my ability to use React, JavaScript and Firebase to build a useful, fun web app. 
 
