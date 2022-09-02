@@ -27,6 +27,17 @@ To limit data queries, relatives names are also stored in arrays along with ids.
 ## Cypress Testing
 Rather than use Cypress' new component testing capabilities, I test each component in the e2e suite. For this application, it seems that too many functions and components needed to be imported for each component test. Switching to the e2e environment bypassed this extra work completely. The Cypress Testing was excellent for confirming error handling is functioning correctly. All tests are in Cypress/e2e/ [Cypress](cypress/e2e/)
 
+## Why I built the project this way:
+* To spend time solidifying my programming skills in React, Firebase, JavaScript and Cypress.
+* The Comments Database is seperate from People to allow for easy updating of createBy Display Name which is stored along with the UserId in each comment. This seemed more straightforward than searching all comments within each person.
+
+## If I had more time I would:
+* Spend more time on styles.
+* Consider a database with comments incorporated into the people database.
+* Have learned node more completely to manage firebase authorizations (taking a second node class now).
+
+## I wish I had:
+* Used a linter in addition to that provided by React.
 
 Please enjoy the website! 
 
