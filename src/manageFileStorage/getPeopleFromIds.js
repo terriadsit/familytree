@@ -1,7 +1,8 @@
  
-// called by <Home /> to retrieve a person's details from the 'people' db.
-// receives a list of person id's 
-// returns their full information
+// Called by <Home /> to retrieve a person's details from the 'people' db.
+// Receives a list of person id's.
+// Returns their full information so they may have snippets displayed
+// on a users homepage.
 
 import { dbFirestore } from "../firebase/config"
 import { doc, getDoc } from "firebase/firestore"

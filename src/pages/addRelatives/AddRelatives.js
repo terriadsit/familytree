@@ -1,8 +1,8 @@
-// manage adding and updating (remove or add) relatives, 
-// called by <AddPerson>
-// holds state for relatives wh/ is updated through props functions managed here
-// <ChooseRelatives /> from a react-select field
-// <RemoveRelatives /> from previously added relatives
+// Manage adding and updating (remove or add) relatives, 
+// called by <AddPerson>.
+// Holds state for relatives wh/ is updated through props functions managed here.
+// <ChooseRelatives /> is basically a react-select field.
+// <RemoveRelatives /> from previously added relatives.
 import { useParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from "react"
 import { useCollection } from "../../hooks/useCollection"
@@ -47,7 +47,7 @@ function AddRelatives() {
   const [children, setChildren] = useState([])
   
   // check for prevRel relatives matching Proposed relatives
-  // used to add from react select on updates
+  // used to add from react select on updates to avoid duplicates
   const checkForMatch = (prevRel, proposedRel) => {
    let found = null
     proposedRel.map(r => {

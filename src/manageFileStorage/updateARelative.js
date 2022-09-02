@@ -1,6 +1,10 @@
-// manage updates to relative arrays that each person in people db has
-// may remove or add a relative or change the name of a present relative
-// called by <AddRelatives /> and <PersonSummary />
+// Manage updates to the four relative arrays that each person in people db has
+// May remove or add a relative or change the name of a present relative
+// Parameters: personToUpdateId, relativeId, relativeName, 
+//   newName (for changing a relatives name), 
+//   whRelative (parents, siblings, children, spouses), 
+//   whChange (add, remove or changeName)
+// Called by <AddRelatives /> and <PersonSummary />
 
 import { dbFirestore } from "../firebase/config"
 import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'
