@@ -100,6 +100,23 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+It is a web app availble for use at https://familytreeandarchive.com/ where you are able to record family stories, facts, geneology, photos and pdf files.
+
+This was a project to confirm my ability to use React, JavaScript and Firebase to build a useful, fun web app. 
+
+Then I was able to confirm my Cypress skills by thoroughly testing each component. Rather than using Cypress' new component testing capabilities, I tested each component in the e2e suite. For this application, it seemed that too many functions and components needed to be imported for each component test. Switching to the e2e environment bypassed this extra work completely. The Cypress Testing was excellent for confirming error handling was functioning correctly.
+
+Creating a key based NoSQL database in Firebase Firestore was extremely rewarding. The file structure consists of users, people, and comments databases. Users id's are used for indicating createdBy fields. Then as people are created, their ids are linked to comments as well as their id's being added to user's onMyHomePage field. 
+
+An intriguing challenge was keeping family relationships related to one another using PeopleId's and then removing these relationships if people are deleted from the database, lots of fun! All of those async functions gave me lots of practice with async including the Promise.all() method.
+
+Coding this app provided experience upgrading React and Firebase as they changed versions between my React/Firebase Udemy class and my programming this code. I also was able to learn much of the Firebase Auth verification proccess to allow users to change their email address or password which was not covered in my class.
+
+Happily, I was able to try out some fun code like tool tips, dropdowns and exploring some of the React Pointer Events. 
+It was exciting to learn to import others work like NotiStack's EnQueue SnackbarProvider and Emailjs! I am grateful for the code published by Mirco Bellagamba that allowed image compression in his article regarding image compression.
+
+Please enjoy the website! 
+
 ## Available Scripts
 
 In the project directory, you can run:
