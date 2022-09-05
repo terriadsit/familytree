@@ -32,7 +32,8 @@ Rather than use Cypress' new component testing capabilities, I test each compone
 * The Comments Database is seperate from People to allow for easy updating of createBy Display Name which is stored along with the UserId in each comment. This seemed more straightforward than searching all comments within each person.
 
 ## If I had more time I would:
-* Spend more time on styles.
+* Spend more time on styles. In particular, date formats.
+* Worked on a clickable diagram layout of relatives.
 * Consider a database with comments incorporated into the people database.
 * Have learned node more completely to manage firebase authorizations (taking a second node class now).
 
