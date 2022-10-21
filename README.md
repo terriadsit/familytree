@@ -38,7 +38,7 @@ Rather than use Cypress' new component testing capabilities, I test each compone
 * Have learned node more completely to manage firebase authorizations (taking a second node class now).
 
 ## I wish I had:
-* Used a linter in addition to that provided by React.
+* Used a linter for consistent code style.
 
 Please enjoy the website! 
 
